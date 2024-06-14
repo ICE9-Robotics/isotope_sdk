@@ -1,0 +1,53 @@
+isotope_board:
+  defaults:
+    debug_enabled: false # Whether debug mode is enabled.
+    comm_timeout: 5 # The timeout in seconds for communication with the isotope board.
+  devices: # List of isotope boards connected to the controller.
+    - id: 1 # The ID of the isotope board. Can be any number.
+      port: COM3 # The port the isotope board is connected to.
+      debug_enabled: true # You may override any default settings by adding an entry.
+    - id: 2
+      port: COM4
+      comm_timeout: 10
+    - id: 3
+      port: COM5
+
+pump:
+  defaults:
+    rpm: 100 # RPM to run the pump motor at.
+    current: 400 # Current limit of the pump motor in mA.
+    steps_per_degree: 7.5 # The step resolution of the pump motor in degrees.
+    steps_per_ml: 10 # The number of steps required to move 1 ml of fluid.
+    reverse_direction: false # Whether the pump motor should run in reverse.
+  devices: # List of pumps connected to the controller. You may configure up to 4 pumps for each isotope board.
+    - id: 1 # The ID of the pump. Can be any number.
+      board_id: 1 # The ID of the isotope board the pump is connected to.
+      port_id: 0 # The ID of the MOT port the pump is connected to.
+      rpm: 200 # You may override any default settings by adding an entry, or skipping the entry to use the default settings.
+      current: 200
+    - id: 2
+      board_id: 1
+      port_id: 1
+      steps_per_degree: 10
+      steps_per_ml: 15
+      reverse_direction: true
+    - id: 3
+      board_id: 2
+      port_id: 3
+
+valve:
+  defaults:
+    power: 100 # Power percentage to run the solenoid valve at.
+    normally_open: false # Whether the solenoid valve is normally open.
+  devices: # List of solenoid valves connected to the controller. You may configure up to 3 solenoid valves for each isotope board.
+    - id: 1 # The ID of the solenoid valve. Can be any number.
+      board_id: 1 # The ID of the isotope board the solenoid valve is connected to.
+      port_id: 0 # The ID of the VAL port the solenoid valve is connected to.
+      power: 50 # You may override any default settings by adding an entry.
+    - id: 2
+      board_id: 1
+      port_id: 1
+      normally_open: true
+    - id: 3
+      board_id: 1
+      port_id: 2
