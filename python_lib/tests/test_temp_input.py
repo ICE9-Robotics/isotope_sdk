@@ -9,16 +9,16 @@ class TestTempInputPort(unittest.TestCase):
         self.isotope_mock = MagicMock(spec=Isotope_comms_protocol)
         self.temp_input_port = TempInputPort(self.isotope_mock, 0)
 
-    def test_get_temperature_success(self):
+    def test_get_value_success(self):
         self.isotope_mock.send_cmd.return_value = (25, "ACK")
         self.isotope_mock.is_resp_ok.return_value = True
-        temperature = self.temp_input_port.get_temperature()
+        temperature = self.temp_input_port.get_value()
         self.assertEqual(temperature, 25)
 
-    def test_get_temperature_err_resp(self):
+    def test_get_value_err_resp(self):
         self.isotope_mock.send_cmd.return_value = (1, "ERR")
         self.isotope_mock.is_resp_ok.return_value = False
-        temperature = self.temp_input_port.get_temperature()
+        temperature = self.temp_input_port.get_value()
         self.assertIsNone(temperature)
 
     def test_invalid_port_id(self):

@@ -16,17 +16,17 @@ class TestADCInputPort(unittest.TestCase):
         with self.assertRaises(ValueError):
             ADCInputPort(self.isotope_mock, 3)
             
-    def test_get_input_success(self):
+    def test_get_value_success(self):
         expected_value = 512
         self.isotope_mock.send_cmd.return_value = (expected_value, "ACK")
         self.isotope_mock.is_resp_ok.return_value = True
-        result = self.adc_input_item.get_input()
+        result = self.adc_input_item.get_value()
         self.assertEqual(result, expected_value)
         
-    def test_get_input_failure(self):
+    def test_get_value_failure(self):
         self.isotope_mock.send_cmd.return_value = (1, "ERR")
         self.isotope_mock.is_resp_ok.return_value = False
-        result = self.adc_input_item.get_input()
+        result = self.adc_input_item.get_value()
         self.assertIsNone(result)
 
 class TestADCInput(unittest.TestCase):
@@ -44,17 +44,17 @@ class TestADCInput(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.adc_input[3]
 
-    def test_get_input_success(self):
+    def test_get_value_success(self):
         expected_value = 512
         self.isotope_mock.send_cmd.return_value = (expected_value, "ACK")
         self.isotope_mock.is_resp_ok.return_value = True
-        result = self.adc_input[0].get_input()
+        result = self.adc_input[0].get_value()
         self.assertEqual(result, expected_value)
 
-    def test_get_input_failure(self):
+    def test_get_value_failure(self):
         self.isotope_mock.send_cmd.return_value = (1, "ERR")
         self.isotope_mock.is_resp_ok.return_value = False
-        result = self.adc_input[0].get_input()
+        result = self.adc_input[0].get_value()
         self.assertIsNone(result)
 
 if __name__ == '__main__':
