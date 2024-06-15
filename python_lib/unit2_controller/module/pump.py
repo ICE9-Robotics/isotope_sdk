@@ -5,22 +5,23 @@ class PumpObj:
     The pump object class.
     """
     
-    motor: isotope.port.Motor
+    motor: isotope.port.MotorPort
     rpm: int
     current: int
     steps_per_degree: int
     steps_per_ml: int
     default_dir: int
     
-    def initialise(self, board: isotope.Isotope_comms_protocol, port_id: int) -> None:
+    def initialise(self, isotope_board: isotope.Isotope, port_id: int) -> None:
         """
         Initializes the pump object with the specified board and port ID.
 
         Args:
-            board (isotope.Isotope_comms_protocol): The communication protocol object for the board.
+            isotope_board (isotope.Isotope): The Isotope object.
             port_id (int): The ID of the port to which the motor is connected.
         """
-        self.motor = isotope.port.Motor(board, port_id, self.steps_per_degree, self.current, self.rpm)
+        self.motor = isotope_board.motors[port_id]
+        self.motor.configure(self.steps_per_degree, self.current, self.rpm)        
     
     def rotate_by_steps(self, steps: int) -> bool:
         """
@@ -70,23 +71,23 @@ class Pump:
     
     Attributes:
         _config (dict[str, any]): configurations for pumps, as specified in config.yaml.
-        _boards (isotope.Isotope_comms_protocol,...): Isotope_comms_protocol instances of the installed Isotope boards.
+        _isots (isotope.Isotope_comms_protocol,...): Isotope_comms_protocol instances of the installed Isotope boards.
         _pumps (dict[int, PumpObj]): PumpObj instances.
     """
     
     _config: dict[str, any]
-    _boards: tuple[isotope.Isotope_comms_protocol,...]
+    _isots: tuple[isotope.Isotope,...]
     _pumps: dict[int, PumpObj]
     
-    def __init__(self, isotope_boards: tuple[isotope.Isotope_comms_protocol,...], config: dict):
+    def __init__(self, isotope_boards: tuple[isotope.Isotope,...], config: dict):
         """
         Constructor for the Pump class.
         
         Args:
-            isotope_boards (tuple[isotope.Isotope_comms_protocol,...]): Isotope_comms_protocol instances of the installed Isotope boards.
+            isotope_boards (tuple[isotope.Isotope,...]): Isotope instances of the installed Isotope boards.
             config (dict): A dictionary containing the configuration settings for the pumps.
         """
-        self._boards = isotope_boards
+        self._isots = isotope_boards
         self._config = config['pump']
         self._configure()
     
@@ -105,7 +106,7 @@ class Pump:
         
         Args:
             device_id (int): The ID of the pump.
-            milli_litre (float): The volume of liquid to be moved in milliliters.
+            millilitre (float): The volume of liquid to be moved in milliliters.
             direction (int, optional): The direction of movement, can be either -1 or 1. Defaults to 1.
         
         Returns:
@@ -165,5 +166,4 @@ class Pump:
             pump.steps_per_degree = device.get('steps_per_degree', defaults['steps_per_degree'])
             pump.steps_per_ml = device.get('steps_per_ml', defaults['steps_per_ml'])
             pump.default_dir = -1 if device.get('reverse_direction', defaults['reverse_direction']) else 1
-            # pump.initialise(self._boards[device['board_id']], device['port_id'])
             self._pumps[device['id']] = pump

@@ -37,13 +37,11 @@ pump:
 
 valve:
   defaults:
-    power: 100 # Power percentage to run the solenoid valve at.
     normally_open: false # Whether the solenoid valve is normally open.
   devices: # List of solenoid valves connected to the controller. You may configure up to 3 solenoid valves for each isotope board.
     - id: 1 # The ID of the solenoid valve. Can be any number.
       board_id: 1 # The ID of the isotope board the solenoid valve is connected to.
       port_id: 0 # The ID of the VAL port the solenoid valve is connected to.
-      power: 50 # You may override any default settings by adding an entry.
     - id: 2
       board_id: 1
       port_id: 1

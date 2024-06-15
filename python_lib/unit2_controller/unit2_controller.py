@@ -1,5 +1,5 @@
 import yaml
-import isotope
+from isotope import Isotope
 from .module import Pump, Valve
 
 
@@ -10,32 +10,33 @@ class Unit2:
     Attributes:
         pump (Pump): pumps connected to the Isotope boards.
         valve (Valve): valves connected to the Isotope boards.
-        _isotope_boards (dict[int, isotope.Isotope_comms_protocol]): communication protocol for installed isotope boards.
+        _isotopes (dict[int, isotope.Isotope_comms_protocol]): communication protocol for installed isotope boards.
     """
 
     pump: Pump
     valve: Valve
-    _isotope_boards: dict[int, isotope.Isotope_comms_protocol]
+    _isotopes: dict[int, Isotope]
 
     def __init__(self, config_file: str = "config.yaml"):
         self.config = yaml.load(open(config_file, 'r'), Loader=yaml.FullLoader)
 
-        self.pump = Pump(self._isotope_boards, self.config())
-        self.valve = Valve(self._isotope_boards, self.config())
+        self.pump = Pump(self._isotopes, self.config())
+        self.valve = Valve(self._isotopes, self.config())
 
     def initialise_isotope_board(self):
         """
         Initializes the isotope boards based on the configuration settings.
         """
         defaults = self.config['isotope_board']['defaults']
-        for board in self.config['isotope_board']:
-            debug_enabled = board.get('debug_enabled', defaults['debug_enabled'])
-            comm_timeout = board.get('comm_timeout', defaults['comm_timeout'])
-            self._isotope_boards[board['id']] = isotope.Isotope_comms_protocol(board['port'], debug_enabled, comm_timeout)
+        for isot in self.config['isotope_board']:
+            debug_enabled = isot.get('debug_enabled', defaults['debug_enabled'])
+            comm_timeout = isot.get('comm_timeout', defaults['comm_timeout'])
+            self._isotopes[isot['id']] = Isotope(isot['port'], debug_enabled, comm_timeout)
+        self._isotopes[isot['id']].connect()
             
-    def close_connection(self):
+    def disconnect(self):
         """
-        Closes the connection to the isotope boards.
+        Disconnect the isotope boards.
         """
-        for board in self._isotope_boards.values():
-            board.close()
+        for isot in self._isotopes.values():
+            isot.disconnect()
