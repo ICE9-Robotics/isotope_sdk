@@ -57,6 +57,11 @@ RES_ERR_NON_JSON_RESPONSE = "ERR5"
 RES_ERR_RESPONSE_TIMEOUT = "ERR6"
 
 
+class IsotopeCommsError(Exception):
+    """IsotopeCommsError class for exceptions related to the Isotope communication protocol.
+    """
+    pass
+
 class Isotope_comms_protocol:
     """Isotope_comms_protocol class for communication with the Isotope board.
     This class provides methods to communicate with the Isotope board using a serial connection.
@@ -133,6 +138,9 @@ class Isotope_comms_protocol:
         Returns:
             str | tuple[str, str]: for CMD_TYPE_SET, returns error/message code; for CMD_TYPE_GET, returns payload and error/message code as a tuple.
         """
+        if self.ser is None:
+            raise IsotopeCommsError("Serial port is not open.")
+        
         message_s = json.dumps(
             {"type": type, "section": section, "item": item, "value": value})
         self.ser.flush()

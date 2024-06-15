@@ -10,6 +10,8 @@ class MotorPort(IsotopePort):
     _rpm: int
     _current: int
     _enabled: bool = False
+    _configure_requested = False
+    _configured: bool = False
 
     def __init__(self, comms: icl.Isotope_comms_protocol, port_id: int) -> None:
         """Constructor for the MotorPort class. 
@@ -44,7 +46,6 @@ class MotorPort(IsotopePort):
             ValueError: Resolution must be positive values.
             ValueError: RPM must be positive values.
             ValueError: Current must be positive values.
-            PortException: Could not configure the MOT port with the given parameters.
         """
         if resolution < 0:
             raise ValueError("Resolution must be a positive value.")
@@ -53,11 +54,16 @@ class MotorPort(IsotopePort):
         if current < 0:
             raise ValueError("Current must be a positive value.")
 
+        self._configured = False
+        self._configure_requested = True
         self._resolution = resolution
         self._rpm = rpm
         self._current = current
 
-        return self._configure()
+        try:
+            self._configure()
+        except icl.IsotopeCommsError:
+            pass
 
     @property
     def rpm(self) -> int:
@@ -97,6 +103,8 @@ class MotorPort(IsotopePort):
         Returns:
             bool: True if the MOT port was successfully enabled, False otherwise.
         """
+        if not self._configured:
+            self._configure()
         msg = self._comms.send_cmd(
             icl.CMD_TYPE_SET, icl.SEC_MOTOR_ENABLE, self._id, 1)
         if self._comms.is_resp_ok(msg):
@@ -192,8 +200,17 @@ class MotorPort(IsotopePort):
 
         Returns:
             bool: True if the configuration was successful, False otherwise.
+        
+        Raises:
+            IsotopeCommsError: The MotorPort.configure method must be called before calling this method to set the correct parameters.
         """
-        return self.set_rpm(self._rpm) and self.set_current(self._current)
+        if not self._configure_requested:
+            raise icl.IsotopeCommsError("Parameters are not set. Have you called the MotorPort.configure method?")
+        result = self.set_rpm(self._rpm) and self.set_current(self._current)
+        if result:
+            self._configured = True
+            self._configure_requested = False
+        return result
 
 
 class Motor:

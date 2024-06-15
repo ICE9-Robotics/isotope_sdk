@@ -19,20 +19,25 @@ class Unit2:
 
     def __init__(self, config_file: str = "config.yaml"):
         self.config = yaml.load(open(config_file, 'r'), Loader=yaml.FullLoader)
-
-        self.pump = Pump(self._isotopes, self.config())
-        self.valve = Valve(self._isotopes, self.config())
+        self.initialise_isotope_board()
+        self.pump = Pump(self._isotopes, self.config)
+        self.valve = Valve(self._isotopes, self.config)
 
     def initialise_isotope_board(self):
+        """Initializes the isotope boards based on the configuration settings.
         """
-        Initializes the isotope boards based on the configuration settings.
-        """
+        self._isotopes = {}
         defaults = self.config['isotope_board']['defaults']
-        for isot in self.config['isotope_board']:
+        for isot in self.config['isotope_board']['devices']:
             debug_enabled = isot.get('debug_enabled', defaults['debug_enabled'])
             comm_timeout = isot.get('comm_timeout', defaults['comm_timeout'])
             self._isotopes[isot['id']] = Isotope(isot['port'], debug_enabled, comm_timeout)
-        self._isotopes[isot['id']].connect()
+            
+    def connect(self):
+        """Connect to the isotope boards.
+        """       
+        for isot in self._isotopes.values():
+            self._isotopes[isot['id']].connect()
             
     def disconnect(self):
         """

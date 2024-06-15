@@ -11,6 +11,7 @@ class PumpObj:
     steps_per_degree: int
     steps_per_ml: int
     default_dir: int
+    _initialised: bool = False
     
     def initialise(self, isotope_board: isotope.Isotope, port_id: int) -> None:
         """
@@ -21,7 +22,8 @@ class PumpObj:
             port_id (int): The ID of the port to which the motor is connected.
         """
         self.motor = isotope_board.motors[port_id]
-        self.motor.configure(self.steps_per_degree, self.current, self.rpm)        
+        self.motor.configure(self.steps_per_degree, self.current, self.rpm)
+        self._initialised = True
     
     def rotate_by_steps(self, steps: int) -> bool:
         """
@@ -33,6 +35,8 @@ class PumpObj:
         Returns:
             bool: True if the execution is successful, False otherwise.
         """
+        if not self._initialised:
+            self.initialise()
         if not self.is_powered():
             self.motor.enable()
         result = self.motor.rotate_by_steps(steps * self.default_dir)
@@ -52,7 +56,7 @@ class PumpObj:
         """
         assert(millilitre > 0)
         assert(direction in [-1, 1])
-        
+
         steps = round(self.steps_per_ml * millilitre * direction)
         return self.rotate_by_steps(steps)
     
@@ -166,4 +170,5 @@ class Pump:
             pump.steps_per_degree = device.get('steps_per_degree', defaults['steps_per_degree'])
             pump.steps_per_ml = device.get('steps_per_ml', defaults['steps_per_ml'])
             pump.default_dir = -1 if device.get('reverse_direction', defaults['reverse_direction']) else 1
+            pump.initialise(self._isots[device['board_id']], device['port_id'])
             self._pumps[device['id']] = pump

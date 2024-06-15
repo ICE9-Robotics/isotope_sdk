@@ -3,6 +3,7 @@ from unit2_controller import Unit2
 def main():
     # Create a Unit2 object    
     unit2 = Unit2('config.yaml')
+    unit2.connect()
 
     # Test the pump
     for id in unit2.pump.get_device_ids():
