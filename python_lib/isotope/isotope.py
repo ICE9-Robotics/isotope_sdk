@@ -74,9 +74,10 @@ class Isotope:
         screen_level = logging.DEBUG if debug else logging.INFO
         setup_logger(__package__, screen_level=screen_level)
         self._logger = logging.getLogger(__package__)
+        self._logger.info("==============================================")
+        self._logger.info(f"Initiating Isotope Breakout connected to port {usb_address}")
         self._logger.info(f"SDK version: {firmware_to_string(sdk_version)}")
         self._logger.info(f"Minimum firmware: {firmware_to_string(minimum_firmware)}")
-        self._logger.info(f"USB address: {usb_address}")
         self._logger.info(f"Response timeout: {response_timeout}")
         
         self.comms = icl.Isotope_comms_protocol(usb_address, response_timeout)

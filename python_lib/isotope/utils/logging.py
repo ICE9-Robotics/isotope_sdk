@@ -1,5 +1,7 @@
 import logging
+from logging.handlers import RotatingFileHandler
 from typing import Union
+import os
 
 
 def setup_logger(name: str = 'isotope', 
@@ -16,6 +18,13 @@ def setup_logger(name: str = 'isotope',
     """
 
     logger = logging.getLogger(name)
+    
+    try:
+        if logger.configured:
+            return
+    except AttributeError:
+        pass
+    
     logger.setLevel(min(screen_level, file_level))
 
     # Stream handler
@@ -29,9 +38,13 @@ def setup_logger(name: str = 'isotope',
     # File handler
     if file_level is not None:
         if log_file is None:
-            log_file = f'{name}.log'
-        f_handler = logging.FileHandler(log_file)
+            log_file = os.path.join('.log',f'{name}.log')
+        if not os.path.exists(os.path.dirname(log_file)):
+            os.makedirs(os.path.dirname(log_file))
+        f_handler = RotatingFileHandler(log_file, maxBytes=5*1024*1024, backupCount=10)
         f_handler.setLevel(file_level)
         f_format = logging.Formatter('%(asctime)s %(name)s::%(module)s::%(levelname)-8s: %(message)s')
         f_handler.setFormatter(f_format)
         logger.addHandler(f_handler)
+
+    logger.configured = True
