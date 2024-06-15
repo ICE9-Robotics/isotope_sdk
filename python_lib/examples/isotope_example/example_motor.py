@@ -13,53 +13,50 @@ resolution = 7.5
 current = 400
 rpm = 50
 
-# USB address of the Isotope board. 
-# For windows machine, this is usually "COMX" where X is the port number; 
-# for Ubuntu, this is usually "/dev/ttyACMX", where X is the port number; 
+# USB address of the Isotope board.
+# For windows machine, this is usually "COMX" where X is the port number;
+# for Ubuntu, this is usually "/dev/ttyACMX", where X is the port number;
 # and for MacOS, this is usually "/dev/cu.usbmodemXXXXX".
 usb_address = '/dev/cu.usbmodem21201'
 
-def start_comms():
-    icl = isotope.Isotope_comms_protocol(
-        usb_address, DEBUG_ENABLED, response_timeout=5)
-    if (not icl.verify_firmware()):
-        raise Exception("Error: Could not connect to Isotope or firmware version is not compatible")
-    return icl
-   
+
 def main():
     # Start the communication
-    icl = start_comms()
-    
-    # Create a motor object 
-    motor = isotope.port.Motor(icl, port_id, resolution, current, rpm)
+    isot = isotope.Isotope(
+        usb_address, DEBUG_ENABLED, response_timeout=5)
+    isot.connect()
+
+    # Configure motor port
+    isot.motors[port_id].configure(resolution, current, rpm)
 
     # Enable the motor port
-    if motor.enable():
+    if isot.motors[port_id].enable():
         print("Motor port enabled")
     else:
         raise Exception("Failed to enable the motor port")
 
     # Rotate the motor by steps
-    if motor.rotate_by_steps(100):
+    if isot.motors[port_id].rotate_by_steps(100):
         print("Motor roated by steps")
     else:
         raise Exception("Failed to rotate the motor by steps")
     time.sleep(1)
 
     # Rotate the motor by degrees
-    if motor.rotate_by_degrees(90):
+    if isot.motors[port_id].rotate_by_degrees(90):
         print("Motor roated by degrees")
     else:
         raise Exception("Failed to rotate the motor by degrees")
 
     # Disable the motor port
-    if motor.disable():
+    if isot.motors[port_id].disable():
         print("Motor port disabled")
     else:
         raise Exception("Failed to disable the motor port")
-    
+
     # Close the connection
-    icl.close()
+    isot.disconnect()
+
 
 if __name__ == "__main__":
     main()

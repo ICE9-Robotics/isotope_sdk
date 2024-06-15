@@ -34,7 +34,7 @@ def main():
             raise Exception("Failed to toggle Valve {id}")
     
     # Close the connection
-    unit2.close()
+    unit2.disconnect()
     
 if __name__ == "__main__":
     main()
