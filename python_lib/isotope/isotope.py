@@ -80,6 +80,9 @@ class IsotopeException(Exception):
 
 
 class Isotope:
+    
+    heart_beat_interval: int = 5
+        
     def __init__(self, usb_address: str, debug=False, response_timeout=5) -> None:
         """Isotope_comms_protocol class for communication with the Isotope board.
 
@@ -109,7 +112,6 @@ class Isotope:
             self._logger.error(e, exc_info=True)
             raise e
         
-        self._heartbeat_interval = 1
         self._heartbeat_thread = threading.Thread(target=self._heartbeat)
     
     def connect(self) -> bool:
@@ -156,8 +158,10 @@ class Isotope:
         return ok and self.comms.is_resp_ok(msg)
         
     def _heartbeat(self) -> None:
+        """Heartbeat thread to keep the connection alive.
+        """
         while self.comms.is_connected():
-            if time.perf_counter() - self.comms.last_comm_tick < self._heartbeat_interval:
+            if time.perf_counter() - self.comms.last_comm_tick < self.heart_beat_interval:
                 time.sleep(0.1)
                 continue
             self.comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_HEARTBEAT, 0, 0)
