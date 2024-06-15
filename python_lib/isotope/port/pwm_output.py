@@ -45,7 +45,7 @@ class PWMOutputPort(IsotopePort):
         """Read the PWM value of the PWM port.
 
         Returns:
-            Union[int, None]: The PWM value of the PWM port, or None if the read failed.
+            int | None: The PWM value of the PWM port, or None if the read failed.
         """
         value, msg = self._comms.send_cmd(icl.CMD_TYPE_GET, icl.SEC_PWM_OUTPUT, self._id, 0)
         return value if self._comms.is_resp_ok(msg) else None

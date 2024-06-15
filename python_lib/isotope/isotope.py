@@ -1,34 +1,13 @@
 import threading
 import time
 import logging
+from .utils.logging import setup_logger
 from . import port
 from . import isotope_comms_lib as icl
 
 minimum_firmware = (1, 0, 0)
 sdk_version = (1, 0, 0)
 
-
-def setup_logger(name='isotope', screen_level=logging.WARN, file_level=logging.DEBUG, log_file=None):
-    logger = logging.getLogger(name)
-    logger.setLevel(min(screen_level, file_level))
-
-    # Stream handler
-    if screen_level is not None:
-        s_handler = logging.StreamHandler()
-        s_handler.setLevel(screen_level)
-        s_format = logging.Formatter('%(name)s::%(module)s::%(levelname)-8s: %(message)s')
-        s_handler.setFormatter(s_format)
-        logger.addHandler(s_handler)
-
-    # File handler
-    if file_level is not None:
-        if log_file is None:
-            log_file = f'isotope.log'
-        f_handler = logging.FileHandler(log_file)
-        f_handler.setLevel(file_level)
-        f_format = logging.Formatter('%(asctime)s %(name)s::%(module)s::%(levelname)-8s: %(message)s')
-        f_handler.setFormatter(f_format)
-        logger.addHandler(f_handler)
         
 def firmware_from_string(firmware_string: str) -> tuple[int, ...]:
     """Converts firmware in string to int tuple.

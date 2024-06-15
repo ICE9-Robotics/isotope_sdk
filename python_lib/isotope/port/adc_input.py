@@ -31,7 +31,7 @@ class ADCInputPort(IsotopePort):
         """Get the input value of the ADC port.
 
         Returns:
-            Union[int, None]: The input value of the ADC port, or None if the read failed.
+            int | None: The input value of the ADC port, or None if the read failed.
         """
         value, msg = self._comms.send_cmd(icl.CMD_TYPE_GET, icl.SEC_ANALOG_INPUT, self._id, 0)
         return value if self._comms.is_resp_ok(msg) else None

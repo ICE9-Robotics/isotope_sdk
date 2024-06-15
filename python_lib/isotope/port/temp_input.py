@@ -28,7 +28,7 @@ class TempInputPort(IsotopePort):
         """Get the temperature input value from the temperature port.
 
         Returns:
-            Union[int, None]: The temperature input value of the temperature port, or None if the read failed.
+            int | None: The temperature input value of the temperature port, or None if the read failed.
         """
         value, msg = self._comms.send_cmd(icl.CMD_TYPE_GET, icl.SEC_TEMP_SENSOR, self._id, 0)
         return value if self._comms.is_resp_ok(msg) else None

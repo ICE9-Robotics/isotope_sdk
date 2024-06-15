@@ -53,8 +53,9 @@ RES_ERR_WRONG_SEC_TYPE = "ERR1"
 RES_ERR_WRONG_SEC_SECTION = "ERR2"
 RES_ERR_WRONG_SEC_ITEM = "ERR3"
 RES_ERR_WRONG_SEC_VALUE = "ERR4"
-RES_ERR_NON_JSON_RESPONSE = "ERR5"
-RES_ERR_RESPONSE_TIMEOUT = "ERR6"
+
+INC_ERR_NON_JSON_RESPONSE = "ERRINC1"
+INC_ERR_RESPONSE_TIMEOUT = "ERRINC2"
 
 
 class IsotopeCommsError(Exception):
@@ -83,8 +84,6 @@ class Isotope_comms_protocol:
         self.ser = None
         self.last_comm_tick = None
         
-        self._logger.debug(f"usb_address: {usb_address}, response_timeout: {response_timeout}")
-        
     def __del__(self) -> None:
         """Destructor to close the serial port.
         """
@@ -96,6 +95,9 @@ class Isotope_comms_protocol:
     def connect(self) -> None:
         """Connect to the Isotope board.
         """
+        self._logger.debug(f"Connecting to {BOARD_NAME}...")
+        self._logger.debug(f"USB address: {self.usb_address}")
+        self._logger.debug(f"Baud rate: {self.serial_baudrate}")
         try:
             self.ser = serial.Serial(
                 self.usb_address, self.serial_baudrate, timeout=0.5)  # open serial port
@@ -136,7 +138,7 @@ class Isotope_comms_protocol:
             value (int): Value for the command.
 
         Returns:
-            str | tuple[str, str]: for CMD_TYPE_SET, returns error/message code; for CMD_TYPE_GET, returns payload and error/message code as a tuple.
+            str | tuple[str, str]: for CMD_TYPE_SET, returns message code; for CMD_TYPE_GET, returns payload and message code as a tuple.
         """
         if self.ser is None:
             raise IsotopeCommsError("Serial port is not open.")
@@ -147,9 +149,9 @@ class Isotope_comms_protocol:
         self.ser.write(message_s.encode('ascii'))
         self.last_comm_tick = time.perf_counter()
         
-        self._logger.debug("Outgoing >> ", message_s.strip())
-        timeout_flag = self._wait_for_serial()
-        if not timeout_flag:
+        self._logger.debug(f"Outgoing >> {self.last_comm_tick:.6f}", message_s.strip())
+        received = self._wait_for_serial()
+        if received:
             resp = self.ser.readline()
             self._logger.debug("Incoming << ", resp.decode("utf-8").strip())
             try:
@@ -157,11 +159,11 @@ class Isotope_comms_protocol:
                 error = resp_dict['error']
                 payload = resp_dict['payload']
             except:
-                error = RES_ERR_NON_JSON_RESPONSE
+                error = INC_ERR_NON_JSON_RESPONSE
                 payload = 0
         else:
-            self._logger.warn("Response timeout.")
-            error = RES_ERR_RESPONSE_TIMEOUT
+            self._logger.error("Response timeout.")
+            error = INC_ERR_RESPONSE_TIMEOUT
             payload = 0
 
         if type == CMD_TYPE_SET:
@@ -169,7 +171,12 @@ class Isotope_comms_protocol:
         else:
             return payload, error
 
-    def is_resp_ok(self, msg):
+    def is_resp_ok(self, msg: str) -> bool:
+        """Check if the response is OK and logs error if not.
+        
+        Returns:
+            bool: True if the response is OK, False otherwise.
+        """
         if (msg == RES_ACK):
             self._logger.debug("Response OK")
             return True
@@ -177,14 +184,24 @@ class Isotope_comms_protocol:
             self._log_error(msg)
             return False
 
-    def _wait_for_serial(self):
+    def _wait_for_serial(self) -> bool:
+        """Wait for serial response.
+
+        Returns:
+            bool: True if reresponse is received, False if response timeout.
+        """
         time_started = time.perf_counter()
         while (time.perf_counter() - time_started) < self.resp_timeout:
             if (self.ser.in_waiting > 0):
-                return False
-        return True
+                return True
+        return False
         
-    def _log_error(self, error_code):
+    def _log_error(self, error_code: str) -> None:
+        """Log error message based on error code.
+
+        Args:
+            error_code (str): Error code from the response.
+        """
         if error_code == RES_ERR_WRONG_JSON_FORMAT:
             msg = "Error Response from Isotope Board - Wrong JSON format string"
         if error_code == RES_ERR_WRONG_SEC_TYPE:
@@ -195,9 +212,9 @@ class Isotope_comms_protocol:
             msg = "Error Response from Isotope Board - Wrong command Item for the Section"
         if error_code == RES_ERR_WRONG_SEC_VALUE:
             msg = "Error Response from Isotope Board - Value out of range"
-        if error_code == RES_ERR_NON_JSON_RESPONSE:
-            msg = "Error Response from Isotope Board - Returned value cannot be parsed"
-        if error_code == RES_ERR_RESPONSE_TIMEOUT:
-            msg = "Error Response from Isotope Board - Waiting for response Timeout"
+        if error_code == INC_ERR_NON_JSON_RESPONSE:
+            msg = "Incoming message error - Response is not a valid JSON format"
+        if error_code == INC_ERR_RESPONSE_TIMEOUT:
+            msg = "Incoming message error - Timeout when waiting for serial response"
         
-        self._logger.error("Response error: ", msg)
+        self._logger.error(msg)

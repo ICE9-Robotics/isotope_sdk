@@ -1,5 +1,6 @@
 import yaml
 from isotope import Isotope
+from isotope.utils.logging import setup_logger
 from .module import Pump, Valve
 
 
@@ -18,6 +19,8 @@ class Unit2:
     _isotopes: dict[int, Isotope]
 
     def __init__(self, config_file: str = "config.yaml"):
+        setup_logger(__package__)
+        
         self.config = yaml.load(open(config_file, 'r'), Loader=yaml.FullLoader)
         self.initialise_isotope_board()
         self.pump = Pump(self._isotopes, self.config)
@@ -40,8 +43,7 @@ class Unit2:
             self._isotopes[isot['id']].connect()
             
     def disconnect(self):
-        """
-        Disconnect the isotope boards.
+        """Disconnect the isotope boards.
         """
         for isot in self._isotopes.values():
             isot.disconnect()
