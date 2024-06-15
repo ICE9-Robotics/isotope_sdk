@@ -40,7 +40,7 @@ class Unit2:
         """Connect to the isotope boards.
         """       
         for isot in self._isotopes.values():
-            self._isotopes[isot['id']].connect()
+            isot.connect()
             
     def disconnect(self):
         """Disconnect the isotope boards.
