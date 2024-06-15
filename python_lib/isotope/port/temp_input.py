@@ -24,7 +24,7 @@ class TempInputPort(IsotopePort):
 
         super().__init__(comms, port_id)
 
-    def get_temperature(self) -> Union[int, None]:
+    def get_value(self) -> Union[int, None]:
         """Get the temperature input value from the temperature port.
 
         Returns:

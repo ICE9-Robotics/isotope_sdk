@@ -27,7 +27,7 @@ class ADCInputPort(IsotopePort):
 
         super().__init__(comms, port_id)
 
-    def get_input(self) -> Union[int, None]:
+    def get_value(self) -> Union[int, None]:
         """Get the input value of the ADC port.
 
         Returns:

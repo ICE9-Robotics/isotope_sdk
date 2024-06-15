@@ -100,11 +100,11 @@ class Isotope:
         self.comms = icl.Isotope_comms_protocol(usb_address, response_timeout)
         
         try:
-            self.power_outputs = port.PowerOutput(self.comms)
+            self.powers = port.PowerOutput(self.comms)
             self.motors = port.Motor(self.comms)
-            self.adc_inputs = port.ADCInput(self.comms)
-            self.pwm_outputs = port.PWMOutput(self.comms)
-            self.temp_inputs = port.TempInput(self.comms)
+            self.adcs = port.ADCInput(self.comms)
+            self.pwms = port.PWMOutput(self.comms)
+            self.temps = port.TempInput(self.comms)
         except ValueError as e:
             self._logger.error(e, exc_info=True)
             raise e
