@@ -34,7 +34,7 @@ class Unit2:
         for isot in self.config['isotope_board']['devices']:
             debug_enabled = isot.get('debug_enabled', defaults['debug_enabled'])
             comm_timeout = isot.get('comm_timeout', defaults['comm_timeout'])
-            self._isotopes[isot['id']] = Isotope(isot['port'], debug_enabled, comm_timeout)
+            self._isotopes[isot['name']] = Isotope(isot['port'], debug_enabled, comm_timeout)
             
     def connect(self):
         """Connect to the isotope boards.
