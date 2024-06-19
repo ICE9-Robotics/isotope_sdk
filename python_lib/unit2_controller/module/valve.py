@@ -4,7 +4,10 @@ import isotope
 
 class ValveObj:
     """
-    The valve object class.
+    The valve object class provides methods for controlling the valves on the Isotope board.
+    
+    Attributes:s
+        normally_open (bool): The state of the valve when it is not powered.
     """
     
     power_output: isotope.port.PowerOutputPort
@@ -65,7 +68,7 @@ class ValveObj:
 
 class Valve:
     """
-    The Valve class for controlling Unit 2 diaphragm valves.
+    The Valve class initialises and manages the valve objects which provides methods for controlling the valves on the Isotope board.
     
     Attributes:
         _config (dict[str, any]): configuration for valves, as specified in config.yaml.
@@ -101,61 +104,6 @@ class Valve:
         """
         return list(self._valves.keys())
         
-    def open(self, name: Union[int, str]) -> bool:
-        """
-        Opens the specified valve.
-
-        Args:
-            name ([int | str]): The name of the valve device.
-
-        Returns:
-            bool: True if the execution is successful, False otherwise.
-        """
-        self._verify_name(name)
-        return self._valves[name].open()
-    
-    def close(self, name: Union[int, str]) -> bool:
-        """
-        Close the specified valve.
-
-        Args:
-            name ([int | str]): The name of the valve device.
-
-        Returns:
-            bool: True if the execution is successful, False otherwise.
-        """
-        self._verify_name(name)
-        return self._valves[name].close()
-    
-    def toggle(self, name: Union[int, str]) -> bool:
-        """
-        Toggles the specified valve.
-
-        Args:
-            name ([int | str]): The name of the valve device.
-
-        Returns:
-            bool: True if the execution is successful, False otherwise.
-        """
-        self._verify_name(name)
-        if self.is_open(name):
-            return self.close(name)
-        else:
-            return self.open(name)
-    
-    def is_open(self, name: Union[int, str]) -> bool:
-        """
-        Checks if the specified valve is open.
-
-        Args:
-            name ([int | str]): The name of the valve device.
-
-        Returns:
-            bool: True if the valve is open, False otherwise.
-        """
-        self._verify_name(name)
-        return self._valves[name].is_open()
-    
     def __getitem__(self, name: Union[int, str]) -> ValveObj:
         """
         Gets the valve object with the specified name.

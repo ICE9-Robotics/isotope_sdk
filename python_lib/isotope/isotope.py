@@ -65,6 +65,8 @@ class Isotope:
     
     Attributes:
         heart_beat_interval (int): Interval for the heartbeat thread.
+        
+    Variables:
         powers (port.PowerOutput): Instance of the PowerOutput class, for controlling the power output ports.
         motors (port.Motor): Instance of the Motor class, for controlling the motor ports.
         adcs (port.ADCInput): Instance of the ADCInput class, for reading the ADC input ports.

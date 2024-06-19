@@ -4,7 +4,15 @@ import isotope
 
 class PumpObj:
     """
-    The pump object class.
+    The pump object class provides methods for controlling the pumps on the Isotope board.
+    
+    Attributes:
+        rpm (int): The RPM of the motor.
+        current (int): The current of the motor.
+        steps_per_degree (int): The number of steps per degree of rotation.
+        steps_per_ml (int): The number of steps per milliliter.
+        default_dir (int): The default direction of the motor.
+        _initialised (bool): True if the pump is initialised, False otherwise.
     """
     
     motor: isotope.port.MotorPort
@@ -87,7 +95,7 @@ class PumpObj:
 
 class Pump:
     """
-    The Pump class for controlling Unit 2 diaphragm pumps.
+    The Pump class initialises and manages the pump object which provides methods for controlling the pumps on the Isotope board.
     
     Attributes:
         _config (dict[str, any]): configurations for pumps, as specified in config.yaml.
@@ -122,39 +130,6 @@ class Pump:
             list[[int | str]]: A list of pump names.
         """
         return list(self._pumps.keys())
-        
-    def move_liquid(self, name: Union[int, str], millilitre: float, direction: int = 1) -> bool:
-        """
-        Moves the liquid in the specified pump by the given volume.
-        
-        Args:
-            name ([int | str]): The name of the pump.
-            millilitre (float): The volume of liquid to be moved in milliliters.
-            direction (int, optional): The direction of movement, can be either -1 or 1. Defaults to 1.
-        
-        Returns:
-            bool: True if the execution is successful, False otherwise.
-        
-        Raises:
-            ValueError: If millilitre is less than or equal to 0.
-            ValueError: If direction is not -1 or 1.
-        """
-        self._verify_name(name)
-        return self._pumps[name].move_liquid(millilitre, direction)
-    
-    def move_liquid_by_steps(self, name: Union[int, str], steps: int) -> bool:
-        """
-        Moves liquid in the specified pump by rotating the motor with the specified number of steps.
-        
-        Args:
-            name ([int | str]): The name of the pump.
-            steps (int): The number of steps. Can be negative to reverse the direction.
-        
-        Returns:
-            bool: True if the movement is successful, False otherwise.
-        """
-        self._verify_name(name)
-        return self._pumps[name].move_liquid_by_steps(steps)
     
     def __getitem__(self, name: Union[int, str]) -> PumpObj:
         """

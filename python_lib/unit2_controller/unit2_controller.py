@@ -12,10 +12,9 @@ class Unit2:
     It provides a straightforward interface for controlling the pumps and valves connected to multiple Isotope boards.
     Details of the pumps, valves, and Isotope boards can be specified in a configuration file in YAML format.
 
-    Attributes:
+    Variables:
         pump (Pump): an instance of the Pump class, providing methods for communicating with the pumps connected to the Isotope boards.
         valve (Valve): an instance of the Valve class, providing methods for communicating with the valves connected to the Isotope boards.
-        _isotopes (dict[[int | str], isotope.Isotope_comms_protocol]): communication protocol instances for installed isotope boards.
     """
 
     pump: Pump
