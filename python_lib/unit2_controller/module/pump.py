@@ -122,7 +122,7 @@ class Pump:
         self._configure()
         self._logger.debug("Pump initialised.")
     
-    def get_names(self) -> list[Union[int, str]]:
+    def names(self) -> list[Union[int, str]]:
         """
         Gets the names of all the pumps.
         
@@ -130,6 +130,15 @@ class Pump:
             list[[int | str]]: A list of pump names.
         """
         return list(self._pumps.keys())
+    
+    def items(self) -> list[tuple[Union[int, str], PumpObj]]:
+        """
+        Provides a view of the content in the form of name-value sets.
+        
+        Returns:
+            list[tuple[int | str, PumpObj]]: A list of name-value sets.
+        """
+        return self._pumps.items()
     
     def __getitem__(self, name: Union[int, str]) -> PumpObj:
         """

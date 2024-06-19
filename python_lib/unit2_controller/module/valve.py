@@ -95,7 +95,7 @@ class Valve:
         self._configure()
         self._logger.debug("Valve initialised.")
         
-    def get_names(self) -> list[Union[int, str]]:
+    def names(self) -> list[Union[int, str]]:
         """
         Gets the names of all the valves.
         
@@ -103,6 +103,14 @@ class Valve:
             list[[int | str]]: A list of the names of the valves.
         """
         return list(self._valves.keys())
+    
+    def items(self) -> list[tuple[Union[int, str], ValveObj]]:
+        """
+        Provides a view of the content in the form of name-value sets.
+        Returns:
+            list[tuple[int | str, ValveObj]]: A list of name-value sets.
+        """
+        return self._valves.items()
         
     def __getitem__(self, name: Union[int, str]) -> ValveObj:
         """
