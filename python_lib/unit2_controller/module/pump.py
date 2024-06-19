@@ -1,5 +1,6 @@
-import isotope
 from typing import Union
+import logging
+import isotope
 
 class PumpObj:
     """
@@ -14,6 +15,9 @@ class PumpObj:
     default_dir: int
     _initialised: bool = False
     
+    def __init__(self) -> None:
+        self._logger = logging.getLogger(__package__)
+    
     def initialise(self, isotope_board: isotope.Isotope, port_id: int) -> None:
         """
         Initializes the pump object with the specified board and port ID.
@@ -22,6 +26,8 @@ class PumpObj:
             isotope_board (isotope.Isotope): The Isotope object.
             port_id (int): The ID of the port to which the motor is connected.
         """
+        self._logger.debug(f"Initialising Pump connected to Isotope Breakout {isotope_board} on port {port_id}...")
+        
         self.motor = isotope_board.motors[port_id]
         self.motor.configure(self.steps_per_degree, self.current, self.rpm)
         self._initialised = True
@@ -36,12 +42,13 @@ class PumpObj:
         Returns:
             bool: True if the execution is successful, False otherwise.
         """
-        if not self._initialised:
-            self.initialise()
+        self._logger.debug(f"Moving liquid by {steps} steps...")
+        assert(self._initialised, "Pump not initialised.")
         if not self._is_powered():
             self.motor.enable()
         result = self.motor.rotate_by_steps(steps * self.default_dir)
         self.motor.disable()
+        self._logger.debug(f"Movement {'successful' if result else 'failed'}.")
         return result
     
     def move_liquid(self, millilitre: float, direction: int) -> bool:
@@ -58,7 +65,8 @@ class PumpObj:
         Raises:
             ValueError: If millilitre is less than or equal to 0.
             ValueError: If direction is not -1 or 1.
-        """        
+        """
+        self._logger.debug(f"Moving liquid by {millilitre} ml...")    
         if millilitre <= 0:
             raise ValueError("millilitre must be greater than 0")
         
@@ -79,7 +87,7 @@ class PumpObj:
 
 class Pump:
     """
-    Class for controlling Unit 2 diaphragm pumps.
+    The Pump class for controlling Unit 2 diaphragm pumps.
     
     Attributes:
         _config (dict[str, any]): configurations for pumps, as specified in config.yaml.
@@ -99,9 +107,12 @@ class Pump:
             isotope_boards (tuple[isotope.Isotope,...]): Isotope instances of the installed Isotope boards.
             config (dict): A dictionary containing the configuration settings for the pumps.
         """
+        self._logger = logging.getLogger(__package__)
+        self._logger.debug("Initialising Pump...")
         self._isots = isotope_boards
         self._config = config['pump']
         self._configure()
+        self._logger.debug("Pump initialised.")
     
     def get_names(self) -> list[Union[int, str]]:
         """
@@ -175,9 +186,12 @@ class Pump:
         """
         Configures pumps based on the provided configuration settings.
         """
+        self._logger.debug(f"Configuring pumps... Registered ${len(self._config['devices'])}.")
+        
         defaults = self._config['defaults']
         self._pumps = {}
         for device in self._config['devices']:
+            self._logger.debug(f"Configuring Pump ${device['name']}...")
             pump = PumpObj()
             pump.rpm = device.get('rpm', defaults['rpm'])
             pump.current = device.get('current', defaults['current'])
@@ -186,3 +200,4 @@ class Pump:
             pump.default_dir = -1 if device.get('reverse_direction', defaults['reverse_direction']) else 1
             pump.initialise(self._isots[device['board_id']], device['port_id'])
             self._pumps[device['name']] = pump
+            self._logger.debug(f"Pump ${device['name']} configured.")

@@ -7,7 +7,7 @@ import os
 def setup_logger(name: str = 'isotope', 
                  screen_level : Union[int, None] = logging.WARN, 
                  file_level: Union[int, None] = logging.DEBUG, 
-                 log_file: Union[int, None] = None):
+                 log_file: Union[int, None] = None) -> logging.Logger:
     """Setup logger for the package.
 
     Args:
@@ -48,3 +48,4 @@ def setup_logger(name: str = 'isotope',
         logger.addHandler(f_handler)
 
     logger.configured = True
+    return logger

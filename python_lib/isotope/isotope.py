@@ -59,11 +59,28 @@ class IsotopeException(Exception):
 
 
 class Isotope:
+    """The Isotope class is the higher-level class for communicating with the Isotope Breakout,
+    with a single method call connect() to connect to the board and initialise all the I/O ports.
+    A heartbeat thread is incorporated to keep the connection alive.
+    
+    Attributes:
+        heart_beat_interval (int): Interval for the heartbeat thread.
+        powers (port.PowerOutput): Instance of the PowerOutput class, for controlling the power output ports.
+        motors (port.Motor): Instance of the Motor class, for controlling the motor ports.
+        adcs (port.ADCInput): Instance of the ADCInput class, for reading the ADC input ports.
+        pwms (port.PWMOutput): Instance of the PWMOutput class, for controlling the PWM output ports.
+        temps (port.TempInput): Instance of the TempInput class, for reading the temperature input ports.
+    """
     
     heart_beat_interval: int = 5
-        
+    powers: port.PowerOutput
+    motors: port.Motor
+    adcs: port.ADCInput
+    pwms: port.PWMOutput
+    temps: port.TempInput
+    
     def __init__(self, usb_address: str, debug=False, response_timeout=5) -> None:
-        """Isotope_comms_protocol class for communication with the Isotope board.
+        """Constructor for the Isotope class.
 
         Args:
             usb_address (str): USB port address of the Isotope board.
@@ -72,8 +89,7 @@ class Isotope:
             serial_baudrate (int): Baud rate for the serial connection. Default is 115200.
         """
         screen_level = logging.DEBUG if debug else logging.INFO
-        setup_logger(__package__, screen_level=screen_level)
-        self._logger = logging.getLogger(__package__)
+        self._logger = setup_logger(__package__, screen_level=screen_level)
         self._logger.info("==============================================")
         self._logger.info(f"Initiating Isotope Breakout connected to port {usb_address}")
         self._logger.info(f"SDK version: {firmware_to_string(sdk_version)}")

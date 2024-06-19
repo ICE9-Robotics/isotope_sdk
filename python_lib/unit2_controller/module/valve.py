@@ -1,3 +1,4 @@
+import logging
 from typing import Union
 import isotope
 
@@ -9,6 +10,9 @@ class ValveObj:
     power_output: isotope.port.PowerOutputPort
     normally_open: bool
     
+    def __init__(self) -> None:
+        self._logger = logging.getLogger(__package__)
+    
     def initialise(self, isot: isotope.Isotope, port_id: int) -> None:
         """
         Initializes the valve object with the specified board and port ID.
@@ -17,6 +21,7 @@ class ValveObj:
             isot (isotope.Isotope): The Isotope instance for controlling the board.
             port_id (int): The ID of the power output port to which the valve is connected.
         """
+        self._logger.debug(f"Initialising Valve connected to Isotope Breakout {isot} on port {port_id}...")
         self.power_output = isot.powers[port_id]
         self.power_output.default_pwm = 1024
     
@@ -27,6 +32,7 @@ class ValveObj:
         Returns:
             bool: True if the execution is successful, False otherwise.
         """
+        self._logger.debug("Opening valve...")
         return self.power_output.disable() if self.normally_open else self.power_output.enable()
     
     def close(self) -> bool:
@@ -36,6 +42,7 @@ class ValveObj:
         Returns:
             bool: True if the execution is successful, False otherwise.
         """
+        self._logger.debug("Closing valve...")
         return self.power_output.enable() if self.normally_open else self.power_output.disable()
     
     def toggle(self) -> bool:
@@ -58,7 +65,7 @@ class ValveObj:
 
 class Valve:
     """
-    Class for controlling Unit 2 diaphragm valves.
+    The Valve class for controlling Unit 2 diaphragm valves.
     
     Attributes:
         _config (dict[str, any]): configuration for valves, as specified in config.yaml.
@@ -78,9 +85,12 @@ class Valve:
             isotope_boards (tuple[isotope.Isotope,...]): Isotope instances of the installed Isotope boards.
             config (dict): A dictionary containing the configuration settings for the valves.
         """
+        self._logger = logging.getLogger(__package__)
+        self._logger.debug("Initialising Valve...")
         self._isots = isotope_boards
         self._config = config['valve']
         self._configure()
+        self._logger.debug("Valve initialised.")
         
     def get_names(self) -> list[Union[int, str]]:
         """
@@ -176,10 +186,13 @@ class Valve:
         """
         Configures valves based on the provided configuration settings.
         """
+        self._logger.debug(f"Configuring valves... Registered ${len(self._config['devices'])}.")
         defaults = self._config['defaults']
         self._valves = {}
         for device in self._config['devices']:
+            self._logger.debug(f"Configuring Valve ${device['name']}...")
             valve = ValveObj()
             valve.normally_open = device.get('normally_open', defaults['normally_open'])
             valve.initialise(self._isots[device['board_id']], device['port_id'])
             self._valves[device['name']] = valve
+            self._logger.debug(f"Valve ${device['name']} configured.")

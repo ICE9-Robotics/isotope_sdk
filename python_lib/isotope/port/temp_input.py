@@ -30,6 +30,7 @@ class TempInputPort(IsotopePort):
         Returns:
             int | None: The temperature input value of the temperature port, or None if the read failed.
         """
+        self._logger.debug(f"Reading value from temperature port {self._id}...")
         value, msg = self._comms.send_cmd(icl.CMD_TYPE_GET, icl.SEC_TEMP_SENSOR, self._id, 0)
         return value if self._comms.is_resp_ok(msg) else None
 

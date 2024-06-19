@@ -1,3 +1,4 @@
+import logging
 import isotope.isotope_comms_lib as icl
 
 class PortException(Exception):
@@ -19,7 +20,8 @@ class IsotopePort:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
             port_id (int): ID of the port on the Isotope board.
-        """   
+        """
+        self._logger = logging.getLogger(__package__)
         self._comms = comms
         self._id = port_id
         

@@ -103,6 +103,7 @@ class MotorPort(IsotopePort):
         Returns:
             bool: True if the MOT port was successfully enabled, False otherwise.
         """
+        self._logger.debug(f"Enabling motor {self._id}...")
         if not self._configured:
             self._configure()
         msg = self._comms.send_cmd(
@@ -118,6 +119,7 @@ class MotorPort(IsotopePort):
         Returns:
             bool: True if the MOT port was successfully disabled, False otherwise.
         """
+        self._logger.debug(f"Disabling motor {self._id}...")
         msg = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_MOTOR_ENABLE, self._id, 0)
         if self._comms.is_resp_ok(msg):
             self._enabled = False
@@ -144,6 +146,7 @@ class MotorPort(IsotopePort):
         Returns:
             bool: True if the command was successful, False otherwise.
         """
+        self._logger.debug(f"Rotating motor {self._id} by {steps} steps...")
         if not self.is_enabled():
             return False
         msg = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_MOTOR_STEP, self._id, steps)
@@ -160,6 +163,7 @@ class MotorPort(IsotopePort):
         Returns:
             bool: True if the command was successful, False otherwise.
         """
+        self._logger.debug(f"Rotating motor {self._id} by {degrees} degrees...")
         steps = degrees/self._resolution
         return self.rotate_by_steps(steps)
 
@@ -172,6 +176,7 @@ class MotorPort(IsotopePort):
         Returns:
             bool: True if the RPM value was successfully set, False otherwise.
         """
+        self._logger.debug(f"Setting RPM to {value}...")
         msg = self._comms.send_cmd(
             icl.CMD_TYPE_SET, icl.SEC_MOTOR_RPM_SPEED, self._id, value)
         if self._comms.is_resp_ok(msg):
@@ -188,6 +193,7 @@ class MotorPort(IsotopePort):
         Returns:
             bool: True if the current value was successfully set, False otherwise.
         """
+        self._logger.debug(f"Setting current to {value} mA...")
         msg = self._comms.send_cmd(
             icl.CMD_TYPE_SET, icl.SEC_MOTOR_CURRENT_MILLIAMP, self._id, value)
         if self._comms.is_resp_ok(msg):
@@ -206,10 +212,12 @@ class MotorPort(IsotopePort):
         """
         if not self._configure_requested:
             raise icl.IsotopeCommsError("Parameters are not set. Have you called the MotorPort.configure method?")
+        self._logger.debug(f"Configuring motor {self._id}...")
         result = self.set_rpm(self._rpm) and self.set_current(self._current)
         if result:
             self._configured = True
             self._configure_requested = False
+        self._logger.debug(f"{'Successfully configured' if result else 'Failed to configure'} motor {self._id}.")
         return result
 
 

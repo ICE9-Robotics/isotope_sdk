@@ -1,4 +1,5 @@
 from typing import Union
+import logging
 import isotope.isotope_comms_lib as icl
 from .isotope_port import IsotopePort
 
@@ -35,6 +36,7 @@ class PWMOutputPort(IsotopePort):
         Raises:
             ValueError: PWM value must be between 0 and 1024.
         """
+        self._logger.debug(f"Setting PWM value of PWM port {self._id} to {value}...")
         if value < 0 or value > 1024:
             raise ValueError("PWM value must be between 0 and 1024.")
 
@@ -47,6 +49,7 @@ class PWMOutputPort(IsotopePort):
         Returns:
             int | None: The PWM value of the PWM port, or None if the read failed.
         """
+        self._logger.debug(f"Reading PWM value from PWM port {self._id}...")
         value, msg = self._comms.send_cmd(icl.CMD_TYPE_GET, icl.SEC_PWM_OUTPUT, self._id, 0)
         return value if self._comms.is_resp_ok(msg) else None
 
@@ -62,6 +65,7 @@ class PWMOutput:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
         """
+        self._logger = logging.getLogger(__package__)
         self._comms = comms
         self._ports = [PWMOutputPort(comms, i) for i in range(4)]
 
@@ -84,6 +88,7 @@ class PWMOutput:
         Returns:
             bool: True if successful, False otherwise.
         """
+        self._logger.debug("Enabling PWM outputs...")
         msg = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_PWM_ENABLE, 0, 1)
         return self._comms.is_resp_ok(msg)
     
@@ -93,6 +98,7 @@ class PWMOutput:
         Returns:
             bool: True if successful, False otherwise.
         """
+        self._logger.debug("Disabling PWM outputs...")
         msg = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_PWM_ENABLE, 0, 0)
         return self._comms.is_resp_ok(msg)
     
@@ -102,5 +108,6 @@ class PWMOutput:
         Returns:
             bool: True if enabled, False otherwise.
         """
+        self._logger.debug("Checking if PWM outputs are enabled...")
         val, msg = self._comms.send_cmd(icl.CMD_TYPE_GET, icl.SEC_PWM_ENABLE, 0, 0)
         return self._comms.is_resp_ok(msg) and int(val) == 1

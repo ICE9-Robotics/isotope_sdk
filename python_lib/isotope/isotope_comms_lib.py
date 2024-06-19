@@ -65,11 +65,12 @@ class IsotopeCommsError(Exception):
 
 class Isotope_comms_protocol:
     """Isotope_comms_protocol class for communication with the Isotope board.
-    This class provides methods to communicate with the Isotope board using a serial connection.
+    This class provides base methods to communicate with the Isotope board using a serial connection.
+    For low-level communicaiton with the ports on the Isotope board, please refer to the isotope.port module.
     """
 
     def __init__(self, usb_address: str, response_timeout=5) -> None:
-        """Isotope_comms_protocol class for communication with the Isotope board.
+        """Constructor for the Isotope_comms_protocol class.
 
         Args:
             usb_address (str): USB port address of the Isotope board.

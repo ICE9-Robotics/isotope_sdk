@@ -62,13 +62,14 @@ class PowerOutputPort(IsotopePort):
         Raises:
             ValueError: PWM value must be between 0 and 1024.
         """
+        self._logger.debug(f"Enabling power output port {self._id} with PWM value of {pwm}...")
         if pwm is not None and (pwm < 0 or pwm > 1024):
             raise ValueError("PWM value must be between 0 and 1024.")
         if pwm == 0:
             return self.disable()
         if pwm is None:
             pwm = self._defaut_pwm
-
+            self._logger.debug(f"Using default PWM value of {pwm}.")
         msg = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_POWER_OUTPUT, self._id, pwm)
         if self._comms.is_resp_ok(msg):
             self._current_pwm = pwm
@@ -81,6 +82,7 @@ class PowerOutputPort(IsotopePort):
         Returns:
             bool: True if the power output port was successfully disabled, False otherwise.
         """
+        self._logger.debug(f"Disabling power output port {self._id}...")
         msg = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_POWER_OUTPUT, self._id, 0)
         if self._comms.is_resp_ok(msg):
             self._current_pwm = 0
