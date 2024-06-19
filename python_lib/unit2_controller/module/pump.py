@@ -1,4 +1,5 @@
 import isotope
+from typing import Union
 
 class PumpObj:
     """
@@ -25,9 +26,9 @@ class PumpObj:
         self.motor.configure(self.steps_per_degree, self.current, self.rpm)
         self._initialised = True
     
-    def rotate_by_steps(self, steps: int) -> bool:
+    def move_liquid_by_steps(self, steps: int) -> bool:
         """
-        Rotates the motor by the specified number of steps.
+        Moves liquid by rotating the motor with the specified number of steps.
 
         Args:
             steps (int): The number of steps to rotate the motor. Can be negative to reverse the direction.
@@ -37,30 +38,37 @@ class PumpObj:
         """
         if not self._initialised:
             self.initialise()
-        if not self.is_powered():
+        if not self._is_powered():
             self.motor.enable()
         result = self.motor.rotate_by_steps(steps * self.default_dir)
         self.motor.disable()
         return result
     
-    def move_liquid_by_ml(self, millilitre: float, direction: int) -> bool:
+    def move_liquid(self, millilitre: float, direction: int) -> bool:
         """
         Moves the specified amount of liquid in milliliters.
 
         Args:
             millilitre (float): The amount of liquid to move in milliliters.
             direction (int): The direction of movement (-1 for reverse, 1 for forward).
-
+            
         Returns:
             bool: True if the execution is successful, False otherwise.
-        """
-        assert(millilitre > 0)
-        assert(direction in [-1, 1])
+
+        Raises:
+            ValueError: If millilitre is less than or equal to 0.
+            ValueError: If direction is not -1 or 1.
+        """        
+        if millilitre <= 0:
+            raise ValueError("millilitre must be greater than 0")
+        
+        if direction not in [-1, 1]:
+            raise ValueError("direction must be either -1 or 1")
 
         steps = round(self.steps_per_ml * millilitre * direction)
-        return self.rotate_by_steps(steps)
+        return self.move_liquid_by_steps(steps)
     
-    def is_powered(self) -> bool:
+    def _is_powered(self) -> bool:
         """
         Checks if the motor is powered.
 
@@ -76,12 +84,12 @@ class Pump:
     Attributes:
         _config (dict[str, any]): configurations for pumps, as specified in config.yaml.
         _isots (isotope.Isotope_comms_protocol,...): Isotope_comms_protocol instances of the installed Isotope boards.
-        _pumps (dict[int, PumpObj]): PumpObj instances.
+        _pumps (dict[[int | str], PumpObj]): PumpObj instances with the names as the keys.
     """
     
     _config: dict[str, any]
     _isots: tuple[isotope.Isotope,...]
-    _pumps: dict[int, PumpObj]
+    _pumps: dict[Union[int, str], PumpObj]
     
     def __init__(self, isotope_boards: tuple[isotope.Isotope,...], config: dict):
         """
@@ -95,21 +103,21 @@ class Pump:
         self._config = config['pump']
         self._configure()
     
-    def get_device_ids(self) -> list[int]:
+    def get_names(self) -> list[Union[int, str]]:
         """
-        Gets the IDs of all the pumps.
+        Gets the names of all the pumps.
         
         Returns:
-            list[int]: A list of pump IDs.
+            list[[int | str]]: A list of pump names.
         """
         return list(self._pumps.keys())
         
-    def move_liquid(self, device_id: int, millilitre: float, direction: int = 1) -> bool:
+    def move_liquid(self, name: Union[int, str], millilitre: float, direction: int = 1) -> bool:
         """
         Moves the liquid in the specified pump by the given volume.
         
         Args:
-            device_id (int): The ID of the pump.
+            name ([int | str]): The name of the pump.
             millilitre (float): The volume of liquid to be moved in milliliters.
             direction (int, optional): The direction of movement, can be either -1 or 1. Defaults to 1.
         
@@ -120,42 +128,48 @@ class Pump:
             ValueError: If millilitre is less than or equal to 0.
             ValueError: If direction is not -1 or 1.
         """
-        self._verify_device_id(device_id)
-        
-        if millilitre <= 0:
-            raise ValueError("millilitre must be greater than 0")
-        
-        if direction not in [-1, 1]:
-            raise ValueError("direction must be either -1 or 1")
-        
-        return self._pumps[device_id].move_liquid_by_ml(millilitre, direction)
+        self._verify_name(name)
+        return self._pumps[name].move_liquid(millilitre, direction)
     
-    def move_liquid_by_steps(self, device_id: int, steps: int) -> bool:
+    def move_liquid_by_steps(self, name: Union[int, str], steps: int) -> bool:
         """
-        Moves the liquid in the specified pump motor by the given number of steps.
+        Moves liquid in the specified pump by rotating the motor with the specified number of steps.
         
         Args:
-            device_id (int): The ID of the pump.
+            name ([int | str]): The name of the pump.
             steps (int): The number of steps. Can be negative to reverse the direction.
         
         Returns:
             bool: True if the movement is successful, False otherwise.
         """
-        self._verify_device_id(device_id)
-        return self._pumps[device_id].rotate_by_steps(steps)
+        self._verify_name(name)
+        return self._pumps[name].move_liquid_by_steps(steps)
     
-    def _verify_device_id(self, device_id: int) -> None:
+    def __getitem__(self, name: Union[int, str]) -> PumpObj:
+        """
+        Gets the pump object with the specified name.
+        
+        Args:
+            name ([int | str]): The name of the pump.
+        
+        Returns:
+            PumpObj: The pump object.
+        """
+        self._verify_name(name)
+        return self._pumps[name]
+    
+    def _verify_name(self, name: Union[int, str]) -> None:
             """
-            Verifies if a pump with the given ID exists.
+            Verifies if a pump with the given name exists.
 
             Args:
-                device_id (int): The ID of the pump to verify.
+                name ([int | str]): The name of the pump to verify.
 
             Raises:
-                ValueError: If the pump with the given ID is not found.
+                ValueError: If the pump with the given name is not found.
             """
-            if device_id not in self._pumps:
-                raise ValueError(f"Pump with ID {device_id} not found.")
+            if name not in self._pumps:
+                raise ValueError(f"Pump with name {name} not found.")
         
     def _configure(self):
         """
@@ -171,4 +185,4 @@ class Pump:
             pump.steps_per_ml = device.get('steps_per_ml', defaults['steps_per_ml'])
             pump.default_dir = -1 if device.get('reverse_direction', defaults['reverse_direction']) else 1
             pump.initialise(self._isots[device['board_id']], device['port_id'])
-            self._pumps[device['id']] = pump
+            self._pumps[device['name']] = pump

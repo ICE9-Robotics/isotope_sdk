@@ -1,3 +1,4 @@
+from typing import Union
 import isotope
 
 class ValveObj:
@@ -37,6 +38,15 @@ class ValveObj:
         """
         return self.power_output.enable() if self.normally_open else self.power_output.disable()
     
+    def toggle(self) -> bool:
+        """
+        Toggles the valve.
+
+        Returns:
+            bool: True if the execution is successful, False otherwise.
+        """
+        return self.close() if self.is_open() else self.open()
+    
     def is_open(self) -> bool:
         """
         Checks if the valve is open.
@@ -53,12 +63,12 @@ class Valve:
     Attributes:
         _config (dict[str, any]): configuration for valves, as specified in config.yaml.
         _isots (isotope.Isotope_comms_protocol,...): Isotope_comms_protocol instances of the installed Isotope boards.
-        _valves (dict[int, ValveObj]): ValveObj instances.
+        _valves (dict[[int | str], ValveObj]): ValveObj instances with device names as the keys.
     """
     
     _config: dict[str, any]
     _isots: tuple[isotope.Isotope,...]
-    _valves: dict[int, ValveObj]
+    _valves: dict[Union[int, str], ValveObj]
     
     def __init__(self, isotope_boards: tuple[isotope.Isotope,...], config: dict):
         """
@@ -72,82 +82,95 @@ class Valve:
         self._config = config['valve']
         self._configure()
         
-    def get_device_ids(self) -> list[int]:
+    def get_names(self) -> list[Union[int, str]]:
         """
-        Gets the IDs of all the valves.
+        Gets the names of all the valves.
         
         Returns:
-            list[int]: A list of valve IDs.
+            list[[int | str]]: A list of the names of the valves.
         """
         return list(self._valves.keys())
         
-    def open(self, device_id: int) -> bool:
+    def open(self, name: Union[int, str]) -> bool:
         """
         Opens the specified valve.
 
         Args:
-            device_id (int): The ID of the valve device.
+            name ([int | str]): The name of the valve device.
 
         Returns:
             bool: True if the execution is successful, False otherwise.
         """
-        self._verify_device_id(device_id)
-        return self._valves[device_id].open()
+        self._verify_name(name)
+        return self._valves[name].open()
     
-    def close(self, device_id: int) -> bool:
+    def close(self, name: Union[int, str]) -> bool:
         """
         Close the specified valve.
 
         Args:
-            device_id (int): The ID of the valve device.
+            name ([int | str]): The name of the valve device.
 
         Returns:
             bool: True if the execution is successful, False otherwise.
         """
-        self._verify_device_id(device_id)
-        return self._valves[device_id].close()
+        self._verify_name(name)
+        return self._valves[name].close()
     
-    def toggle(self, device_id: int) -> bool:
+    def toggle(self, name: Union[int, str]) -> bool:
         """
         Toggles the specified valve.
 
         Args:
-            device_id (int): The ID of the valve device.
+            name ([int | str]): The name of the valve device.
 
         Returns:
             bool: True if the execution is successful, False otherwise.
         """
-        self._verify_device_id(device_id)
-        if self.is_open(device_id):
-            return self.close(device_id)
+        self._verify_name(name)
+        if self.is_open(name):
+            return self.close(name)
         else:
-            return self.open(device_id)
+            return self.open(name)
     
-    def is_open(self, device_id: int) -> bool:
+    def is_open(self, name: Union[int, str]) -> bool:
         """
         Checks if the specified valve is open.
 
         Args:
-            device_id (int): The ID of the valve device.
+            name ([int | str]): The name of the valve device.
 
         Returns:
             bool: True if the valve is open, False otherwise.
         """
-        self._verify_device_id(device_id)
-        return self._valves[device_id].is_open()
+        self._verify_name(name)
+        return self._valves[name].is_open()
     
-    def _verify_device_id(self, device_id: int) -> None:
+    def __getitem__(self, name: Union[int, str]) -> ValveObj:
+        """
+        Gets the valve object with the specified name.
+
+        Args:
+            name ([int | str]): The name of the valve.
+
+        Returns:
+            ValveObj: The valve object.
+        """
+        self._verify_name(name)
+        return self._valves[name]
+    
+    def _verify_name(self, name: Union[int, str]) -> None:
             """
-            Verifies if a valve with the given ID exists.
+            Verifies if a valve with the given name exists.
 
             Args:
-                device_id (int): The ID of the valve to verify.
+                name ([int | str]): The name of the valve to verify.
 
             Raises:
-                ValueError: If the valve with the given ID is not found.
+                ValueError: If the valve with the given name is not found.
             """
-            if device_id not in self._valves:
-                raise ValueError(f"Valve with ID {device_id} not found.")
+            if name not in self._valves:
+                raise ValueError(f"Valve with name {name} not found.")
         
     def _configure(self):
         """
@@ -159,4 +182,4 @@ class Valve:
             valve = ValveObj()
             valve.normally_open = device.get('normally_open', defaults['normally_open'])
             valve.initialise(self._isots[device['board_id']], device['port_id'])
-            self._valves[device['id']] = valve
+            self._valves[device['name']] = valve

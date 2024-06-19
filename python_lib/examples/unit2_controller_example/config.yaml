@@ -4,9 +4,9 @@ isotope_board:
     debug_enabled: false
     comm_timeout: 5
   devices:
-    - id: 1
+    - name: 1
       port: COM3
-    - id: 2
+    - name: 2
       port: COM4
 
 pump:
@@ -17,25 +17,25 @@ pump:
     steps_per_ml: 10
     reverse_direction: false
   devices:
-    - id: 1
+    - name: 1
       board_id: 1
       port_id: 0
-    - id: 2
+    - name: 2
       board_id: 1
       port_id: 1
-    - id: 3
+    - name: 3
       board_id: 1
       port_id: 2
-    - id: 4
+    - name: 4
       board_id: 1
       port_id: 3
-    - id: 5
+    - name: 5
       board_id: 2
       port_id: 0
-    - id: 6
+    - name: 6
       board_id: 2
       port_id: 1
-    - id: 7
+    - name: 7
       board_id: 2
       port_id: 2
 
@@ -44,6 +44,6 @@ valve:
     power: 100
     normally_open: false
   devices:
-    - id: 1
+    - name: 1
       board_id: 1
       port_id: 0
