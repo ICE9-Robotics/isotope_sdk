@@ -104,15 +104,15 @@ class Pump:
     """
     
     _config: dict[str, any]
-    _isots: tuple[isotope.Isotope,...]
+    _isots: dict[Union[int, str], isotope.Isotope]
     _pumps: dict[Union[int, str], PumpObj]
     
-    def __init__(self, isotope_boards: tuple[isotope.Isotope,...], config: dict):
+    def __init__(self, isotope_boards: dict[Union[int, str], isotope.Isotope], config: dict):
         """
         Constructor for the Pump class.
         
         Args:
-            isotope_boards (tuple[isotope.Isotope,...]): Isotope instances of the installed Isotope boards.
+            isotope_boards (dict[Union[int, str], isotope.Isotope]): Isotope instances of the installed Isotope boards.
             config (dict): A dictionary containing the configuration settings for the pumps.
         """
         self._logger = logging.getLogger(__package__)
@@ -176,12 +176,22 @@ class Pump:
         self._pumps = {}
         for device in self._config['devices']:
             self._logger.debug(f"Configuring Pump ${device['name']}...")
+            
+            board_name = device['board_name']
+            if board_name not in self._isots.keys():
+                raise ValueError(f"Isotope board {board_name} is not registered. Have you assigned the correct board_name to pump {device['name']} in the config file?")
+            port_id = device['port_id']
+            if port_id >= len(self._isots[board_name].motors):
+                raise ValueError(f"Port ID {port_id} is out of range.")
+            if port_id < 0:
+                raise ValueError(f"Port ID {port_id} is invalid. Port ID must be greater than or equal to 0.")
+            
             pump = PumpObj()
             pump.rpm = device.get('rpm', defaults['rpm'])
             pump.current = device.get('current', defaults['current'])
             pump.steps_per_degree = device.get('steps_per_degree', defaults['steps_per_degree'])
             pump.steps_per_ml = device.get('steps_per_ml', defaults['steps_per_ml'])
             pump.default_dir = -1 if device.get('reverse_direction', defaults['reverse_direction']) else 1
-            pump.initialise(self._isots[device['board_id']], device['port_id'])
+            pump.initialise(self._isots[board_name], port_id)
             self._pumps[device['name']] = pump
             self._logger.debug(f"Pump ${device['name']} configured.")

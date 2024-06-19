@@ -77,15 +77,15 @@ class Valve:
     """
     
     _config: dict[str, any]
-    _isots: tuple[isotope.Isotope,...]
+    _isots: dict[Union[int, str], isotope.Isotope]
     _valves: dict[Union[int, str], ValveObj]
     
-    def __init__(self, isotope_boards: tuple[isotope.Isotope,...], config: dict):
+    def __init__(self, isotope_boards: dict[Union[int, str], isotope.Isotope], config: dict):
         """
         Constructor for the Valve class.
         
         Args:
-            isotope_boards (tuple[isotope.Isotope,...]): Isotope instances of the installed Isotope boards.
+            isotope_boards (dict[Union[int, str], isotope.Isotope]): Isotope instances of the installed Isotope boards.
             config (dict): A dictionary containing the configuration settings for the valves.
         """
         self._logger = logging.getLogger(__package__)
@@ -147,6 +147,17 @@ class Valve:
         self._valves = {}
         for device in self._config['devices']:
             self._logger.debug(f"Configuring Valve ${device['name']}...")
+            
+            board_name = device['board_name']
+            if board_name not in self._isots.keys():
+                raise ValueError(f"Isotope board {board_name} is not registered. Have you assigned the correct board_name to valve {device['name']} in the config file?")
+            
+            port_id = device['port_id']
+            if port_id > len(self._isots[board_name].powers):
+                raise ValueError(f"Port ID {port_id} is out of range.")
+            if port_id < 0:
+                raise ValueError(f"Port ID {port_id} is invalid. Port ID must be greater than or equal to 0.")
+            
             valve = ValveObj()
             valve.normally_open = device.get('normally_open', defaults['normally_open'])
             valve.initialise(self._isots[device['board_id']], device['port_id'])
