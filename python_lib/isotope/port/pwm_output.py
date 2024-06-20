@@ -1,7 +1,7 @@
 from typing import Union
 import logging
 import isotope.isotope_comms_lib as icl
-from .isotope_port import IsotopePort
+from .isotope_port import IsotopePort, IsotopePortContainer
 
 
 class PWMOutputPort(IsotopePort):
@@ -51,10 +51,10 @@ class PWMOutputPort(IsotopePort):
         """
         self._logger.debug(f"Reading PWM value from PWM port {self._id}...")
         value, msg = self._comms.send_cmd(icl.CMD_TYPE_GET, icl.SEC_PWM_OUTPUT, self._id, 0)
-        return value if self._comms.is_resp_ok(msg) else None
+        return int(value) if self._comms.is_resp_ok(msg) else None
 
 
-class PWMOutput:
+class PWMOutput(IsotopePortContainer[PWMOutputPort]):
     """The PWMOutput class is a list-like container for PWMOutputPort objects representing all the PWM output ports on the Isotope board.
     """
 
@@ -66,21 +66,8 @@ class PWMOutput:
                 that is used to communicate with the Isotope board.
         """
         self._logger = logging.getLogger(__package__)
-        self._comms = comms
-        self._ports = [PWMOutputPort(comms, i) for i in range(4)]
-
-    def __getitem__(self, key: int) -> PWMOutputPort:
-        """Get the PWM output port by index.
-
-        Args:
-            key (int): The index of the PWM output port.
-
-        Returns:
-            PWMOutputPort: The PWM output port.
-        """
-        if key < 0 or key > 3:
-            raise ValueError("Invalid port ID. Valid values are 0, 1, 2 and 3.")
-        return self._ports[key]
+        super().__init__(comms, 4)
+        self._ports = [PWMOutputPort(comms, i) for i in range(self._max_ports)]
     
     def enable(self) -> bool:
         """Enable all PWM outputs.
@@ -111,12 +98,3 @@ class PWMOutput:
         self._logger.debug("Checking if PWM outputs are enabled...")
         val, msg = self._comms.send_cmd(icl.CMD_TYPE_GET, icl.SEC_PWM_ENABLE, 0, 0)
         return self._comms.is_resp_ok(msg) and int(val) == 1
-
-    def __len__(self) -> int:
-        """Get the number of PWM output ports.
-
-        Returns:
-            int: The number of PWM output ports.
-        """
-        return len(self._ports)
-    

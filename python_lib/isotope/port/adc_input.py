@@ -1,6 +1,6 @@
 from typing import Union
 import isotope.isotope_comms_lib as icl
-from .isotope_port import IsotopePort
+from .isotope_port import IsotopePort, IsotopePortContainer
 
 
 class ADCInputPort(IsotopePort):
@@ -38,7 +38,7 @@ class ADCInputPort(IsotopePort):
         return value if self._comms.is_resp_ok(msg) else None
 
 
-class ADCInput:
+class ADCInput(IsotopePortContainer[ADCInputPort]):
     """The ADCInput class is a list-like container for ADCInputPort objects representing all the ADC ports on the Isotope board.
     """
 
@@ -49,26 +49,5 @@ class ADCInput:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
         """
-        self._ports = [ADCInputPort(comms, i) for i in range(3)]
-
-    def __getitem__(self, key: int) -> ADCInputPort:
-        """Get the ADC input port by index.
-
-        Args:
-            key (int): The index of the ADC input port.
-
-        Returns:
-            ADCInputPort: The ADC input port.
-        """
-        if key < 0 or key > 2:
-            raise ValueError("Invalid port ID. Valid values are 0, 1 and 2.")
-        return self._ports[key]
-
-    def __len__(self) -> int:
-        """Get the number of ADC input ports.
-
-        Returns:
-            int: The number of ADC input ports.
-        """
-        return len(self._ports)
-    
+        super().__init__(comms, 3)
+        self._ports = [ADCInputPort(comms, i) for i in range(self._max_ports)]

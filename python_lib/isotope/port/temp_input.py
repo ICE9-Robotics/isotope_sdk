@@ -1,6 +1,6 @@
 from typing import Union
 import isotope.isotope_comms_lib as icl
-from .isotope_port import IsotopePort
+from .isotope_port import IsotopePort, IsotopePortContainer
 
 
 class TempInputPort(IsotopePort):
@@ -35,7 +35,7 @@ class TempInputPort(IsotopePort):
         return value if self._comms.is_resp_ok(msg) else None
 
 
-class TempInput:
+class TempInput(IsotopePortContainer[TempInputPort]):
     """The TempInput class is a list-like container for TempInputPort objects representing all the Temperature input ports on the Isotope board.
     """
 
@@ -46,26 +46,5 @@ class TempInput:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
         """
-        self._ports = [TempInputPort(comms, i) for i in range(3)]
-
-    def __getitem__(self, key: int) -> TempInputPort:
-        """Get the temperature input port by index.
-
-        Args:
-            key (int): The index of the temperature input port.
-
-        Returns:
-            TempInputPort: The temperature input port.
-        """
-        if key < 0 or key > 2:
-            raise ValueError("Invalid port ID. Valid values are 0, 1 and 2.")
-        return self._ports[key]
-
-    def __len__(self) -> int:
-        """Get the number of temperature input ports.
-
-        Returns:
-            int: The number of temperature input ports.
-        """
-        return len(self._ports)
-    
+        super().__init__(comms, 3)
+        self._ports = [TempInputPort(comms, i) for i in range(self._max_ports)]

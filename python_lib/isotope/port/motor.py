@@ -1,5 +1,5 @@
 import isotope.isotope_comms_lib as icl
-from .isotope_port import IsotopePort
+from .isotope_port import IsotopePort, IsotopePortContainer
 
 
 class MotorPort(IsotopePort):
@@ -221,7 +221,7 @@ class MotorPort(IsotopePort):
         return result
 
 
-class Motor:
+class Motor(IsotopePortContainer[MotorPort]):
     """The Motor class is a list-like container for MotorPort objects representing all the MOT ports on the Isotope board.
     """
 
@@ -232,26 +232,5 @@ class Motor:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
         """
-        self._comms = comms
-        self._ports = [MotorPort(comms, i) for i in range(4)]
-
-    def __getitem__(self, key: int) -> MotorPort:
-        """Get the motor port by index.
-
-        Args:
-            key (int): The index of the motor port.
-
-        Returns:
-            MotorPort: The motor port.
-        """
-        if key < 0 or key > 3:
-            raise ValueError("Invalid port ID. Valid values are 0, 1, 2 and 3.")
-        return self._ports[key]
-
-    def __len__(self) -> int:
-        """Get the number of motor ports.
-
-        Returns:
-            int: The number of motor ports.
-        """
-        return len(self._ports)
+        super().__init__(comms, 4)
+        self._ports = [MotorPort(comms, i) for i in range(self._max_ports)]

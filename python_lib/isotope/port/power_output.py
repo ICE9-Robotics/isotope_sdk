@@ -1,5 +1,5 @@
 import isotope.isotope_comms_lib as icl
-from .isotope_port import IsotopePort
+from .isotope_port import IsotopePort, IsotopePortContainer
 
 
 class PowerOutputPort(IsotopePort):
@@ -107,7 +107,7 @@ class PowerOutputPort(IsotopePort):
         return self._current_pwm
 
 
-class PowerOutput:
+class PowerOutput(IsotopePortContainer[PowerOutputPort]):
     """The PowerOutput class is a list-like container for PowerOutputPort objects representing all the power output ports on the Isotope board.
     """
 
@@ -118,25 +118,5 @@ class PowerOutput:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
         """
-        self._ports = [PowerOutputPort(comms, i) for i in range(3)]
-
-    def __getitem__(self, key: int) -> PowerOutputPort:
-        """Get the power output port by index.
-
-        Args:
-            key (int): The index of the power output port.
-
-        Returns:
-            PowerOutputPort: The power output port.
-        """
-        if key < 0 or key > 2:
-            raise ValueError("Invalid port ID. Valid values are 0, 1 and 2.")
-        return self._ports[key]
-
-    def __len__(self) -> int:
-        """Get the number of power output ports.
-
-        Returns:
-            int: The number of power output ports.
-        """
-        return len(self._ports)
+        super().__init__(comms, 3)
+        self._ports = [PowerOutputPort(comms, i) for i in range(self._max_ports)]

@@ -1,4 +1,5 @@
 import logging
+from typing import Generic, TypeVar
 import isotope.isotope_comms_lib as icl
 
 class PortException(Exception):
@@ -35,38 +36,42 @@ class IsotopePort:
         return self._id
     
 
-class IsotopePortContainer:
-    """The Motor class is a list-like container for MotorPort objects representing all the MOT ports on the Isotope board.
+T = TypeVar('T', bound=IsotopePort)
+
+class IsotopePortContainer(Generic[T]):
+    """The IsotopePortContainer class is an abstract for list-like container for IsotopePort objects representing all the corresponding ports on the Isotope board.
     """
     _max_ports: int
-    _ports: list[IsotopePort]
+    _ports: list[T]
     
-    def __init__(self, comms: icl.Isotope_comms_protocol) -> None:
-        """Constructor for the Motor class.
+    def __init__(self, comms: icl.Isotope_comms_protocol, max_ports: int) -> None:
+        """Constructor for the IsotopePortContainer class.
 
         Args:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
+            max_ports (int): The maximum number of ports for the specific port type on the Isotope board.
         """
         self._comms = comms
+        self._max_ports = max_ports
 
-    def __getitem__(self, key: int) -> IsotopePort:
-        """Get the motor port by index.
+    def __getitem__(self, key: int) -> T:
+        """Get the specific IsotopePort object by index.
 
         Args:
             key (int): The index of the motor port.
 
         Returns:
-            MotorPort: The motor port.
+            T: The IsotopePort object.
         """
-        if key < 0 or key > 3:
-            raise ValueError("Invalid port ID. Valid values are 0, 1, 2 and 3.")
+        if key < 0 or key > self._max_ports - 1:
+            raise ValueError(f"Invalid port ID. Valid values are {', '.join([str(i) for i in range(0, self._max_ports)])}.")
         return self._ports[key]
 
     def __len__(self) -> int:
-        """Get the number of motor ports.
+        """Get the number of ports.
 
         Returns:
-            int: The number of motor ports.
+            int: The number of ports.
         """
         return len(self._ports)
