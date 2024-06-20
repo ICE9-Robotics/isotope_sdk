@@ -21,7 +21,7 @@ def setup_logger(name: str = 'isotope',
     
     try:
         if logger.configured:
-            return
+            return logger
     except AttributeError:
         pass
     

@@ -63,3 +63,12 @@ class ADCInput:
         if key < 0 or key > 2:
             raise ValueError("Invalid port ID. Valid values are 0, 1 and 2.")
         return self._ports[key]
+
+    def __len__(self) -> int:
+        """Get the number of ADC input ports.
+
+        Returns:
+            int: The number of ADC input ports.
+        """
+        return len(self._ports)
+    

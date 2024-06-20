@@ -111,3 +111,12 @@ class PWMOutput:
         self._logger.debug("Checking if PWM outputs are enabled...")
         val, msg = self._comms.send_cmd(icl.CMD_TYPE_GET, icl.SEC_PWM_ENABLE, 0, 0)
         return self._comms.is_resp_ok(msg) and int(val) == 1
+
+    def __len__(self) -> int:
+        """Get the number of PWM output ports.
+
+        Returns:
+            int: The number of PWM output ports.
+        """
+        return len(self._ports)
+    

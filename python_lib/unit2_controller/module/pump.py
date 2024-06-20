@@ -51,7 +51,7 @@ class PumpObj:
             bool: True if the execution is successful, False otherwise.
         """
         self._logger.debug(f"Moving liquid by {steps} steps...")
-        assert(self._initialised, "Pump not initialised.")
+        assert self._initialised, "Pump not initialised."
         if not self._is_powered():
             self.motor.enable()
         result = self.motor.rotate_by_steps(steps * self.default_dir)
@@ -170,7 +170,7 @@ class Pump:
         """
         Configures pumps based on the provided configuration settings.
         """
-        self._logger.debug(f"Configuring pumps... Registered ${len(self._config['devices'])}.")
+        self._logger.debug(f"Configuring pumps... ${len(self._config['devices'])} registered.")
         
         defaults = self._config['defaults']
         self._pumps = {}

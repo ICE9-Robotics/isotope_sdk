@@ -36,15 +36,19 @@ class Unit2:
         self.config = yaml.load(open(config_file, 'r'), Loader=yaml.FullLoader)
         self._logger.info(f"Configuration loaded successfully.")
 
-        self.initialise_isotope_board()
-        self.pump = Pump(self._isotopes, self.config)
-        self.valve = Valve(self._isotopes, self.config)
+        try:
+            self.initialise_isotope_board()
+            self.pump = Pump(self._isotopes, self.config)
+            self.valve = Valve(self._isotopes, self.config)
+        except ValueError as e:
+            self._logger.error("Failed to initialise Unit2 Controller.", exc_info=True)
+            raise e
         self._logger.info("Unit2 Controller initiated successfully.")
 
     def initialise_isotope_board(self):
         """Initializes the isotope boards based on the configuration settings.
         """
-        self._logger.debug(f"Initialising Isotope Breakout boards... Registered ${len(self.config['isotope_board']['devices'])}.")
+        self._logger.debug(f"Initialising Isotope Breakout boards... {len(self.config['isotope_board']['devices'])} registered.")
         self._isotopes = {}
         defaults = self.config['isotope_board']['defaults']
         for isot in self.config['isotope_board']['devices']:
@@ -52,20 +56,20 @@ class Unit2:
             comm_timeout = isot.get('comm_timeout', defaults['comm_timeout'])
             self._logger.debug(f"Initialising Isotope Breakout ${isot['name']}: \nPort: {isot['port']}, Debug: {debug_enabled}, Timeout: {comm_timeout}.")
             self._isotopes[isot['name']] = Isotope(isot['port'], debug_enabled, comm_timeout)
-            self._logger.debug(f"Isotope Breakout ${isot['name']} initialised successfully.")
+            self._logger.debug(f"Isotope Breakout {isot['name']} initialised successfully.")
             
     def connect(self):
         """Connect to the isotope boards.
         """       
         for name, isot in self._isotopes.items():
-            self._logger.debug(f"Connecting to Isotope Breakout ${name}...")
+            self._logger.debug(f"Connecting to Isotope Breakout {name}...")
             isot.connect()
-            self._logger.info(f"Isotope Breakout ${name} connected.")
+            self._logger.info(f"Isotope Breakout {name} connected.")
             
     def disconnect(self):
         """Disconnect the isotope boards.
         """
         for name, isot in self._isotopes.items():
-            self._logger.debug(f"Disconnecting Isotope Breakout ${name}...")
+            self._logger.debug(f"Disconnecting Isotope Breakout {name}...")
             isot.disconnect()
-            self._logger.info(f"Isotope Breakout ${name} disconnected.")
+            self._logger.info(f"Isotope Breakout {name} disconnected.")

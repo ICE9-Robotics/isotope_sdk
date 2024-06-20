@@ -247,3 +247,11 @@ class Motor:
         if key < 0 or key > 3:
             raise ValueError("Invalid port ID. Valid values are 0, 1, 2 and 3.")
         return self._ports[key]
+
+    def __len__(self) -> int:
+        """Get the number of motor ports.
+
+        Returns:
+            int: The number of motor ports.
+        """
+        return len(self._ports)

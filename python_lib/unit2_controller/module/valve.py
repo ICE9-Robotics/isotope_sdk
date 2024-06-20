@@ -142,7 +142,7 @@ class Valve:
         """
         Configures valves based on the provided configuration settings.
         """
-        self._logger.debug(f"Configuring valves... Registered ${len(self._config['devices'])}.")
+        self._logger.debug(f"Configuring valves... ${len(self._config['devices'])} registered.")
         defaults = self._config['defaults']
         self._valves = {}
         for device in self._config['devices']:
@@ -160,6 +160,6 @@ class Valve:
             
             valve = ValveObj()
             valve.normally_open = device.get('normally_open', defaults['normally_open'])
-            valve.initialise(self._isots[device['board_id']], device['port_id'])
+            valve.initialise(self._isots[device['board_name']], device['port_id'])
             self._valves[device['name']] = valve
             self._logger.debug(f"Valve ${device['name']} configured.")

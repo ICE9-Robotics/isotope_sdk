@@ -31,7 +31,7 @@ CMD_TYPE_SET = "SET"
 # Section Definitions --------------------------------------------------------------
 SEC_WHO_I_AM = "Who_I_am"
 SEC_ID_VALUE = "ID_value"
-SEC_HEARTBEAT = "Heartbeat"
+SEC_HEARTBEAT = "HeartBeat"
 SEC_POWER_OUTPUT = "Power_output"
 SEC_TEMP_SENSOR = "Temp_sensor"
 SEC_PWM_OUTPUT = "PWM_output"
@@ -84,6 +84,7 @@ class Isotope_comms_protocol:
         
         self.ser = None
         self.last_comm_tick = None
+        self._comms_busy = False
         
     def __del__(self) -> None:
         """Destructor to close the serial port.
@@ -146,15 +147,21 @@ class Isotope_comms_protocol:
         
         message_s = json.dumps(
             {"type": type, "section": section, "item": item, "value": value})
+        
+        while self._comms_busy:
+            pass
+        
+        self._comms_busy = True
         self.ser.flush()
         self.ser.write(message_s.encode('ascii'))
         self.last_comm_tick = time.perf_counter()
         
-        self._logger.debug(f"Outgoing >> {self.last_comm_tick:.6f}", message_s.strip())
+        self._logger.debug(f"Outgoing >> {self.last_comm_tick:.6f} {message_s.strip()}")
         received = self._wait_for_serial()
         if received:
             resp = self.ser.readline()
-            self._logger.debug("Incoming << ", resp.decode("utf-8").strip())
+            self._comms_busy = False
+            self._logger.debug(f"Incoming << {resp.decode('utf-8').strip()}")
             try:
                 resp_dict = json.loads(resp)
                 error = resp_dict['error']
@@ -163,6 +170,7 @@ class Isotope_comms_protocol:
                 error = INC_ERR_NON_JSON_RESPONSE
                 payload = 0
         else:
+            self._comms_busy = False
             self._logger.error("Response timeout.")
             error = INC_ERR_RESPONSE_TIMEOUT
             payload = 0

@@ -1,6 +1,7 @@
 import threading
 import time
 import logging
+from serial.serialutil import SerialException
 from .utils.logging import setup_logger
 from . import port
 from . import isotope_comms_lib as icl
@@ -74,7 +75,7 @@ class Isotope:
         temps (port.TempInput): Instance of the TempInput class, for reading the temperature input ports.
     """
     
-    heart_beat_interval: int = 5
+    heart_beat_interval: int = 0.1
     powers: port.PowerOutput
     motors: port.Motor
     adcs: port.ADCInput
@@ -162,7 +163,11 @@ class Isotope:
             if time.perf_counter() - self.comms.last_comm_tick < self.heart_beat_interval:
                 time.sleep(0.1)
                 continue
-            self.comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_HEARTBEAT, 0, 0)
+            try:
+                self.comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_HEARTBEAT, 0, 0)
+            except SerialException as e:
+                self._logger.error(e, exc_info=True)
+                pass
 
     def _verify_firmware(self):
         """Verify the firmware version of the Isotope board.
