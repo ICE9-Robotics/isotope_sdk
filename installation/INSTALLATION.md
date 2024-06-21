@@ -25,4 +25,17 @@ Installation complete.
 
 ## From Github repository
 
-"install_from_github.sh" or "install_from_github.py" can be used to install the packages from online sources. This is useful when you want to update the package to the newest version or from the `dev` branch while your local source is outdated. 
+"install_from_github.sh" or "install_from_github.py" can be used to install the packages from online sources. This is useful when you want to update the package to the newest version or from a branch while your local source is outdated. 
+
+The use of the scripts are similar to above. However, you may pass an argument to indicate from which branch, tag or commit you would like to install. For example, to install from the `dev` branch:
+
+```
+python3 install_from_github.py dev
+./install_from_github.sh dev
+```
+
+or from a the `caa35e0fe3ad2d3be26af10f2222420bda695bf8` commit:
+```
+python3 install_from_github.py caa35e0fe3ad2d3be26af10f2222420bda695bf8
+./install_from_github.sh caa35e0fe3ad2d3be26af10f2222420bda695bf8
+```
