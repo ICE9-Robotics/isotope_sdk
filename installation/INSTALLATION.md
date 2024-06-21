@@ -34,7 +34,7 @@ python3 install_from_github.py dev
 ./install_from_github.sh dev
 ```
 
-or from a the `caa35e0fe3ad2d3be26af10f2222420bda695bf8` commit:
+or from the `caa35e0fe3ad2d3be26af10f2222420bda695bf8` commit:
 ```
 python3 install_from_github.py caa35e0fe3ad2d3be26af10f2222420bda695bf8
 ./install_from_github.sh caa35e0fe3ad2d3be26af10f2222420bda695bf8
