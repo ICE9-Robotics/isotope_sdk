@@ -1,8 +1,13 @@
+import os
 from unit2_controller import Unit2
 
+def get_script_path():
+    return os.path.dirname(__file__)
+
 def main():
+    config_file = os.path.join(get_script_path(), 'config.yaml')
     # Create a Unit2 object
-    unit2 = Unit2('config.yaml')
+    unit2 = Unit2(config_file)
     unit2.connect()
 
     # Test the pump
