@@ -25,4 +25,4 @@ Installation complete.
 
 ## From Github repository
 
-You may also use "install_from_github.sh" or "install_from_github.py" to install from online source. This is useful when you want to update the package to the newest version or from the `dev` branch while your local source is outdated. 
+"install_from_github.sh" or "install_from_github.py" can be used to install the packages from online sources. This is useful when you want to update the package to the newest version or from the `dev` branch while your local source is outdated. 
