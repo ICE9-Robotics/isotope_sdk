@@ -1,7 +1,14 @@
+# generated
 __pycache__/
-.vscode/
 _build/
-.DS_Store
-*.log
+*.egg-info/
+build/
 
+# platform
+.vscode/
+.DS_Store
+
+# test
+mytest_*
 venv/
+*.log

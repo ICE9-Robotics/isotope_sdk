@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "isotope"
+description = "A Python library for interfacing with the Isotope Breakout Board"
+authors = [
+    {name = "Anthony Z Jiang", email = "zhengyi.jiang@ice9robotics.co.uk"},
+    {name = "Bart Garcia Nathan"},
+]
+dependencies = [
+    "pyserial ~= 3.5",
+    ]
+dynamic = ["version"]
+requires-python = ">=3.10"
+
+[tool.setuptools.dynamic]
+version = {attr = "isotope.__version__.__version__"}

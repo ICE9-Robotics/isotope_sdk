@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "unit2_controller"
+description = "A Python library for controlling the Nuclear Medicine Unit 2"
+authors = [
+    {name = "Anthony Z Jiang", email = "zhengyi.jiang@ice9robotics.co.uk"},
+]
+dependencies = [
+    "pyyaml",
+    ]
+dynamic = ["version"]
+requires-python = ">=3.10"
+
+[tool.setuptools.dynamic]
+version = {attr = "unit2_controller.__version__.__version__"}

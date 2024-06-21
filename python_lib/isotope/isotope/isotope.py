@@ -2,12 +2,10 @@ import threading
 import time
 import logging
 from serial.serialutil import SerialException
+from .__version__ import __version_info__, __minimum_firmware__
 from .utils.logging import setup_logger
 from . import port
 from . import isotope_comms_lib as icl
-
-minimum_firmware = (1, 0, 0)
-sdk_version = (1, 0, 0)
 
         
 def firmware_from_string(firmware_string: str) -> tuple[int, ...]:
@@ -95,8 +93,8 @@ class Isotope:
         self._logger = setup_logger(__package__, screen_level=screen_level)
         self._logger.info("==============================================")
         self._logger.info(f"Initiating Isotope Breakout connected to port {usb_address}")
-        self._logger.info(f"SDK version: {firmware_to_string(sdk_version)}")
-        self._logger.info(f"Minimum firmware: {firmware_to_string(minimum_firmware)}")
+        self._logger.info(f"SDK version: {firmware_to_string(__version_info__)}")
+        self._logger.info(f"Minimum firmware: {firmware_to_string(__minimum_firmware__)}")
         self._logger.info(f"Response timeout: {response_timeout}")
         
         self.comms = icl.Isotope_comms_protocol(usb_address, response_timeout)
@@ -177,8 +175,8 @@ class Isotope:
             raise IsotopeException("Error! No Isotope found.")
         if payload == "ISOTOPE_BOARD":
             self.board_firmware = (0, 0, 0)
-            if minimum_firmware != (0, 0, 0):
-                raise IsotopeException(f"Requires minimum firmware v{firmware_to_string(minimum_firmware)}, board firmware is v0.")
+            if __minimum_firmware__ != (0, 0, 0):
+                raise IsotopeException(f"Requires minimum firmware v{firmware_to_string(__minimum_firmware__)}, board firmware is v0.")
             return
         
         re = payload.split(",")
@@ -192,6 +190,6 @@ class Isotope:
 
         my_firmware = re[1].split("=")[1]
         self.board_firmware = firmware_from_string(my_firmware)
-        if self.board_firmware >= minimum_firmware:
+        if self.board_firmware >= __minimum_firmware__:
             return
-        raise IsotopeException(f"Requires minimum firmware v{firmware_to_string(minimum_firmware)}, board firmware is v{my_firmware}.")
+        raise IsotopeException(f"Requires minimum firmware v{firmware_to_string(__minimum_firmware__)}, board firmware is v{my_firmware}.")
