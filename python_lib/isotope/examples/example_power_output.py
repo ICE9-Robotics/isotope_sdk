@@ -13,27 +13,40 @@ port_id = 1
 usb_address = '/dev/cu.usbmodem21201'
 
 
+def validate_result(result: bool):
+    if result:
+        print("Execution was successful.")
+    else:
+        print("Execution failed.")
+
+
 def main():
     # Start the communication
-    isot = isotope.Isotope(
-        usb_address, DEBUG_ENABLED, response_timeout=5)
+    isot = isotope.Isotope(usb_address, DEBUG_ENABLED, response_timeout=5)
     isot.connect()
 
-    # Create a power output port object
+    # Get power output port at port_id
     port = isot.powers[port_id]
 
-    # Enable the power output port
-    if port.enable():
-        print("Power output port enabled")
-    else:
-        raise Exception("Failed to enable the power output port")
-    time.sleep(1)
+    print(f"Enable Port {port_id} with default PWM: {port.default_pwm}")
+    result = port.enable()
+    validate_result(result)
+    time.sleep(0.1)
 
-    # Disable the power output port
-    if port.disable():
-        print("Power output port disabled")
-    else:
-        raise Exception("Failed to disable the power output port")
+    print(f"Port {port_id} is {'enabled' if port.is_enabled() else 'disabled'}.")
+    print(f"Current PWM value is {port.get_pwm()}")
+        
+    print("Change default PWM to 300")
+    result = port.default_pwm = 300
+
+    print(f"Enable Port {port_id} with a custom PWM value of 512")
+    result = port.enable(512)
+    validate_result(result)
+    time.sleep(0.1)
+
+    print(f"Disable Port {port_id}")
+    result = port.disable()
+    validate_result(result)
 
     # Close the connection
     isot.disconnect()

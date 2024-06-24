@@ -13,32 +13,39 @@ port_id = 1
 usb_address = '/dev/cu.usbmodem21201'
 
 
+def validate_result(result: bool):
+    if result:
+        print(f"Execution was successful.")
+    else:
+        print("Execution failed.")
+
+
 def main():
     # Start the communication
-    isot = isotope.Isotope(
-        usb_address, DEBUG_ENABLED, response_timeout=5)
+    isot = isotope.Isotope(usb_address, DEBUG_ENABLED, response_timeout=5)
     isot.connect()
 
-    # Enable the PWM output port
-    if isot.pwms.enable():
-        print("PWM output port enabled")
-    else:
-        raise Exception("Failed to enable the PWM output port")
-    time.sleep(1)
+    print("Enable all PWM output ports")
+    result = isot.pwms.enable()
+    validate_result(result)
+
+    print(f"PWM output ports are {'' if isot.pwms.is_enabled() else 'not'} enabled.")
     
     # Set and get the PWM output port value
     for i in range(0, 1024, 128):
-        if not isot.pwms[port_id].set_pwm(i):
-            raise Exception("Failed to set the PWM output port")
-        time.sleep(0.5)
-        if isot.pwms[port_id].get_pwm() != i:
-            raise Exception("PWM output port value not set correctly")
+        print(f"Setting Port {port_id} PWM to {i}")
+        result = isot.pwms[port_id].set_pwm(i)
+        validate_result(result)
+        time.sleep(0.1)
 
-    # Disable the PWM output port
-    if isot.pwms.disable():
-        print("PWM output port disabled")
-    else:
-        raise Exception("Failed to disable the PWM output port")
+        actual_pwm = isot.pwms[port_id].get_pwm()
+        print(f"Actual PWM on the Isotope Board is {actual_pwm}")
+
+    print("Disable all PWM output ports")
+    result = isot.pwms.disable():
+    validate_result(result)
+
+    print(f"PWM output ports are {'' if isot.pwms.is_enabled() else 'not'} enabled.")
 
     # Close the connection
     isot.disconnect()

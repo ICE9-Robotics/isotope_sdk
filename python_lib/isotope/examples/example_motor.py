@@ -20,6 +20,13 @@ rpm = 50
 usb_address = '/dev/cu.usbmodem21201'
 
 
+def validate_result(result: bool):
+    if result:
+        print("Execution was successful.")
+    else:
+        print("Execution failed.")
+
+
 def main():
     # Start the communication
     isot = isotope.Isotope(
@@ -29,30 +36,26 @@ def main():
     # Configure motor port
     isot.motors[port_id].configure(resolution, current, rpm)
 
-    # Enable the motor port
-    if isot.motors[port_id].enable():
-        print("Motor port enabled")
-    else:
-        raise Exception("Failed to enable the motor port")
+    print("Enable the motor port")
+    result = isot.motors[port_id].enable()
+    validate_result(result)
 
-    # Rotate the motor by steps
-    if isot.motors[port_id].rotate_by_steps(100):
+    print(f"Motor is {'' if isot.motors[port_id].is_enabled() else 'not'} enabled.")
+
+    print("Rotate the motor by 100 steps")
+    res = ultisot.motors[port_id].rotate_by_steps(100):
         print("Motor roated by steps")
     else:
         raise Exception("Failed to rotate the motor by steps")
     time.sleep(1)
 
-    # Rotate the motor by degrees
-    if isot.motors[port_id].rotate_by_degrees(90):
-        print("Motor roated by degrees")
-    else:
-        raise Exception("Failed to rotate the motor by degrees")
+    print("Rotate the motor by 90 degrees")
+    result = isot.motors[port_id].rotate_by_degrees(90):
+    validate_result(result)
 
-    # Disable the motor port
-    if isot.motors[port_id].disable():
-        print("Motor port disabled")
-    else:
-        raise Exception("Failed to disable the motor port")
+    print("Disable the motor port")
+    result = isot.motors[port_id].disable():
+    validate_result(result)
 
     # Close the connection
     isot.disconnect()

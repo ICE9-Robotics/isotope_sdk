@@ -15,8 +15,7 @@ usb_address = '/dev/cu.usbmodem21201'
 
 def main():
     # Start the communication
-    isot = isotope.Isotope(
-        usb_address, DEBUG_ENABLED, response_timeout=5)
+    isot = isotope.Isotope(usb_address, DEBUG_ENABLED, response_timeout=5)
     isot.connect()
     
     # Get the ADC port value
