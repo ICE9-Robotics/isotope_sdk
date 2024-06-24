@@ -13,3 +13,9 @@ unit2_controller is the package for controlling Unit 2. It provides high level m
 # Installation
 
 Please refer to [installation/INSTALLATION.md](installation/INSTALLATION.md) for details.
+
+# Usage
+
+[Documentation](https://ice9-robotics.github.io/isotope_sdk/)
+
+Examples are available for each package, see [python_lib/isotope/examples](python_lib/isotope/examples) and [python_lib/unit2_controller/examples](python_lib/unit2_controller/examples).
