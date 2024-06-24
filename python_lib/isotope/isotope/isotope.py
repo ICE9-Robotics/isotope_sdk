@@ -1,3 +1,42 @@
+"""Main module that provides the Isotope class for communicating with the Isotope Breakout board and its I/O ports.
+
+This module collects all python implementation of the isotope communication protocol into one place. 
+All I/O ports are available as class variables through the Isotope class.
+
+Examples
+--------
+
+    import isotope
+    
+    isot = isotope.Isotope("COM3")
+    isot.connect()
+    
+    # enable power output port 0
+    isot.powers[0].enable()
+    
+    # set PWM value of PWM output port 0
+    isot.pwms[0].set_pwm(512)
+    
+    # read value from ADC input port 0
+    value = isot.adcs[0].get_value()
+    
+    # read value from temperature sensor port 0
+    value = isot.temps[0].get_value()
+    
+    # configure motor port 0
+    isot.motors[0].configure(resolution=7, current=100, rpm=100)
+    
+    # move motor port 0
+    isot.motors[0].rotate_by_steps(100)
+    
+    isot.disconnect()
+    
+See Also
+--------
+isotope.isotope_comms_lib
+isotope.port
+"""
+
 import threading
 import time
 import logging
@@ -8,40 +47,40 @@ from . import port
 from . import isotope_comms_lib as icl
 
         
-def firmware_from_string(firmware_string: str) -> tuple[int, ...]:
-    """Converts firmware in string to int tuple.
+def version_from_string(firmware_string: str) -> tuple[int, ...]:
+    """Converts version in string to int tuple.
 
     Args:
-        firmware_string (str): firmware in string.
+        firmware_string (str): version in string.
 
     Returns:
-        tuple[int, ...]: firmware in tuple.
+        tuple[int, ...]: version in tuple.
     """
     return tuple(map(int, firmware_string.split(".")))
 
 
-def firmware_to_string(firmware_tuple: tuple[int, ...]) -> str:
-    """Converts firmware in int tuple to string.
+def version_to_string(firmware_tuple: tuple[int, ...]) -> str:
+    """Converts version in int tuple to string.
 
     Args:
-        firmware_tuple (tuple[int, ...]): firmware to be converted.
+        firmware_tuple (tuple[int, ...]): version to be converted.
 
     Returns:
-        str: firmware in string.
+        str: version in string.
     """
     return ".".join([str(i) for i in firmware_tuple])
 
 
-def clamp_i(i, min_i, max_i):
+def clamp_i(i: int, min_i: int, max_i: int) -> int:
     """Clamp the value of i between min_i and max_i.
 
     Args:
-        i (_type_): Value to be clamped.
-        min_i (_type_): Nin value.
-        max_i (_type_): Max value.
+        i (int): Value to be clamped.
+        min_i (int): Nin value.
+        max_i (int): Max value.
 
     Returns:
-        _type_: Clamped value.
+        int: Clamped value.
     """
     if i < min_i:
         return min_i
@@ -52,7 +91,7 @@ def clamp_i(i, min_i, max_i):
 
 
 class IsotopeException(Exception):
-    """IsotopeException class for handling exceptions.
+    """General exception for Isotope class.
     """
     pass
 
@@ -62,23 +101,28 @@ class Isotope:
     with a single method call connect() to connect to the board and initialise all the I/O ports.
     A heartbeat thread is incorporated to keep the connection alive.
     
+    The I/O ports can be accessed using the the class variables including:
+    
+    - `powers` for power output ports, i.e. Output X.
+    
+    - `motors` for stepper motor ports, i.e. MOT X.
+    
+    - `adcs` for analogue-digital-converter ports, i.e. ADC X.
+    
+    - `pwms` for PWM output ports, i.e. PWM X.
+    
+    - `temps` for temperature sensor ports, i.e. TEMP X.
+    
     Attributes:
         heart_beat_interval (int): Interval for the heartbeat thread.
-        
-    Variables:
-        powers (port.PowerOutput): Instance of the PowerOutput class, for controlling the power output ports.
-        motors (port.Motor): Instance of the Motor class, for controlling the motor ports.
-        adcs (port.ADCInput): Instance of the ADCInput class, for reading the ADC input ports.
-        pwms (port.PWMOutput): Instance of the PWMOutput class, for controlling the PWM output ports.
-        temps (port.TempInput): Instance of the TempInput class, for reading the temperature input ports.
     """
     
-    heart_beat_interval: int = 0.1
-    powers: port.PowerOutput
-    motors: port.Motor
-    adcs: port.ADCInput
-    pwms: port.PWMOutput
-    temps: port.TempInput
+    heart_beat_interval: int = 0.1 # Interval for the heartbeat thread.
+    powers: port.PowerOutput # Instance of the PowerOutput class, for controlling the power output ports.
+    motors: port.Motor # Instance of the Motor class, for controlling the motor ports.
+    adcs: port.ADCInput # Instance of the ADCInput class, for reading the ADC input ports.
+    pwms: port.PWMOutput # Instance of the PWMOutput class, for controlling the PWM output ports.
+    temps: port.TempInput # Instance of the TempInput class, for reading the temperature input ports.
     
     def __init__(self, usb_address: str, debug=False, response_timeout=5) -> None:
         """Constructor for the Isotope class.
@@ -93,8 +137,8 @@ class Isotope:
         self._logger = setup_logger(__package__, screen_level=screen_level)
         self._logger.info("==============================================")
         self._logger.info(f"Initiating Isotope Breakout connected to port {usb_address}")
-        self._logger.info(f"SDK version: {firmware_to_string(__version_info__)}")
-        self._logger.info(f"Minimum firmware: {firmware_to_string(__minimum_firmware__)}")
+        self._logger.info(f"SDK version: {version_to_string(__version_info__)}")
+        self._logger.info(f"Minimum firmware: {version_to_string(__minimum_firmware__)}")
         self._logger.info(f"Response timeout: {response_timeout}")
         
         self.comms = icl.Isotope_comms_protocol(usb_address, response_timeout)
@@ -123,7 +167,7 @@ class Isotope:
         except IsotopeException as e:
             self._logger.error(e, exc_info=True)
             raise e
-        self._logger.info(f"Board firmware: {firmware_to_string(self.board_firmware)}")
+        self._logger.info(f"Board firmware: {version_to_string(self.board_firmware)}")
         if self.comms.is_connected():
             self._heartbeat_thread.start()
             self._logger.debug("Heartbeat thread started.")
@@ -176,7 +220,7 @@ class Isotope:
         if payload == "ISOTOPE_BOARD":
             self.board_firmware = (0, 0, 0)
             if __minimum_firmware__ != (0, 0, 0):
-                raise IsotopeException(f"Requires minimum firmware v{firmware_to_string(__minimum_firmware__)}, board firmware is v0.")
+                raise IsotopeException(f"Requires minimum firmware v{version_to_string(__minimum_firmware__)}, board firmware is v0.")
             return
         
         re = payload.split(",")
@@ -189,7 +233,7 @@ class Isotope:
         self._logger.debug("Found Isotope board!")
 
         my_firmware = re[1].split("=")[1]
-        self.board_firmware = firmware_from_string(my_firmware)
+        self.board_firmware = version_from_string(my_firmware)
         if self.board_firmware >= __minimum_firmware__:
             return
-        raise IsotopeException(f"Requires minimum firmware v{firmware_to_string(__minimum_firmware__)}, board firmware is v{my_firmware}.")
+        raise IsotopeException(f"Requires minimum firmware v{version_to_string(__minimum_firmware__)}, board firmware is v{my_firmware}.")

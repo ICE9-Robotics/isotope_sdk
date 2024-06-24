@@ -1,4 +1,20 @@
-from typing import Union
+"""Contains `PWMOutputPort` and `PWMOutput` classes, used to hanlde the communication with 
+the PWM ports on the Isotope board.
+
+`PWMOutputPort` class inherits from the `IsotopePort` class as the actual implementation of the communicaiton protocol 
+while the `PWMOutput` class inherits from the `IsotopePortContainer` class as a list-like container that holds `PWMOutputPort` 
+instances for all available PWM ports on the Isotope board.
+
+Notes
+-----
+Users are encouraged to use the Isotope class to access the ports instead of creating their own instances of these 
+class directly.
+
+See Also
+--------
+isotope.isotope
+"""
+
 import logging
 import isotope.isotope_comms_lib as icl
 from .isotope_port import IsotopePort, IsotopePortContainer
@@ -9,8 +25,7 @@ class PWMOutputPort(IsotopePort):
     """
 
     def __init__(self, comms: icl.Isotope_comms_protocol, port_id: int) -> None:
-        """Constructor for the PWM class. 
-
+        """
         Args:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class that is used to communicate with the Isotope board.
             port_id (int): ID of the PWM output port on the Isotope board. Valid values are 0, 1, 2 and 3.
@@ -43,7 +58,7 @@ class PWMOutputPort(IsotopePort):
         msg = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_PWM_OUTPUT, self._id, value)
         return self._comms.is_resp_ok(msg)
 
-    def get_pwm(self) -> Union[int, None]:
+    def get_pwm(self) -> int | None:
         """Read the PWM value of the PWM port.
 
         Returns:
@@ -59,16 +74,15 @@ class PWMOutput(IsotopePortContainer[PWMOutputPort]):
     """
 
     def __init__(self, comms: icl.Isotope_comms_protocol) -> None:
-        """Constructor for the PWMOutput class.
-
-        args:
+        """
+        Args:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
         """
         self._logger = logging.getLogger(__package__)
         super().__init__(comms, 4)
         self._ports = [PWMOutputPort(comms, i) for i in range(self._max_ports)]
-    
+
     def enable(self) -> bool:
         """Enable all PWM outputs.
 
@@ -78,7 +92,7 @@ class PWMOutput(IsotopePortContainer[PWMOutputPort]):
         self._logger.debug("Enabling PWM outputs...")
         msg = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_PWM_ENABLE, 0, 1)
         return self._comms.is_resp_ok(msg)
-    
+
     def disable(self) -> bool:
         """Disable all PWM outputs.
 
@@ -88,7 +102,7 @@ class PWMOutput(IsotopePortContainer[PWMOutputPort]):
         self._logger.debug("Disabling PWM outputs...")
         msg = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_PWM_ENABLE, 0, 0)
         return self._comms.is_resp_ok(msg)
-    
+
     def is_enabled(self) -> bool:
         """Check if PWM outputs are enabled.
 

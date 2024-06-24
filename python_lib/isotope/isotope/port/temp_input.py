@@ -1,4 +1,20 @@
-from typing import Union
+"""Contains `TempInputPort` and `TempInput` classes, used to hanlde the communication with 
+the TEMP ports on the Isotope board.
+
+`TempInputPort` class inherits from the `IsotopePort` class as the actual implementation of the communicaiton protocol 
+while the `TempInput` class inherits from the `IsotopePortContainer` class as a list-like container that holds `TempInputPort` 
+instances for all available TEMP ports on the Isotope board.
+
+Notes
+-----
+Users are encouraged to use the Isotope class to access the ports instead of creating their own instances of these 
+class directly.
+
+See Also
+--------
+isotope.isotope
+"""
+
 import isotope.isotope_comms_lib as icl
 from .isotope_port import IsotopePort, IsotopePortContainer
 
@@ -8,8 +24,7 @@ class TempInputPort(IsotopePort):
     """
 
     def __init__(self, comms: icl.Isotope_comms_protocol, port_id: int) -> None:
-        """Constructor for the TempInputPort class. 
-
+        """
         Args:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
@@ -24,7 +39,7 @@ class TempInputPort(IsotopePort):
 
         super().__init__(comms, port_id)
 
-    def get_value(self) -> Union[int, None]:
+    def get_value(self) -> int | None:
         """Get the temperature input value from the temperature port.
 
         Returns:
@@ -40,9 +55,8 @@ class TempInput(IsotopePortContainer[TempInputPort]):
     """
 
     def __init__(self, comms: icl.Isotope_comms_protocol) -> None:
-        """Constructor for the TempInput class.
-
-        args:
+        """
+        Args:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
         """

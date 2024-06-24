@@ -1,3 +1,20 @@
+"""Contains `PowerOutputPort` and `PowerOutput` classes, used to hanlde the communication with 
+the Output ports on the Isotope board.
+
+`PowerOutputPort` class inherits from the `IsotopePort` class as the actual implementation of the communicaiton protocol 
+while the `PowerOutput` class inherits from the `IsotopePortContainer` class as a list-like container that holds `PowerOutputPort` 
+instances for all available Output ports on the Isotope board.
+
+Notes
+-----
+Users are encouraged to use the Isotope class to access the ports instead of creating their own instances of these 
+class directly.
+
+See Also
+--------
+isotope.isotope
+"""
+
 import isotope.isotope_comms_lib as icl
 from .isotope_port import IsotopePort, IsotopePortContainer
 
@@ -9,8 +26,7 @@ class PowerOutputPort(IsotopePort):
     _current_pwm: int = 0
 
     def __init__(self, comms: icl.Isotope_comms_protocol, port_id: int) -> None:
-        """Constructor for the PowerOutput class. 
-
+        """
         Args:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class that is used to communicate with the Isotope board.
             port_id (int): ID of the power output port on the Isotope board. Valid values are 0, 1 and 2.
@@ -112,9 +128,8 @@ class PowerOutput(IsotopePortContainer[PowerOutputPort]):
     """
 
     def __init__(self, comms: icl.Isotope_comms_protocol) -> None:
-        """Constructor for the PowerOutput class.
-
-        args:
+        """
+        Args:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
         """

@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.1.dev2+g80697eb">
+<title>isotope.isotope API documentation</title>
+<meta name="description" content="Main module that provides the Isotope class for communicating with the Isotope Breakout board and its I/O ports …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>isotope.isotope</code></h1>
+</header>
+<section id="section-intro">
+<p>Main module that provides the Isotope class for communicating with the Isotope Breakout board and its I/O ports.</p>
+<p>This module collects all python implementation of the isotope communication protocol into one place.
+All I/O ports are available as class variables through the Isotope class.</p>
+<h2 id="examples">Examples</h2>
+<pre><code>import isotope
+
+isot = isotope.Isotope("COM3")
+isot.connect()
+
+# enable power output port 0
+isot.powers[0].enable()
+
+# set PWM value of PWM output port 0
+isot.pwms[0].set_pwm(512)
+
+# read value from ADC input port 0
+value = isot.adcs[0].get_value()
+
+# read value from temperature sensor port 0
+value = isot.temps[0].get_value()
+
+# configure motor port 0
+isot.motors[0].configure(resolution=7, current=100, rpm=100)
+
+# move motor port 0
+isot.motors[0].rotate_by_steps(100)
+
+isot.disconnect()
+</code></pre>
+<h2 id="see-also">See Also</h2>
+<p><code><a title="isotope.isotope_comms_lib" href="isotope_comms_lib.html">isotope.isotope_comms_lib</a></code>
+<code><a title="isotope.port" href="port/index.html">isotope.port</a></code></p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="isotope.isotope.clamp_i"><code class="name flex">
+<span>def <span class="ident">clamp_i</span></span>(<span>i: int, min_i: int, max_i: int) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Clamp the value of i between min_i and max_i.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>i</code></strong> :&ensp;<code>int</code></dt>
+<dd>Value to be clamped.</dd>
+<dt><strong><code>min_i</code></strong> :&ensp;<code>int</code></dt>
+<dd>Nin value.</dd>
+<dt><strong><code>max_i</code></strong> :&ensp;<code>int</code></dt>
+<dd>Max value.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>int</code></dt>
+<dd>Clamped value.</dd>
+</dl></div>
+</dd>
+<dt id="isotope.isotope.version_from_string"><code class="name flex">
+<span>def <span class="ident">version_from_string</span></span>(<span>firmware_string: str) ‑> tuple[int, ...]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts version in string to int tuple.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>firmware_string</code></strong> :&ensp;<code>str</code></dt>
+<dd>version in string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple[int, &hellip;]</code></dt>
+<dd>version in tuple.</dd>
+</dl></div>
+</dd>
+<dt id="isotope.isotope.version_to_string"><code class="name flex">
+<span>def <span class="ident">version_to_string</span></span>(<span>firmware_tuple: tuple[int, ...]) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts version in int tuple to string.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>firmware_tuple</code></strong> :&ensp;<code>tuple[int, &hellip;]</code></dt>
+<dd>version to be converted.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>version in string.</dd>
+</dl></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="isotope.isotope.Isotope"><code class="flex name class">
+<span>class <span class="ident">Isotope</span></span>
+<span>(</span><span>usb_address: str, debug=False, response_timeout=5)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The Isotope class is the higher-level class for communicating with the Isotope Breakout,
+with a single method call connect() to connect to the board and initialise all the I/O ports.
+A heartbeat thread is incorporated to keep the connection alive.</p>
+<p>The I/O ports can be accessed using the the class variables including:</p>
+<ul>
+<li>
+<p><code>powers</code> for power output ports, i.e. Output X.</p>
+</li>
+<li>
+<p><code>motors</code> for stepper motor ports, i.e. MOT X.</p>
+</li>
+<li>
+<p><code>adcs</code> for analogue-digital-converter ports, i.e. ADC X.</p>
+</li>
+<li>
+<p><code>pwms</code> for PWM output ports, i.e. PWM X.</p>
+</li>
+<li>
+<p><code>temps</code> for temperature sensor ports, i.e. TEMP X.</p>
+</li>
+</ul>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>heart_beat_interval</code></strong> :&ensp;<code>int</code></dt>
+<dd>Interval for the heartbeat thread.</dd>
+</dl>
+<p>Constructor for the Isotope class.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>usb_address</code></strong> :&ensp;<code>str</code></dt>
+<dd>USB port address of the Isotope board.</dd>
+<dt><strong><code>debug</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Set to True to enable debug information. Default is False.</dd>
+<dt><strong><code>response_timeout</code></strong> :&ensp;<code>int</code></dt>
+<dd>Time in seconds for waiting for responses from the Isotope board before timeout. Default is 5 seconds.</dd>
+<dt><strong><code>serial_baudrate</code></strong> :&ensp;<code>int</code></dt>
+<dd>Baud rate for the serial connection. Default is 115200.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Isotope:
+    &#34;&#34;&#34;The Isotope class is the higher-level class for communicating with the Isotope Breakout,
+    with a single method call connect() to connect to the board and initialise all the I/O ports.
+    A heartbeat thread is incorporated to keep the connection alive.
+    
+    The I/O ports can be accessed using the the class variables including:
+    
+    - `powers` for power output ports, i.e. Output X.
+    
+    - `motors` for stepper motor ports, i.e. MOT X.
+    
+    - `adcs` for analogue-digital-converter ports, i.e. ADC X.
+    
+    - `pwms` for PWM output ports, i.e. PWM X.
+    
+    - `temps` for temperature sensor ports, i.e. TEMP X.
+    
+    Attributes:
+        heart_beat_interval (int): Interval for the heartbeat thread.
+    &#34;&#34;&#34;
+    
+    heart_beat_interval: int = 0.1 # Interval for the heartbeat thread.
+    powers: port.PowerOutput # Instance of the PowerOutput class, for controlling the power output ports.
+    motors: port.Motor # Instance of the Motor class, for controlling the motor ports.
+    adcs: port.ADCInput # Instance of the ADCInput class, for reading the ADC input ports.
+    pwms: port.PWMOutput # Instance of the PWMOutput class, for controlling the PWM output ports.
+    temps: port.TempInput # Instance of the TempInput class, for reading the temperature input ports.
+    
+    def __init__(self, usb_address: str, debug=False, response_timeout=5) -&gt; None:
+        &#34;&#34;&#34;Constructor for the Isotope class.
+
+        Args:
+            usb_address (str): USB port address of the Isotope board.
+            debug (bool): Set to True to enable debug information. Default is False.
+            response_timeout (int): Time in seconds for waiting for responses from the Isotope board before timeout. Default is 5 seconds.
+            serial_baudrate (int): Baud rate for the serial connection. Default is 115200.
+        &#34;&#34;&#34;
+        screen_level = logging.DEBUG if debug else logging.INFO
+        self._logger = setup_logger(__package__, screen_level=screen_level)
+        self._logger.info(&#34;==============================================&#34;)
+        self._logger.info(f&#34;Initiating Isotope Breakout connected to port {usb_address}&#34;)
+        self._logger.info(f&#34;SDK version: {version_to_string(__version_info__)}&#34;)
+        self._logger.info(f&#34;Minimum firmware: {version_to_string(__minimum_firmware__)}&#34;)
+        self._logger.info(f&#34;Response timeout: {response_timeout}&#34;)
+        
+        self.comms = icl.Isotope_comms_protocol(usb_address, response_timeout)
+        
+        try:
+            self.powers = port.PowerOutput(self.comms)
+            self.motors = port.Motor(self.comms)
+            self.adcs = port.ADCInput(self.comms)
+            self.pwms = port.PWMOutput(self.comms)
+            self.temps = port.TempInput(self.comms)
+        except ValueError as e:
+            self._logger.error(e, exc_info=True)
+            raise e
+        
+        self._heartbeat_thread = threading.Thread(target=self._heartbeat)
+    
+    def connect(self) -&gt; bool:
+        &#34;&#34;&#34;Connect to the Isotope board.
+        
+        Returns:
+            bool: True if the connection is successful, False otherwise.
+        &#34;&#34;&#34;
+        try:
+            self.comms.connect()
+            self._verify_firmware()
+        except IsotopeException as e:
+            self._logger.error(e, exc_info=True)
+            raise e
+        self._logger.info(f&#34;Board firmware: {version_to_string(self.board_firmware)}&#34;)
+        if self.comms.is_connected():
+            self._heartbeat_thread.start()
+            self._logger.debug(&#34;Heartbeat thread started.&#34;)
+        return True
+    
+    def disconnect(self) -&gt; None:
+        &#34;&#34;&#34;Disconnect from the Isotope board.&#34;&#34;&#34;
+        self.comms.disconnect()
+    
+    def set_RGB_colour(self, red_i: int, green_i: int, blue_i: int) -&gt; bool:
+        &#34;&#34;&#34;Set RGB colour.
+
+        Args:
+            red_i (int): Value for the red channel, ranging from 0 to 255.
+            green_i (int): Value for the green channel, ranging from 0 to 255.
+            blue_i (int): Value for the blue channel, ranging from 0 to 255.
+
+        Returns:
+            bool: True if successful. Otherwise, false.
+        &#34;&#34;&#34;
+        msg = self.comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_RGB_RED, 0,
+                            clamp_i(red_i, 0, 255))
+        ok = self.comms.is_resp_ok(msg)
+        msg = self.comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_RGB_GREEN, 0,
+                            clamp_i(green_i, 0, 255))
+        ok = ok and self.comms.is_resp_ok(msg)
+        msg = self.comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_RGB_BLUE, 0,
+                            clamp_i(blue_i, 0, 255))
+        return ok and self.comms.is_resp_ok(msg)
+        
+    def _heartbeat(self) -&gt; None:
+        &#34;&#34;&#34;Heartbeat thread to keep the connection alive.
+        &#34;&#34;&#34;
+        while self.comms.is_connected():
+            if time.perf_counter() - self.comms.last_comm_tick &lt; self.heart_beat_interval:
+                time.sleep(0.1)
+                continue
+            try:
+                self.comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_HEARTBEAT, 0, 0)
+            except SerialException as e:
+                self._logger.error(e, exc_info=True)
+                pass
+
+    def _verify_firmware(self):
+        &#34;&#34;&#34;Verify the firmware version of the Isotope board.
+        &#34;&#34;&#34;
+        payload, msg = self.comms.send_cmd(icl.CMD_TYPE_GET, icl.SEC_WHO_I_AM, 0, 0)
+        if not self.comms.is_resp_ok(msg):
+            raise IsotopeException(&#34;Error! No Isotope found.&#34;)
+        if payload == &#34;ISOTOPE_BOARD&#34;:
+            self.board_firmware = (0, 0, 0)
+            if __minimum_firmware__ != (0, 0, 0):
+                raise IsotopeException(f&#34;Requires minimum firmware v{version_to_string(__minimum_firmware__)}, board firmware is v0.&#34;)
+            return
+        
+        re = payload.split(&#34;,&#34;)
+        if not len(re) == 2:
+            raise IsotopeException(&#34;Error! Wrong firmware format&#34;)
+
+        my_board_name = re[0].split(&#34;=&#34;)[1]
+        if my_board_name != icl.BOARD_NAME:
+            raise IsotopeException(&#34;Error! No Isotpe found&#34;)
+        self._logger.debug(&#34;Found Isotope board!&#34;)
+
+        my_firmware = re[1].split(&#34;=&#34;)[1]
+        self.board_firmware = version_from_string(my_firmware)
+        if self.board_firmware &gt;= __minimum_firmware__:
+            return
+        raise IsotopeException(f&#34;Requires minimum firmware v{version_to_string(__minimum_firmware__)}, board firmware is v{my_firmware}.&#34;)</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="isotope.isotope.Isotope.adcs"><code class="name">var <span class="ident">adcs</span> : <a title="isotope.port.adc_input.ADCInput" href="port/adc_input.html#isotope.port.adc_input.ADCInput">ADCInput</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="isotope.isotope.Isotope.heart_beat_interval"><code class="name">var <span class="ident">heart_beat_interval</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="isotope.isotope.Isotope.motors"><code class="name">var <span class="ident">motors</span> : <a title="isotope.port.motor.Motor" href="port/motor.html#isotope.port.motor.Motor">Motor</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="isotope.isotope.Isotope.powers"><code class="name">var <span class="ident">powers</span> : <a title="isotope.port.power_output.PowerOutput" href="port/power_output.html#isotope.port.power_output.PowerOutput">PowerOutput</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="isotope.isotope.Isotope.pwms"><code class="name">var <span class="ident">pwms</span> : <a title="isotope.port.pwm_output.PWMOutput" href="port/pwm_output.html#isotope.port.pwm_output.PWMOutput">PWMOutput</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="isotope.isotope.Isotope.temps"><code class="name">var <span class="ident">temps</span> : <a title="isotope.port.temp_input.TempInput" href="port/temp_input.html#isotope.port.temp_input.TempInput">TempInput</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="isotope.isotope.Isotope.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Connect to the Isotope board.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the connection is successful, False otherwise.</dd>
+</dl></div>
+</dd>
+<dt id="isotope.isotope.Isotope.disconnect"><code class="name flex">
+<span>def <span class="ident">disconnect</span></span>(<span>self) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Disconnect from the Isotope board.</p></div>
+</dd>
+<dt id="isotope.isotope.Isotope.set_RGB_colour"><code class="name flex">
+<span>def <span class="ident">set_RGB_colour</span></span>(<span>self, red_i: int, green_i: int, blue_i: int) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set RGB colour.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>red_i</code></strong> :&ensp;<code>int</code></dt>
+<dd>Value for the red channel, ranging from 0 to 255.</dd>
+<dt><strong><code>green_i</code></strong> :&ensp;<code>int</code></dt>
+<dd>Value for the green channel, ranging from 0 to 255.</dd>
+<dt><strong><code>blue_i</code></strong> :&ensp;<code>int</code></dt>
+<dd>Value for the blue channel, ranging from 0 to 255.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if successful. Otherwise, false.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="isotope.isotope.IsotopeException"><code class="flex name class">
+<span>class <span class="ident">IsotopeException</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>General exception for Isotope class.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class IsotopeException(Exception):
+    &#34;&#34;&#34;General exception for Isotope class.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#see-also">See Also</a></li>
+</ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="isotope" href="index.html">isotope</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="isotope.isotope.clamp_i" href="#isotope.isotope.clamp_i">clamp_i</a></code></li>
+<li><code><a title="isotope.isotope.version_from_string" href="#isotope.isotope.version_from_string">version_from_string</a></code></li>
+<li><code><a title="isotope.isotope.version_to_string" href="#isotope.isotope.version_to_string">version_to_string</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="isotope.isotope.Isotope" href="#isotope.isotope.Isotope">Isotope</a></code></h4>
+<ul class="two-column">
+<li><code><a title="isotope.isotope.Isotope.adcs" href="#isotope.isotope.Isotope.adcs">adcs</a></code></li>
+<li><code><a title="isotope.isotope.Isotope.connect" href="#isotope.isotope.Isotope.connect">connect</a></code></li>
+<li><code><a title="isotope.isotope.Isotope.disconnect" href="#isotope.isotope.Isotope.disconnect">disconnect</a></code></li>
+<li><code><a title="isotope.isotope.Isotope.heart_beat_interval" href="#isotope.isotope.Isotope.heart_beat_interval">heart_beat_interval</a></code></li>
+<li><code><a title="isotope.isotope.Isotope.motors" href="#isotope.isotope.Isotope.motors">motors</a></code></li>
+<li><code><a title="isotope.isotope.Isotope.powers" href="#isotope.isotope.Isotope.powers">powers</a></code></li>
+<li><code><a title="isotope.isotope.Isotope.pwms" href="#isotope.isotope.Isotope.pwms">pwms</a></code></li>
+<li><code><a title="isotope.isotope.Isotope.set_RGB_colour" href="#isotope.isotope.Isotope.set_RGB_colour">set_RGB_colour</a></code></li>
+<li><code><a title="isotope.isotope.Isotope.temps" href="#isotope.isotope.Isotope.temps">temps</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="isotope.isotope.IsotopeException" href="#isotope.isotope.IsotopeException">IsotopeException</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1.dev2+g80697eb</a>.</p>
+</footer>
+</body>
+</html>

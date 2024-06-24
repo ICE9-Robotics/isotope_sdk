@@ -1,13 +1,53 @@
+"""Utility functions for logging.
+
+This module provides a function to setup the logger for logging messages to the terminal window and/or a file.
+It provides a unified logging format for all the modules in the package and should be used in other related packages,
+such as unit2_controller, to maintain consistency in logging. The name of the logger should be the name of the package.
+
+Notes
+-----
+You only need to setup the logger once in the main module of the package. The logger can be retrieved in other modules
+by calling `logging.getLogger(__package__)` to get the logger instance.
+    
+Examples
+--------
+
+    from isotope.utils.logging import setup_logger
+    
+    logger = setup_logger(__package__)
+    logger.info('This is an info message.')
+    logger.debug('This is a debug message.')
+    logger.warning('This is a warning message.')
+    logger.error('This is an error message.')
+    
+    # You may setup the logger with different levels for the terminal and file.
+    # It logs all levels equal or higher than the set level.
+    import logging
+    logger = setup_logger('unit2_controller', logging.INFO, logging.DEBUG)
+    
+    # Avaliable log levels from the highest to the lowest:
+    # CRITICAL = 50
+    # FATAL = CRITICAL
+    # ERROR = 40
+    # WARNING = 30
+    # WARN = WARNING
+    # INFO = 20
+    # DEBUG = 10
+    # NOTSET = 0
+    
+    # Setting the level to None will disable the logging for that handler.
+    logger = setup_logger('unit2_controller', logging.INFO, None)
+"""
+
 import logging
 from logging.handlers import RotatingFileHandler
-from typing import Union
 import os
 
 
-def setup_logger(name: str = 'isotope', 
-                 screen_level : Union[int, None] = logging.WARN, 
-                 file_level: Union[int, None] = logging.DEBUG, 
-                 log_file: Union[int, None] = None) -> logging.Logger:
+def setup_logger(name: str = 'isotope',
+                 screen_level: int | None = logging.WARN,
+                 file_level: int | None = logging.DEBUG,
+                 log_file: int | None = None) -> logging.Logger:
     """Setup logger for the package.
 
     Args:
@@ -15,16 +55,19 @@ def setup_logger(name: str = 'isotope',
         screen_level ([int | None], optional): level of logging to be displayed in the terminal. Set to None to disable. Defaults to logging.WARN.
         file_level ([int | None], optional): level of logging to be logged in file. Set to None to disable. Defaults to logging.DEBUG.
         log_file ([int | None], optional): name of the file. Defaults to the name of the logger.
+
+    Returns:
+        logging.Logger: Logger instance.
     """
 
     logger = logging.getLogger(name)
-    
+
     try:
         if logger.configured:
             return logger
     except AttributeError:
         pass
-    
+
     logger.setLevel(min(screen_level, file_level))
 
     # Stream handler
@@ -38,7 +81,7 @@ def setup_logger(name: str = 'isotope',
     # File handler
     if file_level is not None:
         if log_file is None:
-            log_file = os.path.join('.log',f'{name}.log')
+            log_file = os.path.join('.log', f'{name}.log')
         if not os.path.exists(os.path.dirname(log_file)):
             os.makedirs(os.path.dirname(log_file))
         f_handler = RotatingFileHandler(log_file, maxBytes=5*1024*1024, backupCount=10)

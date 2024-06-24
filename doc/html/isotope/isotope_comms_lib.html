@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.1.dev2+g80697eb">
+<title>isotope.isotope_comms_lib API documentation</title>
+<meta name="description" content="Base implementation of the Isotope Breakout board communication protocol …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>isotope.isotope_comms_lib</code></h1>
+</header>
+<section id="section-intro">
+<p>Base implementation of the Isotope Breakout board communication protocol.</p>
+<p>This module is an implementation of the comms protocol with the Isotope Breakout board,
+which is a JSON-based protocol over a serial connection.</p>
+<h2 id="notes">Notes</h2>
+<p>An example of a JSON command send to the Isotope Breakout board:</p>
+<pre><code>{
+    "type": "GET", 
+    "section": "Power_output", 
+    "item": 3, 
+    "value": 0
+}
+</code></pre>
+<p>Where:</p>
+<ul>
+<li>
+<p><code>type</code> can be <code>CMD_TYPE_GET</code> for retrieving values or <code>CMD_TYPE_SET</code> for writting values.</p>
+</li>
+<li>
+<p><code>Section</code> can be any of the sections defined under "Section Definitions" in exported constants.</p>
+</li>
+<li>
+<p><code>item</code> is a number in reference of which instance of motor controller or temp or etc.</p>
+</li>
+<li>
+<p><code>value</code> is the value to be sent in a "SET" command. In a "GET" command the value is discarded.</p>
+</li>
+</ul>
+<p>An example of response from Breakout board:</p>
+<pre><code>{
+    "payload": "180", 
+    "error": "ACK"
+}
+</code></pre>
+<p>Where:</p>
+<ul>
+<li>
+<p><code>payload</code> is a string of the data requested. </p>
+</li>
+<li>
+<p><code>error</code> can be <code>ACK</code> when there is no error, or an error code defined under "Response Definitions" in exported constants.</p>
+</li>
+</ul>
+<h2 id="exported-constants">Exported Constants</h2>
+<pre><code>BOARD_NAME # equals "Isotope Board"
+
+# Command type definitions:
+CMD_TYPE_GET # for getting values from the board
+CMD_TYPE_SET # for setting values on the board
+
+# Section Definitions:
+SEC_WHO_I_AM # used with "GET" returns the board name and firmware version
+SEC_ID_VALUE # used with "GET" returns the board ID, unused.
+SEC_HEARTBEAT # used with "SET" to keep the connection alive
+SEC_POWER_OUTPUT # used with "GET" and "SET" to control the power output
+SEC_TEMP_SENSOR # used with "GET" to read the temperature sensor
+SEC_PWM_OUTPUT # used with "GET" and "SET" to control the PWM output
+SEC_PWM_ENABLE # used with "GET" and "SET" to enable or disable the PWM output
+SEC_ANALOG_INPUT # used with "GET" to read the analog input
+SEC_RGB_RED # used with "SET" to control the red channel of the RGB LED
+SEC_RGB_GREEN # used with "SET" to control the green channel of the RGB LED
+SEC_RGB_BLUE # used with "SET" to control the blue channel of the RGB LED
+SEC_MOTOR_STEP # used with "GET" and "SET" to set the number of steps to rotate the motor
+SEC_MOTOR_RPM_SPEED # used with "GET" and "SET" to set/read the motor speed in RPM
+SEC_MOTOR_CURRENT_MILLIAMP # used with "SET" to set the motor current in milliamps
+SEC_MOTOR_ENABLE # used with "SET" to enable or disable the motor
+
+# Response Definitions:
+RES_ACK # default response for successful commands
+RES_ERR_GEN # general error response
+RES_ERR_WRONG_JSON_FORMAT # error response for wrong JSON format
+RES_ERR_WRONG_SEC_TYPE # error response for wrong command type
+RES_ERR_WRONG_SEC_SECTION # error response for unknown command section
+RES_ERR_WRONG_SEC_ITEM # error response for wrong command item for the section
+RES_ERR_WRONG_SEC_VALUE # error response for value out of range
+
+# Incoming Error Definitions:
+INC_ERR_NON_JSON_RESPONSE # error definition when non-JSON response is received
+INC_ERR_RESPONSE_TIMEOUT # error definition when response timeout
+</code></pre>
+<h2 id="examples">Examples</h2>
+<pre><code>import isotope.isotope_comms_lib as icl
+
+icl_obj = icl.Isotope_comms_protocol("COM3")
+icl_obj.connect()
+
+payload, msg = icl_obj.send_cmd(icl.CMD_TYPE_GET, icl.SEC_WHO_I_AM, 0, 0)
+if icl_obj.is_resp_ok(msg):
+    print(f"isotope says: {payload}")
+
+icl_obj.disconnect()
+</code></pre>
+<h2 id="see-also">See Also</h2>
+<p><code><a title="isotope.port" href="port/index.html">isotope.port</a></code>
+<code>isoport.isotope</code></p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="isotope.isotope_comms_lib.IsotopeCommsError"><code class="flex name class">
+<span>class <span class="ident">IsotopeCommsError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exceptions related to the Isotope communication protocol.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class IsotopeCommsError(Exception):
+    &#34;&#34;&#34;Exceptions related to the Isotope communication protocol.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="isotope.isotope_comms_lib.Isotope_comms_protocol"><code class="flex name class">
+<span>class <span class="ident">Isotope_comms_protocol</span></span>
+<span>(</span><span>usb_address: str, response_timeout=5)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Handles base methods for communicating with the Isotope board.</p>
+<p>This class provides base methods to communicate with the Isotope board using a serial connection.
+For low-level communicaiton with the ports on the Isotope board, please refer to the isotope.port module.</p>
+<h2 id="see-also">See Also</h2>
+<p><code><a title="isotope.port" href="port/index.html">isotope.port</a></code></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>usb_address</code></strong> :&ensp;<code>str</code></dt>
+<dd>USB port address of the Isotope board.</dd>
+<dt><strong><code>response_timeout</code></strong> :&ensp;<code>int</code></dt>
+<dd>Time in seconds for waiting for responses from the Isotope board before timeout. Default is 5 seconds.</dd>
+<dt><strong><code>serial_baudrate</code></strong> :&ensp;<code>int</code></dt>
+<dd>Baud rate for the serial connection. Default is 115200.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Isotope_comms_protocol:
+    &#34;&#34;&#34;Handles base methods for communicating with the Isotope board.
+
+    This class provides base methods to communicate with the Isotope board using a serial connection.
+    For low-level communicaiton with the ports on the Isotope board, please refer to the isotope.port module.
+    
+    See also
+    --------
+    isotope.port
+    &#34;&#34;&#34;
+
+    def __init__(self, usb_address: str, response_timeout=5) -&gt; None:
+        &#34;&#34;&#34;
+        Args:
+            usb_address (str): USB port address of the Isotope board.
+            response_timeout (int): Time in seconds for waiting for responses from the Isotope board before timeout. Default is 5 seconds.
+            serial_baudrate (int): Baud rate for the serial connection. Default is 115200.
+        &#34;&#34;&#34;
+        self._logger = logging.getLogger(__package__)
+        self.usb_address = usb_address
+        self.resp_timeout = response_timeout
+        self.serial_baudrate = 115200
+
+        self.ser = None
+        self.last_comm_tick = None
+        self._comms_busy = False
+
+    def __del__(self) -&gt; None:
+        &#34;&#34;&#34;Destructor to close the serial port.
+        &#34;&#34;&#34;
+        try:
+            self.disconnect()
+        except:
+            pass
+
+    def connect(self) -&gt; None:
+        &#34;&#34;&#34;Connect to the Isotope board.
+        &#34;&#34;&#34;
+        self._logger.debug(f&#34;Connecting to {BOARD_NAME}...&#34;)
+        self._logger.debug(f&#34;USB address: {self.usb_address}&#34;)
+        self._logger.debug(f&#34;Baud rate: {self.serial_baudrate}&#34;)
+        try:
+            self.ser = serial.Serial(
+                self.usb_address, self.serial_baudrate, timeout=0.5)  # open serial port
+            self._logger.debug(f&#34;{BOARD_NAME} connected.&#34;)
+        except Exception as e:
+            self.ser = None
+            self._logger.error(f&#34;Failed to connect to {BOARD_NAME}.&#34;, exc_info=True)
+            raise e
+
+        self.ser.flush()
+
+    def disconnect(self) -&gt; None:
+        &#34;&#34;&#34;Disconnect from the Isotope board.
+        &#34;&#34;&#34;
+        try:
+            self.ser.close()
+            self._logger.debug(f&#34;{BOARD_NAME} disconnected.&#34;)
+        except:
+            pass
+
+    def is_connected(self) -&gt; bool:
+        &#34;&#34;&#34;Check if the Isotope board is connected.
+
+        Returns:
+            bool: True if the Isotope board is connected, False otherwise.
+        &#34;&#34;&#34;
+        if self.ser is None:
+            return False
+        return self.ser.is_open
+
+    def send_cmd(self, type: str, section: str, item: int, value: int) -&gt; str | tuple[str, str]:
+        &#34;&#34;&#34;Send command to the Isotope board.
+
+        Args:
+            type (str): Type of the command, `CMD_TYPE_SET` or `CMD_TYPE_GET`.
+            section (str): Section name, please refer to section definitions.
+            item (int): Port ID.
+            value (int): Value to be sent in a `CMD_TYPE_SET` command or discarded in a `CMD_TYPE_GET` command.
+
+        Returns:
+            str | tuple[str, str]: for `CMD_TYPE_SET`, returns message code; for `CMD_TYPE_GET`, returns payload and message code as a tuple.
+        &#34;&#34;&#34;
+        if self.ser is None:
+            raise IsotopeCommsError(&#34;Serial port is not open.&#34;)
+
+        message_s = json.dumps(
+            {&#34;type&#34;: type, &#34;section&#34;: section, &#34;item&#34;: item, &#34;value&#34;: value})
+
+        while self._comms_busy:
+            pass
+
+        self._comms_busy = True
+        self.ser.flush()
+        self.ser.write(message_s.encode(&#39;ascii&#39;))
+        self.last_comm_tick = time.perf_counter()
+
+        self._logger.debug(f&#34;Outgoing &gt;&gt; {self.last_comm_tick:.6f} {message_s.strip()}&#34;)
+        received = self._wait_for_serial()
+        if received:
+            resp = self.ser.readline()
+            self._comms_busy = False
+            self._logger.debug(f&#34;Incoming &lt;&lt; {resp.decode(&#39;utf-8&#39;).strip()}&#34;)
+            try:
+                resp_dict = json.loads(resp)
+                error = resp_dict[&#39;error&#39;]
+                payload = resp_dict[&#39;payload&#39;]
+            except:
+                error = INC_ERR_NON_JSON_RESPONSE
+                payload = 0
+        else:
+            self._comms_busy = False
+            self._logger.error(&#34;Response timeout.&#34;)
+            error = INC_ERR_RESPONSE_TIMEOUT
+            payload = 0
+
+        if type == CMD_TYPE_SET:
+            return error
+        else:
+            return payload, error
+
+    def is_resp_ok(self, msg: str) -&gt; bool:
+        &#34;&#34;&#34;Check if the response is OK and logs error if not.
+
+        Returns:
+            bool: True if the response is OK, False otherwise.
+        &#34;&#34;&#34;
+        if (msg == RES_ACK):
+            self._logger.debug(&#34;Response OK&#34;)
+            return True
+        else:
+            self._log_error(msg)
+            return False
+
+    def _wait_for_serial(self) -&gt; bool:
+        &#34;&#34;&#34;Wait for serial response.
+
+        Returns:
+            bool: True if reresponse is received, False if response timeout.
+        &#34;&#34;&#34;
+        time_started = time.perf_counter()
+        while (time.perf_counter() - time_started) &lt; self.resp_timeout:
+            if (self.ser.in_waiting &gt; 0):
+                return True
+        return False
+
+    def _log_error(self, error_code: str) -&gt; None:
+        &#34;&#34;&#34;Log error message based on error code.
+
+        Args:
+            error_code (str): Error code from the response.
+        &#34;&#34;&#34;
+        if error_code == RES_ERR_WRONG_JSON_FORMAT:
+            msg = &#34;Error Response from Isotope Board - Wrong JSON format string&#34;
+        if error_code == RES_ERR_WRONG_SEC_TYPE:
+            msg = &#34;Error Response from Isotope Board - Wrong command Type&#34;
+        if error_code == RES_ERR_WRONG_SEC_SECTION:
+            msg = &#34;Error Response from Isotope Board - Unknown command Section&#34;
+        if error_code == RES_ERR_WRONG_SEC_ITEM:
+            msg = &#34;Error Response from Isotope Board - Wrong command Item for the Section&#34;
+        if error_code == RES_ERR_WRONG_SEC_VALUE:
+            msg = &#34;Error Response from Isotope Board - Value out of range&#34;
+        if error_code == INC_ERR_NON_JSON_RESPONSE:
+            msg = &#34;Incoming message error - Response is not a valid JSON format&#34;
+        if error_code == INC_ERR_RESPONSE_TIMEOUT:
+            msg = &#34;Incoming message error - Timeout when waiting for serial response&#34;
+
+        self._logger.error(msg)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="isotope.isotope_comms_lib.Isotope_comms_protocol.connect"><code class="name flex">
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Connect to the Isotope board.</p></div>
+</dd>
+<dt id="isotope.isotope_comms_lib.Isotope_comms_protocol.disconnect"><code class="name flex">
+<span>def <span class="ident">disconnect</span></span>(<span>self) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Disconnect from the Isotope board.</p></div>
+</dd>
+<dt id="isotope.isotope_comms_lib.Isotope_comms_protocol.is_connected"><code class="name flex">
+<span>def <span class="ident">is_connected</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Check if the Isotope board is connected.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the Isotope board is connected, False otherwise.</dd>
+</dl></div>
+</dd>
+<dt id="isotope.isotope_comms_lib.Isotope_comms_protocol.is_resp_ok"><code class="name flex">
+<span>def <span class="ident">is_resp_ok</span></span>(<span>self, msg: str) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Check if the response is OK and logs error if not.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the response is OK, False otherwise.</dd>
+</dl></div>
+</dd>
+<dt id="isotope.isotope_comms_lib.Isotope_comms_protocol.send_cmd"><code class="name flex">
+<span>def <span class="ident">send_cmd</span></span>(<span>self, type: str, section: str, item: int, value: int) ‑> str | tuple[str, str]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Send command to the Isotope board.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type</code></strong> :&ensp;<code>str</code></dt>
+<dd>Type of the command, <code>CMD_TYPE_SET</code> or <code>CMD_TYPE_GET</code>.</dd>
+<dt><strong><code>section</code></strong> :&ensp;<code>str</code></dt>
+<dd>Section name, please refer to section definitions.</dd>
+<dt><strong><code>item</code></strong> :&ensp;<code>int</code></dt>
+<dd>Port ID.</dd>
+<dt><strong><code>value</code></strong> :&ensp;<code>int</code></dt>
+<dd>Value to be sent in a <code>CMD_TYPE_SET</code> command or discarded in a <code>CMD_TYPE_GET</code> command.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str | tuple[str, str]</code></dt>
+<dd>for <code>CMD_TYPE_SET</code>, returns message code; for <code>CMD_TYPE_GET</code>, returns payload and message code as a tuple.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul>
+<li><a href="#notes">Notes</a></li>
+<li><a href="#exported-constants">Exported constants</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#see-also">See also</a></li>
+</ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="isotope" href="index.html">isotope</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="isotope.isotope_comms_lib.IsotopeCommsError" href="#isotope.isotope_comms_lib.IsotopeCommsError">IsotopeCommsError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="isotope.isotope_comms_lib.Isotope_comms_protocol" href="#isotope.isotope_comms_lib.Isotope_comms_protocol">Isotope_comms_protocol</a></code></h4>
+<ul class="">
+<li><code><a title="isotope.isotope_comms_lib.Isotope_comms_protocol.connect" href="#isotope.isotope_comms_lib.Isotope_comms_protocol.connect">connect</a></code></li>
+<li><code><a title="isotope.isotope_comms_lib.Isotope_comms_protocol.disconnect" href="#isotope.isotope_comms_lib.Isotope_comms_protocol.disconnect">disconnect</a></code></li>
+<li><code><a title="isotope.isotope_comms_lib.Isotope_comms_protocol.is_connected" href="#isotope.isotope_comms_lib.Isotope_comms_protocol.is_connected">is_connected</a></code></li>
+<li><code><a title="isotope.isotope_comms_lib.Isotope_comms_protocol.is_resp_ok" href="#isotope.isotope_comms_lib.Isotope_comms_protocol.is_resp_ok">is_resp_ok</a></code></li>
+<li><code><a title="isotope.isotope_comms_lib.Isotope_comms_protocol.send_cmd" href="#isotope.isotope_comms_lib.Isotope_comms_protocol.send_cmd">send_cmd</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1.dev2+g80697eb</a>.</p>
+</footer>
+</body>
+</html>

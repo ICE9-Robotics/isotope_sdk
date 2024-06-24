@@ -1,3 +1,19 @@
+"""Contains `MotorPort` and `Motor` classes, used to hanlde the communication with the MOT ports on the Isotope board.
+
+`MotorPort` class inherits from the `IsotopePort` class as the actual implementation of the communicaiton protocol 
+while the `Motor` class inherits from the `IsotopePortContainer` class as a list-like container that holds `MotorPort` 
+instances for all available MOT ports on the Isotope board.
+
+Notes
+-----
+Users are encouraged to use the Isotope class to access the ports instead of creating their own instances of these 
+class directly.
+
+See Also
+--------
+isotope.isotope
+"""
+
 import isotope.isotope_comms_lib as icl
 from .isotope_port import IsotopePort, IsotopePortContainer
 
@@ -14,7 +30,7 @@ class MotorPort(IsotopePort):
     _configured: bool = False
 
     def __init__(self, comms: icl.Isotope_comms_protocol, port_id: int) -> None:
-        """Constructor for the MotorPort class. 
+        """
         Args:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
@@ -226,8 +242,7 @@ class Motor(IsotopePortContainer[MotorPort]):
     """
 
     def __init__(self, comms: icl.Isotope_comms_protocol) -> None:
-        """Constructor for the Motor class.
-
+        """
         Args:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.

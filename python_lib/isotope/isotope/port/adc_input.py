@@ -1,18 +1,29 @@
-from typing import Union
+"""Contains `ADCInputPort` and `ADCInput` classes, used to hanlde the communication with the MOT ports on the Isotope board.
+
+`ADCInputPort` class inherits from the `IsotopePort` class as the actual implementation of the communicaiton protocol 
+while the `ADCInput` class inherits from the `IsotopePortContainer` class as a list-like container that holds `ADCInputPort` 
+instances for all available ADC ports on the Isotope board.
+
+Notes
+-----
+Users are encouraged to use the Isotope class to access the ports instead of creating their own instances of these 
+class directly.
+
+See Also
+--------
+isotope.isotope
+"""
+
 import isotope.isotope_comms_lib as icl
 from .isotope_port import IsotopePort, IsotopePortContainer
 
 
 class ADCInputPort(IsotopePort):
     """The ADCInputPort class is used to read inputs from the ADC ports, i.e. ADC 0, 1 and 2, on the Isotope board.
-
-    Args:
-        IsotopePort (_type_): _description_
     """
 
     def __init__(self, comms: icl.Isotope_comms_protocol, port_id: int) -> None:
-        """Constructor for the ADCInputPort class. 
-
+        """
         Args:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
@@ -27,7 +38,7 @@ class ADCInputPort(IsotopePort):
 
         super().__init__(comms, port_id)
 
-    def get_value(self) -> Union[int, None]:
+    def get_value(self) -> int | None:
         """Get the input value of the ADC port.
 
         Returns:
@@ -43,8 +54,7 @@ class ADCInput(IsotopePortContainer[ADCInputPort]):
     """
 
     def __init__(self, comms: icl.Isotope_comms_protocol) -> None:
-        """Constructor for the ADCInput class. This class
-
+        """
         Args:
             comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
                 that is used to communicate with the Isotope board.
