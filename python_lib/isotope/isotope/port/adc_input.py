@@ -1,7 +1,7 @@
 """Contains `ADCInputPort` and `ADCInput` classes, used to hanlde the communication with the MOT ports on the Isotope board.
 
-`ADCInputPort` class inherits from the `IsotopePort` class as the actual implementation of the communicaiton protocol 
-while the `ADCInput` class inherits from the `IsotopePortContainer` class as a list-like container that holds `ADCInputPort` 
+`ADCInputPort` class inherits from the `isotope.port.isotope_port.IsotopePort` class as the actual implementation of the communicaiton protocol 
+while the `ADCInput` class inherits from the `isotope.port.isotope_port.IsotopePortContainer` class as a list-like container that holds `ADCInputPort` 
 instances for all available ADC ports on the Isotope board.
 
 Notes

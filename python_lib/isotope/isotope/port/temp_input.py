@@ -1,8 +1,8 @@
 """Contains `TempInputPort` and `TempInput` classes, used to hanlde the communication with 
 the TEMP ports on the Isotope board.
 
-`TempInputPort` class inherits from the `IsotopePort` class as the actual implementation of the communicaiton protocol 
-while the `TempInput` class inherits from the `IsotopePortContainer` class as a list-like container that holds `TempInputPort` 
+`TempInputPort` class inherits from the `isotope.port.isotope_port.IsotopePort` class as the actual implementation of the communicaiton protocol 
+while the `TempInput` class inherits from the `isotope.port.isotope_port.IsotopePortContainer` class as a list-like container that holds `TempInputPort` 
 instances for all available TEMP ports on the Isotope board.
 
 Notes

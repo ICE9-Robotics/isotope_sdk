@@ -1,7 +1,8 @@
 """Main module that provides the Isotope class for communicating with the Isotope Breakout board and its I/O ports.
 
-This module collects all python implementation of the isotope communication protocol into one place. 
-All I/O ports are available as class variables through the Isotope class.
+This module collects all submodules that implement different parts of the isotope communication protocol into one place, 
+including the `isotope.isotope_comms_lib` module, the submodules in `isotope.port`. 
+All I/O ports can be accessed by invoking the appropriate class variables.
 
 Examples
 --------
@@ -103,15 +104,13 @@ class Isotope:
     
     The I/O ports can be accessed using the the class variables including:
     
-    - `powers` for power output ports, i.e. Output X.
-    
-    - `motors` for stepper motor ports, i.e. MOT X.
-    
-    - `adcs` for analogue-digital-converter ports, i.e. ADC X.
-    
-    - `pwms` for PWM output ports, i.e. PWM X.
-    
-    - `temps` for temperature sensor ports, i.e. TEMP X.
+    | Variable   | Class type                 | Port                                            |
+    |------------|----------------------------|-------------------------------------------------|
+    | `powers`   | `isotope.port.PowerOutput` | Power output ports, i.e. Output X.              |
+    | `motors`   | `isotope.port.Motor`       | Stepper motor ports, i.e. MOT X.                |
+    | `adcs`     | `isotope.port.ADCInput`    | Analogue-digital-converter ports, i.e. ADC X.   |
+    | `pwms`     | `isotope.port.PWMOutput`   | PWM output ports, i.e. PWM X.                   |
+    | `temps`    | `isotope.port.TempInput`   | Temperature sensor ports, i.e. TEMP X.          |
     
     Attributes:
         heart_beat_interval (int): Interval for the heartbeat thread.

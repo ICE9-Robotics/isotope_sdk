@@ -33,8 +33,9 @@ a list-like container for <code><a title="isotope.port.isotope_port.IsotopePort"
 contain two classes: one to inherit from <code><a title="isotope.port.isotope_port.IsotopePort" href="#isotope.port.isotope_port.IsotopePort">IsotopePort</a></code> and the other from <code><a title="isotope.port.isotope_port.IsotopePortContainer" href="#isotope.port.isotope_port.IsotopePortContainer">IsotopePortContainer</a></code>. Functions identical for all
 ports of the same type should be implemented in the <code><a title="isotope.port.isotope_port.IsotopePort" href="#isotope.port.isotope_port.IsotopePort">IsotopePort</a></code> class, while the <code><a title="isotope.port.isotope_port.IsotopePortContainer" href="#isotope.port.isotope_port.IsotopePortContainer">IsotopePortContainer</a></code> class should be as
 simple as possible and only contain the constructor in most cases to initialise the list of ports.</p>
-<p>In some situation, taking the example of the <code>PWMOutput</code> class, the inheritance of the <code>IsoptopePortContainer</code> class can
-contain additional functions that control the group of ports as a whole such as <code>enable()</code> and <code>disable()</code>.</p>
+<p>In some situation, taking the example of the <code><a title="isotope.port.pwm_output.PWMOutput" href="pwm_output.html#isotope.port.pwm_output.PWMOutput">PWMOutput</a></code> class, the inheritance of the <code><a title="isotope.port.isotope_port.IsotopePortContainer" href="#isotope.port.isotope_port.IsotopePortContainer">IsotopePortContainer</a></code> class can
+contain additional functions that control the group of ports as a whole such as <code><a title="isotope.port.pwm_output.PWMOutput.enable" href="pwm_output.html#isotope.port.pwm_output.PWMOutput.enable">PWMOutput.enable()</a></code> and
+<code><a title="isotope.port.pwm_output.PWMOutput.disable" href="pwm_output.html#isotope.port.pwm_output.PWMOutput.disable">PWMOutput.disable()</a></code>.</p>
 <h2 id="see-also">See Also</h2>
 <p><code><a title="isotope.port.adc_input" href="adc_input.html">isotope.port.adc_input</a></code>
 <code><a title="isotope.port.motor" href="motor.html">isotope.port.motor</a></code>
@@ -176,8 +177,7 @@ that is used to communicate with the Isotope board.</dd>
             T: The IsotopePort object.
         &#34;&#34;&#34;
         if key &lt; 0 or key &gt; self._max_ports - 1:
-            raise ValueError(f&#34;Invalid port ID. Valid values are {
-                             &#39;, &#39;.join([str(i) for i in range(0, self._max_ports)])}.&#34;)
+            raise ValueError(f&#34;Invalid port ID. Valid values are {&#39;, &#39;.join([str(i) for i in range(0, self._max_ports)])}.&#34;)
         return self._ports[key]
 
     def __len__(self) -&gt; int:

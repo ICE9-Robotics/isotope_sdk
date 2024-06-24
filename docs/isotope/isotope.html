@@ -26,8 +26,9 @@ hljs.highlightAll();
 </header>
 <section id="section-intro">
 <p>Main module that provides the Isotope class for communicating with the Isotope Breakout board and its I/O ports.</p>
-<p>This module collects all python implementation of the isotope communication protocol into one place.
-All I/O ports are available as class variables through the Isotope class.</p>
+<p>This module collects all submodules that implement different parts of the isotope communication protocol into one place,
+including the <code><a title="isotope.isotope_comms_lib" href="isotope_comms_lib.html">isotope.isotope_comms_lib</a></code> module, the submodules in <code><a title="isotope.port" href="port/index.html">isotope.port</a></code>.
+All I/O ports can be accessed by invoking the appropriate class variables.</p>
 <h2 id="examples">Examples</h2>
 <pre><code>import isotope
 
@@ -131,23 +132,42 @@ isot.disconnect()
 with a single method call connect() to connect to the board and initialise all the I/O ports.
 A heartbeat thread is incorporated to keep the connection alive.</p>
 <p>The I/O ports can be accessed using the the class variables including:</p>
-<ul>
-<li>
-<p><code>powers</code> for power output ports, i.e. Output X.</p>
-</li>
-<li>
-<p><code>motors</code> for stepper motor ports, i.e. MOT X.</p>
-</li>
-<li>
-<p><code>adcs</code> for analogue-digital-converter ports, i.e. ADC X.</p>
-</li>
-<li>
-<p><code>pwms</code> for PWM output ports, i.e. PWM X.</p>
-</li>
-<li>
-<p><code>temps</code> for temperature sensor ports, i.e. TEMP X.</p>
-</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Class type</th>
+<th>Port</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><dt><code>powers</code></dt></td>
+<td><code>isotope.port.PowerOutput</code></td>
+<td>Power output ports, i.e. Output X.</td>
+</tr>
+<tr>
+<td><dt><code>motors</code></dt></td>
+<td><code>isotope.port.Motor</code></td>
+<td>Stepper motor ports, i.e. MOT X.</td>
+</tr>
+<tr>
+<td><dt><code>adcs</code></dt></td>
+<td><code>isotope.port.ADCInput</code></td>
+<td>Analogue-digital-converter ports, i.e. ADC X.</td>
+</tr>
+<tr>
+<td><dt><code>pwms</code></dt></td>
+<td><code>isotope.port.PWMOutput</code></td>
+<td>PWM output ports, i.e. PWM X.</td>
+</tr>
+<tr>
+<td><dt><code>temps</code></dt></td>
+<td><code>isotope.port.TempInput</code></td>
+<td>Temperature sensor ports, i.e. TEMP X.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>heart_beat_interval</code></strong> :&ensp;<code>int</code></dt>
@@ -176,15 +196,13 @@ A heartbeat thread is incorporated to keep the connection alive.</p>
     
     The I/O ports can be accessed using the the class variables including:
     
-    - `powers` for power output ports, i.e. Output X.
-    
-    - `motors` for stepper motor ports, i.e. MOT X.
-    
-    - `adcs` for analogue-digital-converter ports, i.e. ADC X.
-    
-    - `pwms` for PWM output ports, i.e. PWM X.
-    
-    - `temps` for temperature sensor ports, i.e. TEMP X.
+    | Variable   | Class type                 | Port                                            |
+    |------------|----------------------------|-------------------------------------------------|
+    | `powers`   | `isotope.port.PowerOutput` | Power output ports, i.e. Output X.              |
+    | `motors`   | `isotope.port.Motor`       | Stepper motor ports, i.e. MOT X.                |
+    | `adcs`     | `isotope.port.ADCInput`    | Analogue-digital-converter ports, i.e. ADC X.   |
+    | `pwms`     | `isotope.port.PWMOutput`   | PWM output ports, i.e. PWM X.                   |
+    | `temps`    | `isotope.port.TempInput`   | Temperature sensor ports, i.e. TEMP X.          |
     
     Attributes:
         heart_beat_interval (int): Interval for the heartbeat thread.

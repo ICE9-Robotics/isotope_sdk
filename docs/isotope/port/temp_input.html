@@ -28,8 +28,8 @@ hljs.highlightAll();
 <section id="section-intro">
 <p>Contains <code><a title="isotope.port.temp_input.TempInputPort" href="#isotope.port.temp_input.TempInputPort">TempInputPort</a></code> and <code><a title="isotope.port.temp_input.TempInput" href="#isotope.port.temp_input.TempInput">TempInput</a></code> classes, used to hanlde the communication with
 the TEMP ports on the Isotope board.</p>
-<p><code><a title="isotope.port.temp_input.TempInputPort" href="#isotope.port.temp_input.TempInputPort">TempInputPort</a></code> class inherits from the <code>IsotopePort</code> class as the actual implementation of the communicaiton protocol
-while the <code><a title="isotope.port.temp_input.TempInput" href="#isotope.port.temp_input.TempInput">TempInput</a></code> class inherits from the <code>IsotopePortContainer</code> class as a list-like container that holds <code><a title="isotope.port.temp_input.TempInputPort" href="#isotope.port.temp_input.TempInputPort">TempInputPort</a></code>
+<p><code><a title="isotope.port.temp_input.TempInputPort" href="#isotope.port.temp_input.TempInputPort">TempInputPort</a></code> class inherits from the <code><a title="isotope.port.isotope_port.IsotopePort" href="isotope_port.html#isotope.port.isotope_port.IsotopePort">IsotopePort</a></code> class as the actual implementation of the communicaiton protocol
+while the <code><a title="isotope.port.temp_input.TempInput" href="#isotope.port.temp_input.TempInput">TempInput</a></code> class inherits from the <code><a title="isotope.port.isotope_port.IsotopePortContainer" href="isotope_port.html#isotope.port.isotope_port.IsotopePortContainer">IsotopePortContainer</a></code> class as a list-like container that holds <code><a title="isotope.port.temp_input.TempInputPort" href="#isotope.port.temp_input.TempInputPort">TempInputPort</a></code>
 instances for all available TEMP ports on the Isotope board.</p>
 <h2 id="notes">Notes</h2>
 <p>Users are encouraged to use the Isotope class to access the ports instead of creating their own instances of these

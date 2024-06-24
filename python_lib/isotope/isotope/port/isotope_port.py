@@ -10,8 +10,9 @@ contain two classes: one to inherit from `IsotopePort` and the other from `Isoto
 ports of the same type should be implemented in the `IsotopePort` class, while the `IsotopePortContainer` class should be as
 simple as possible and only contain the constructor in most cases to initialise the list of ports.
 
-In some situation, taking the example of the `PWMOutput` class, the inheritance of the `IsoptopePortContainer` class can 
-contain additional functions that control the group of ports as a whole such as `enable()` and `disable()`.
+In some situation, taking the example of the `isotope.port.pwm_output.PWMOutput` class, the inheritance of the `IsotopePortContainer` class can 
+contain additional functions that control the group of ports as a whole such as `isotope.port.pwm_output.PWMOutput.enable()` and 
+`isotope.port.pwm_output.PWMOutput.disable()`.
 
 See Also
 --------
@@ -97,8 +98,7 @@ class IsotopePortContainer(Generic[T]):
             T: The IsotopePort object.
         """
         if key < 0 or key > self._max_ports - 1:
-            raise ValueError(f"Invalid port ID. Valid values are {
-                             ', '.join([str(i) for i in range(0, self._max_ports)])}.")
+            raise ValueError(f"Invalid port ID. Valid values are {', '.join([str(i) for i in range(0, self._max_ports)])}.")
         return self._ports[key]
 
     def __len__(self) -> int:
