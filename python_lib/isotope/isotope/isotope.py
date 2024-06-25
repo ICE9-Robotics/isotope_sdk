@@ -106,11 +106,11 @@ class Isotope:
     
     | Variable   | Class type                 | Port                                            |
     |------------|----------------------------|-------------------------------------------------|
-    | `powers`   | `isotope.port.PowerOutput` | Power output ports, i.e. Output X.              |
-    | `motors`   | `isotope.port.Motor`       | Stepper motor ports, i.e. MOT X.                |
-    | `adcs`     | `isotope.port.ADCInput`    | Analogue-digital-converter ports, i.e. ADC X.   |
-    | `pwms`     | `isotope.port.PWMOutput`   | PWM output ports, i.e. PWM X.                   |
-    | `temps`    | `isotope.port.TempInput`   | Temperature sensor ports, i.e. TEMP X.          |
+    | `powers`   | `isotope.port.power_output.PowerOutput` | Power output ports, i.e. Output X.              |
+    | `motors`   | `isotope.port.motor.Motor`       | Stepper motor ports, i.e. MOT X.                |
+    | `adcs`     | `isotope.port.adc_input.ADCInput`    | Analogue-digital-converter ports, i.e. ADC X.   |
+    | `pwms`     | `isotope.port.pwm_output.PWMOutput`   | PWM output ports, i.e. PWM X.                   |
+    | `temps`    | `isotope.port.temp_input.TempInput`   | Temperature sensor ports, i.e. TEMP X.          |
     
     Attributes:
         heart_beat_interval (int): Interval in seconds for sending heartbeats, default is 1.

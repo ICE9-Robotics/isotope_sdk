@@ -8,8 +8,8 @@
 <meta name="description" content="Main module that provides the Isotope class for communicating with the Isotope Breakout board and its I/O ports …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
@@ -142,28 +142,28 @@ A heartbeat thread is incorporated to keep the connection alive.</p>
 </thead>
 <tbody>
 <tr>
-<td><dt><code>powers</code></dt></td>
-<td><code>isotope.port.PowerOutput</code></td>
+<td><code>powers</code></td>
+<td><code><a title="isotope.port.power_output.PowerOutput" href="port/power_output.html#isotope.port.power_output.PowerOutput">PowerOutput</a></code></td>
 <td>Power output ports, i.e. Output X.</td>
 </tr>
 <tr>
-<td><dt><code>motors</code></dt></td>
-<td><code>isotope.port.Motor</code></td>
+<td><code>motors</code></td>
+<td><code><a title="isotope.port.motor.Motor" href="port/motor.html#isotope.port.motor.Motor">Motor</a></code></td>
 <td>Stepper motor ports, i.e. MOT X.</td>
 </tr>
 <tr>
-<td><dt><code>adcs</code></dt></td>
-<td><code>isotope.port.ADCInput</code></td>
+<td><code>adcs</code></td>
+<td><code><a title="isotope.port.adc_input.ADCInput" href="port/adc_input.html#isotope.port.adc_input.ADCInput">ADCInput</a></code></td>
 <td>Analogue-digital-converter ports, i.e. ADC X.</td>
 </tr>
 <tr>
-<td><dt><code>pwms</code></dt></td>
-<td><code>isotope.port.PWMOutput</code></td>
+<td><code>pwms</code></td>
+<td><code><a title="isotope.port.pwm_output.PWMOutput" href="port/pwm_output.html#isotope.port.pwm_output.PWMOutput">PWMOutput</a></code></td>
 <td>PWM output ports, i.e. PWM X.</td>
 </tr>
 <tr>
-<td><dt><code>temps</code></dt></td>
-<td><code>isotope.port.TempInput</code></td>
+<td><code>temps</code></td>
+<td><code><a title="isotope.port.temp_input.TempInput" href="port/temp_input.html#isotope.port.temp_input.TempInput">TempInput</a></code></td>
 <td>Temperature sensor ports, i.e. TEMP X.</td>
 </tr>
 </tbody>
@@ -171,7 +171,7 @@ A heartbeat thread is incorporated to keep the connection alive.</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>heart_beat_interval</code></strong> :&ensp;<code>int</code></dt>
-<dd>Interval for the heartbeat thread.</dd>
+<dd>Interval in seconds for sending heartbeats, default is 1.</dd>
 </dl>
 <h2 id="args">Args</h2>
 <dl>
@@ -197,26 +197,18 @@ A heartbeat thread is incorporated to keep the connection alive.</p>
     
     | Variable   | Class type                 | Port                                            |
     |------------|----------------------------|-------------------------------------------------|
-    | `powers`   | `isotope.port.PowerOutput` | Power output ports, i.e. Output X.              |
-    | `motors`   | `isotope.port.Motor`       | Stepper motor ports, i.e. MOT X.                |
-    | `adcs`     | `isotope.port.ADCInput`    | Analogue-digital-converter ports, i.e. ADC X.   |
-    | `pwms`     | `isotope.port.PWMOutput`   | PWM output ports, i.e. PWM X.                   |
-    | `temps`    | `isotope.port.TempInput`   | Temperature sensor ports, i.e. TEMP X.          |
+    | `powers`   | `isotope.port.power_output.PowerOutput` | Power output ports, i.e. Output X.              |
+    | `motors`   | `isotope.port.motor.Motor`       | Stepper motor ports, i.e. MOT X.                |
+    | `adcs`     | `isotope.port.adc_input.ADCInput`    | Analogue-digital-converter ports, i.e. ADC X.   |
+    | `pwms`     | `isotope.port.pwm_output.PWMOutput`   | PWM output ports, i.e. PWM X.                   |
+    | `temps`    | `isotope.port.temp_input.TempInput`   | Temperature sensor ports, i.e. TEMP X.          |
     
     Attributes:
-        heart_beat_interval (int): Interval for the heartbeat thread.
+        heart_beat_interval (int): Interval in seconds for sending heartbeats, default is 1.
     &#34;&#34;&#34;
     
-    heart_beat_interval: int = 0.1 # Interval for the heartbeat thread.
-    powers: port.PowerOutput # Instance of the PowerOutput class, for controlling the power output ports.
-    motors: port.Motor # Instance of the Motor class, for controlling the motor ports.
-    adcs: port.ADCInput # Instance of the ADCInput class, for reading the ADC input ports.
-    pwms: port.PWMOutput # Instance of the PWMOutput class, for controlling the PWM output ports.
-    temps: port.TempInput # Instance of the TempInput class, for reading the temperature input ports.
-    
     def __init__(self, usb_address: str, debug=False, response_timeout=5) -&gt; None:
-        &#34;&#34;&#34;Constructor for the Isotope class.
-
+        &#34;&#34;&#34;
         Args:
             usb_address (str): USB port address of the Isotope board.
             debug (bool): Set to True to enable debug information. Default is False.
@@ -243,6 +235,7 @@ A heartbeat thread is incorporated to keep the connection alive.</p>
             self._logger.error(e, exc_info=True)
             raise e
         
+        self.heart_beat_interval = 1
         self._heartbeat_thread = threading.Thread(target=self._heartbeat)
     
     def connect(self) -&gt; bool:
@@ -328,33 +321,6 @@ A heartbeat thread is incorporated to keep the connection alive.</p>
             return
         raise IsotopeException(f&#34;Requires minimum firmware v{version_to_string(__minimum_firmware__)}, board firmware is v{my_firmware}.&#34;)</code></pre>
 </details>
-<h3>Class variables</h3>
-<dl>
-<dt id="isotope.isotope.Isotope.adcs"><code class="name">var <span class="ident">adcs</span> : <a title="isotope.port.adc_input.ADCInput" href="port/adc_input.html#isotope.port.adc_input.ADCInput">ADCInput</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="isotope.isotope.Isotope.heart_beat_interval"><code class="name">var <span class="ident">heart_beat_interval</span> : int</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="isotope.isotope.Isotope.motors"><code class="name">var <span class="ident">motors</span> : <a title="isotope.port.motor.Motor" href="port/motor.html#isotope.port.motor.Motor">Motor</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="isotope.isotope.Isotope.powers"><code class="name">var <span class="ident">powers</span> : <a title="isotope.port.power_output.PowerOutput" href="port/power_output.html#isotope.port.power_output.PowerOutput">PowerOutput</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="isotope.isotope.Isotope.pwms"><code class="name">var <span class="ident">pwms</span> : <a title="isotope.port.pwm_output.PWMOutput" href="port/pwm_output.html#isotope.port.pwm_output.PWMOutput">PWMOutput</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="isotope.isotope.Isotope.temps"><code class="name">var <span class="ident">temps</span> : <a title="isotope.port.temp_input.TempInput" href="port/temp_input.html#isotope.port.temp_input.TempInput">TempInput</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="isotope.isotope.Isotope.connect"><code class="name flex">
@@ -421,6 +387,52 @@ A heartbeat thread is incorporated to keep the connection alive.</p>
 </section>
 </article>
 <nav id="sidebar">
+<form>
+<input id="lunr-search" name="q" placeholder="🔎 Search ..." aria-label="Search"
+disabled minlength="2">
+</form>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.css" integrity="sha512-b+T2i3P45i1LZM7I00Ci5QquB9szqaxu+uuk5TUSGjZQ4w4n+qujQiIuvTv2BxE7WCGQCifNMksyKILDiHzsOg==" crossorigin>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.js" integrity="sha512-2B9/byNV1KKRm5nQ2RLViPFD6U4dUjDGwuW1GU+ImJh8YinPU9Zlq1GzdTMO+G2ROrB5o1qasJBy1ttYz0wCug==" crossorigin></script>
+<style>
+.modal-dialog iframe {
+width: 100vw;
+height: calc(100vh - 80px);
+}
+@media screen and (min-width: 700px) {
+.modal-dialog iframe {
+width: 70vw;
+height: 80vh;
+}
+}
+.modal-dialog .tingle-modal-box {width: auto;}
+.modal-dialog .tingle-modal-box__content {padding: 0;}
+</style>
+<script>
+const input = document.getElementById('lunr-search');
+input.disabled = false;
+input.form.addEventListener('submit', (ev) => {
+ev.preventDefault();
+const url = new URL(window.location);
+url.searchParams.set('q', input.value);
+history.replaceState({}, null, url.toString());
+search(input.value);
+});
+const query = new URL(window.location).searchParams.get('q');
+if (query)
+search(query);
+function search(query) {
+const url = '../doc-search.html#' + encodeURIComponent(query);
+new tingle.modal({
+cssClass: ['modal-dialog'],
+onClose: () => {
+const url = new URL(window.location);
+url.searchParams.delete('q');
+history.replaceState({}, null, url.toString());
+setTimeout(() => input.focus(), 100);
+}
+}).setContent('<iframe src="' + url + '"></iframe>').open();
+}
+</script>
 <div class="toc">
 <ul>
 <li><a href="#examples">Examples</a></li>
@@ -444,16 +456,10 @@ A heartbeat thread is incorporated to keep the connection alive.</p>
 <ul>
 <li>
 <h4><code><a title="isotope.isotope.Isotope" href="#isotope.isotope.Isotope">Isotope</a></code></h4>
-<ul class="two-column">
-<li><code><a title="isotope.isotope.Isotope.adcs" href="#isotope.isotope.Isotope.adcs">adcs</a></code></li>
+<ul class="">
 <li><code><a title="isotope.isotope.Isotope.connect" href="#isotope.isotope.Isotope.connect">connect</a></code></li>
 <li><code><a title="isotope.isotope.Isotope.disconnect" href="#isotope.isotope.Isotope.disconnect">disconnect</a></code></li>
-<li><code><a title="isotope.isotope.Isotope.heart_beat_interval" href="#isotope.isotope.Isotope.heart_beat_interval">heart_beat_interval</a></code></li>
-<li><code><a title="isotope.isotope.Isotope.motors" href="#isotope.isotope.Isotope.motors">motors</a></code></li>
-<li><code><a title="isotope.isotope.Isotope.powers" href="#isotope.isotope.Isotope.powers">powers</a></code></li>
-<li><code><a title="isotope.isotope.Isotope.pwms" href="#isotope.isotope.Isotope.pwms">pwms</a></code></li>
 <li><code><a title="isotope.isotope.Isotope.set_RGB_colour" href="#isotope.isotope.Isotope.set_RGB_colour">set_RGB_colour</a></code></li>
-<li><code><a title="isotope.isotope.Isotope.temps" href="#isotope.isotope.Isotope.temps">temps</a></code></li>
 </ul>
 </li>
 <li>
