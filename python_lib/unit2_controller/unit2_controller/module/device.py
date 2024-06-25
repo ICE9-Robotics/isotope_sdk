@@ -1,9 +1,37 @@
+"""Contains abstract classes for other submodules that represents different devices to be controlled by the Isotope Breakout board.
+
+`DeviceObj` class is the actual implementation of the device, while the `Device` class is a container for multiple `DeviceObj` instances and handles initialisation
+of each DeviceObj instance.
+
+Notes for developers
+--------------------
+For each device that needs to be controlled by the Isotope board, a new module should be created in the `module` super-module. The new module should 
+contain two classes: one to inherit from `DeviceObj` and the other from `Device`. 
+
+The inheritant of `DeviceObj` should implement functions of the device that requires communicating with the Isotope board, such as initialises the initial states, 
+uploading control parameters, executing a control commands, and reading the sensor values, etc.
+The inheritant of `Device` should contain functions to initialise the properties or parameters of the device that does not require immediate communication with 
+the Isotope board.
+
+See Also
+--------
+unit2_controller.module.pump
+unit2_controller.module.valve
+"""
+
 import logging
 from typing import Generic, TypeVar
 import isotope
 
+class DeviceError(Exception):
+    """A custom exception class for device-related errors.
+    """
+    pass
+
 
 class DeviceObj:
+    """The DeviceObj class is an abstract class for different devices that is to be controlled by the Isotope Breakout boards.
+    """
 
     def __init__(self) -> None:
         self._logger = logging.getLogger(__package__)
@@ -13,16 +41,13 @@ T = TypeVar("T", bound=DeviceObj)
 
 
 class Device(Generic[T]):
-    """
-    The Device class is an abstract class for initialising and managing the inheritance of DeviceObj
+    """The Device class is an abstract class for initialising and managing the inheritance of DeviceObj
     """
 
     def __init__(self, isotope_boards: tuple[isotope.Isotope, ...], config: dict[str, any]):
         """
-        Constructor for the Device class.
-
         Args:
-            isotope_boards (tuple[isotope.Isotope,...]): Isotope instances of the installed Isotope boards.
+            isotope_boards (tuple[isotope.Isotope,...]): `isotope.Isotope` instances of the installed Isotope boards.
             config (dict[str, any]): A dictionary containing the configuration settings for the devices.
             
         Notes for developers
@@ -45,7 +70,7 @@ class Device(Generic[T]):
 
     def items(self) -> list[tuple[int | str, DeviceObj]]:
         """
-        Provides a view of the content in the form of name-value sets.
+        Provides a view of the content in the form of [[name,value], ..].
 
         Returns:
             list[tuple[int | str, PumpObj]]: A list of name-value sets.

@@ -7,7 +7,7 @@ instances for all available TEMP ports on the Isotope board.
 
 Notes
 -----
-Users are encouraged to use the Isotope class to access the ports instead of creating their own instances of these 
+Users are encouraged to use the isotope.Isotope class to access the ports instead of creating their own instances of these 
 class directly.
 
 Example

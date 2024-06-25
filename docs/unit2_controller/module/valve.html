@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.1.dev2+g80697eb">
+<title>unit2_controller.module.valve API documentation</title>
+<meta name="description" content="Contains `ValveObj` and `Valve` classes, used to control solenoids connected to the Isotope board …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>unit2_controller.module.valve</code></h1>
+</header>
+<section id="section-intro">
+<p>Contains <code><a title="unit2_controller.module.valve.ValveObj" href="#unit2_controller.module.valve.ValveObj">ValveObj</a></code> and <code><a title="unit2_controller.module.valve.Valve" href="#unit2_controller.module.valve.Valve">Valve</a></code> classes, used to control solenoids connected to the Isotope board.</p>
+<p><code><a title="unit2_controller.module.valve.ValveObj" href="#unit2_controller.module.valve.ValveObj">ValveObj</a></code> class inherits from the <code>unit2_controller.module.device.DeviceObject</code> class containing the actual implementation of functions to control the valves.
+<code><a title="unit2_controller.module.valve.Valve" href="#unit2_controller.module.valve.Valve">Valve</a></code> class inherits from the <code><a title="unit2_controller.module.device.Device" href="device.html#unit2_controller.module.device.Device">Device</a></code> class that initialises and manages the <code><a title="unit2_controller.module.valve.ValveObj" href="#unit2_controller.module.valve.ValveObj">ValveObj</a></code> instances for all registered valves.</p>
+<h2 id="notes">Notes</h2>
+<p>Users are encouraged to use the unit2_controller.Unit2 class to access the valves instead of creating their own instances of these
+class directly.</p>
+<h2 id="example">Example</h2>
+<pre><code>from unit2_controller import Unit2
+
+
+def setup_unit2():
+    # Create a Unit2 object, see example_config.yaml for an example configuration file
+    unit2 = Unit2('config.yaml')
+    unit2.connect()
+    return unit2
+
+
+unit2 = setup_unit2()
+# Test the valve
+for name, valve in unit2.valve.items():
+    if valve.open() and valve.is_open():
+        print(f"opened Valve {name}")
+    else:
+        raise Exception(f"Failed to open Valve {name}")
+
+    if valve.close() and not valve.is_open():
+        print(f"closed Valve {name}")
+    else:
+        raise Exception(f"Failed to close Valve {name}")
+
+    opened = valve.open()
+    if valve.toggle() and valve.is_open() != opened:
+        print(f"toggled Valve {name}")
+    else:
+        raise Exception(f"Failed to toggle Valve {name}")
+</code></pre>
+<h2 id="see-also">See Also</h2>
+<p><code>unit2_controller.Unit2</code>
+<code><a title="unit2_controller.module.device" href="device.html">unit2_controller.module.device</a></code></p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="unit2_controller.module.valve.Valve"><code class="flex name class">
+<span>class <span class="ident">Valve</span></span>
+<span>(</span><span>isotope_boards: dict[int | str, isotope.isotope.Isotope], config: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The Valve class initialises and manages the ValveObj instances.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>isotope_boards</code></strong> :&ensp;<code>dict[int | str, isotope.Isotope]</code></dt>
+<dd>isotope.Isotope instances of the installed Isotope boards.</dd>
+<dt><strong><code>config</code></strong> :&ensp;<code>dict</code></dt>
+<dd>A dictionary containing the configuration settings for the valves.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Valve(Device[ValveObj]):
+    &#34;&#34;&#34; The Valve class initialises and manages the ValveObj instances.
+    &#34;&#34;&#34;
+
+    def __init__(self, isotope_boards: dict[int | str, isotope.Isotope], config: dict):
+        &#34;&#34;&#34;
+        Args:
+            isotope_boards (dict[int | str, isotope.Isotope]): isotope.Isotope instances of the installed Isotope boards.
+            config (dict): A dictionary containing the configuration settings for the valves.
+        &#34;&#34;&#34;
+        super().__init__(isotope_boards, config[&#39;valve&#39;])
+
+        self._logger.debug(&#34;Initialising Valve...&#34;)
+        self._configure()
+        self._logger.debug(&#34;Valve initialised.&#34;)
+
+    def _configure(self):
+        &#34;&#34;&#34;Configures valves based on the provided configuration settings.
+        &#34;&#34;&#34;
+        self._logger.debug(f&#34;Configuring valves... ${len(self._config[&#39;devices&#39;])} registered.&#34;)
+        defaults = self._config[&#39;defaults&#39;]
+        self._devices = {}
+        for device in self._config[&#39;devices&#39;]:
+            self._logger.debug(f&#34;Configuring Valve ${device[&#39;name&#39;]}...&#34;)
+
+            board_name = device[&#39;board_name&#39;]
+            if board_name not in self._isots.keys():
+                raise ValueError(
+                    f&#34;Isotope board {board_name} is not registered. Have you assigned the correct board_name to valve {device[&#39;name&#39;]} in the config file?&#34;)
+
+            port_id = device[&#39;port_id&#39;]
+            if port_id &gt; len(self._isots[board_name].powers):
+                raise ValueError(f&#34;Port ID {port_id} is out of range.&#34;)
+            if port_id &lt; 0:
+                raise ValueError(f&#34;Port ID {port_id} is invalid. Port ID must be greater than or equal to 0.&#34;)
+
+            valve = ValveObj()
+            valve.normally_open = device.get(&#39;normally_open&#39;, defaults[&#39;normally_open&#39;])
+            valve.initialise(self._isots[device[&#39;board_name&#39;]], device[&#39;port_id&#39;])
+            self._devices[device[&#39;name&#39;]] = valve
+            self._logger.debug(f&#34;Valve ${device[&#39;name&#39;]} configured.&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="unit2_controller.module.device.Device" href="device.html#unit2_controller.module.device.Device">Device</a></li>
+<li>typing.Generic</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="unit2_controller.module.valve.Valve.items"><code class="name flex">
+<span>def <span class="ident">items</span></span>(<span>self) ‑> list[tuple[int | str, <a title="unit2_controller.module.device.DeviceObj" href="device.html#unit2_controller.module.device.DeviceObj">DeviceObj</a>]]</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="unit2_controller.module.device.Device" href="device.html#unit2_controller.module.device.Device">Device</a></code>.<code><a title="unit2_controller.module.device.Device.items" href="device.html#unit2_controller.module.device.Device.items">items</a></code>
+</p>
+<div class="desc inherited"><p>Provides a view of the content in the form of [[name,value], ..] …</p></div>
+</dd>
+<dt id="unit2_controller.module.valve.Valve.names"><code class="name flex">
+<span>def <span class="ident">names</span></span>(<span>self) ‑> list[int | str]</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="unit2_controller.module.device.Device" href="device.html#unit2_controller.module.device.Device">Device</a></code>.<code><a title="unit2_controller.module.device.Device.names" href="device.html#unit2_controller.module.device.Device.names">names</a></code>
+</p>
+<div class="desc inherited"><p>Gets the names of all the devices …</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="unit2_controller.module.valve.ValveObj"><code class="flex name class">
+<span>class <span class="ident">ValveObj</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>The ValveObj class provides methods for controlling the valves on the Isotope board.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ValveObj(DeviceObj):
+    &#34;&#34;&#34;The ValveObj class provides methods for controlling the valves on the Isotope board.
+    &#34;&#34;&#34;
+
+    def __init__(self) -&gt; None:
+        super().__init__()
+        self.normally_open = False
+        self.power_output: isotope.port.PowerOutputPort = None
+
+    def initialise(self, isot: isotope.Isotope, port_id: int) -&gt; None:
+        &#34;&#34;&#34;Initializes the valve object with the specified board and port ID.
+
+        Args:
+            isot (isotope.Isotope): The Isotope instance for controlling the board.
+            port_id (int): The ID of the power output port to which the valve is connected.
+        &#34;&#34;&#34;
+        self._logger.debug(f&#34;Initialising Valve connected to Isotope Breakout {isot} on port {port_id}...&#34;)
+        self.power_output = isot.powers[port_id]
+        self.power_output.default_pwm = 1024
+
+    def open(self) -&gt; bool:
+        &#34;&#34;&#34;Open the valve.
+
+        Returns:
+            bool: True if the execution is successful, False otherwise.
+        &#34;&#34;&#34;
+        self._logger.debug(&#34;Opening valve...&#34;)
+        return self.power_output.disable() if self.normally_open else self.power_output.enable()
+
+    def close(self) -&gt; bool:
+        &#34;&#34;&#34;Close the valve.
+
+        Returns:
+            bool: True if the execution is successful, False otherwise.
+        &#34;&#34;&#34;
+        self._logger.debug(&#34;Closing valve...&#34;)
+        return self.power_output.enable() if self.normally_open else self.power_output.disable()
+
+    def toggle(self) -&gt; bool:
+        &#34;&#34;&#34; Toggles the valve.
+
+        Returns:
+            bool: True if the execution is successful, False otherwise.
+        &#34;&#34;&#34;
+        return self.close() if self.is_open() else self.open()
+
+    def is_open(self) -&gt; bool:
+        &#34;&#34;&#34;Checks if the valve is open.
+
+        Returns:
+            bool: True if the valve is on, False otherwise.
+        &#34;&#34;&#34;
+        return self.power_output.is_enabled()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="unit2_controller.module.device.DeviceObj" href="device.html#unit2_controller.module.device.DeviceObj">DeviceObj</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="unit2_controller.module.valve.ValveObj.close"><code class="name flex">
+<span>def <span class="ident">close</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Close the valve.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the execution is successful, False otherwise.</dd>
+</dl></div>
+</dd>
+<dt id="unit2_controller.module.valve.ValveObj.initialise"><code class="name flex">
+<span>def <span class="ident">initialise</span></span>(<span>self, isot: isotope.isotope.Isotope, port_id: int) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initializes the valve object with the specified board and port ID.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>isot</code></strong> :&ensp;<code>isotope.Isotope</code></dt>
+<dd>The Isotope instance for controlling the board.</dd>
+<dt><strong><code>port_id</code></strong> :&ensp;<code>int</code></dt>
+<dd>The ID of the power output port to which the valve is connected.</dd>
+</dl></div>
+</dd>
+<dt id="unit2_controller.module.valve.ValveObj.is_open"><code class="name flex">
+<span>def <span class="ident">is_open</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks if the valve is open.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the valve is on, False otherwise.</dd>
+</dl></div>
+</dd>
+<dt id="unit2_controller.module.valve.ValveObj.open"><code class="name flex">
+<span>def <span class="ident">open</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Open the valve.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the execution is successful, False otherwise.</dd>
+</dl></div>
+</dd>
+<dt id="unit2_controller.module.valve.ValveObj.toggle"><code class="name flex">
+<span>def <span class="ident">toggle</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Toggles the valve.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the execution is successful, False otherwise.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<form>
+<input id="lunr-search" name="q" placeholder="🔎 Search ..." aria-label="Search"
+disabled minlength="2">
+</form>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.css" integrity="sha512-b+T2i3P45i1LZM7I00Ci5QquB9szqaxu+uuk5TUSGjZQ4w4n+qujQiIuvTv2BxE7WCGQCifNMksyKILDiHzsOg==" crossorigin>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.js" integrity="sha512-2B9/byNV1KKRm5nQ2RLViPFD6U4dUjDGwuW1GU+ImJh8YinPU9Zlq1GzdTMO+G2ROrB5o1qasJBy1ttYz0wCug==" crossorigin></script>
+<style>
+.modal-dialog iframe {
+width: 100vw;
+height: calc(100vh - 80px);
+}
+@media screen and (min-width: 700px) {
+.modal-dialog iframe {
+width: 70vw;
+height: 80vh;
+}
+}
+.modal-dialog .tingle-modal-box {width: auto;}
+.modal-dialog .tingle-modal-box__content {padding: 0;}
+</style>
+<script>
+const input = document.getElementById('lunr-search');
+input.disabled = false;
+input.form.addEventListener('submit', (ev) => {
+ev.preventDefault();
+const url = new URL(window.location);
+url.searchParams.set('q', input.value);
+history.replaceState({}, null, url.toString());
+search(input.value);
+});
+const query = new URL(window.location).searchParams.get('q');
+if (query)
+search(query);
+function search(query) {
+const url = '../../doc-search.html#' + encodeURIComponent(query);
+new tingle.modal({
+cssClass: ['modal-dialog'],
+onClose: () => {
+const url = new URL(window.location);
+url.searchParams.delete('q');
+history.replaceState({}, null, url.toString());
+setTimeout(() => input.focus(), 100);
+}
+}).setContent('<iframe src="' + url + '"></iframe>').open();
+}
+</script>
+<div class="toc">
+<ul>
+<li><a href="#notes">Notes</a></li>
+<li><a href="#example">Example</a></li>
+<li><a href="#see-also">See Also</a></li>
+</ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="unit2_controller.module" href="index.html">unit2_controller.module</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="unit2_controller.module.valve.Valve" href="#unit2_controller.module.valve.Valve">Valve</a></code></h4>
+<ul class="">
+<li><code><a title="unit2_controller.module.valve.Valve.items" href="device.html#unit2_controller.module.valve.Valve.items">items</a></code></li>
+<li><code><a title="unit2_controller.module.valve.Valve.names" href="device.html#unit2_controller.module.valve.Valve.names">names</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="unit2_controller.module.valve.ValveObj" href="#unit2_controller.module.valve.ValveObj">ValveObj</a></code></h4>
+<ul class="">
+<li><code><a title="unit2_controller.module.valve.ValveObj.close" href="#unit2_controller.module.valve.ValveObj.close">close</a></code></li>
+<li><code><a title="unit2_controller.module.valve.ValveObj.initialise" href="#unit2_controller.module.valve.ValveObj.initialise">initialise</a></code></li>
+<li><code><a title="unit2_controller.module.valve.ValveObj.is_open" href="#unit2_controller.module.valve.ValveObj.is_open">is_open</a></code></li>
+<li><code><a title="unit2_controller.module.valve.ValveObj.open" href="#unit2_controller.module.valve.ValveObj.open">open</a></code></li>
+<li><code><a title="unit2_controller.module.valve.ValveObj.toggle" href="#unit2_controller.module.valve.ValveObj.toggle">toggle</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1.dev2+g80697eb</a>.</p>
+</footer>
+</body>
+</html>
