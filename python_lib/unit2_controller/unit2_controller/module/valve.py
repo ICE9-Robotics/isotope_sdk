@@ -1,20 +1,15 @@
-import logging
-from typing import Union
 import isotope
+from .device import Device, DeviceObj
 
-class ValveObj:
+class ValveObj(DeviceObj):
     """
     The valve object class provides methods for controlling the valves on the Isotope board.
-    
-    Attributes:s
-        normally_open (bool): The state of the valve when it is not powered.
     """
     
-    power_output: isotope.port.PowerOutputPort
-    normally_open: bool
-    
     def __init__(self) -> None:
-        self._logger = logging.getLogger(__package__)
+        super().__init__()
+        self.normally_open = False
+        self.power_output: isotope.port.PowerOutputPort = None
     
     def initialise(self, isot: isotope.Isotope, port_id: int) -> None:
         """
@@ -66,77 +61,24 @@ class ValveObj:
         """
         return self.power_output.is_enabled()
 
-class Valve:
+class Valve(Device[ValveObj]):
     """
     The Valve class initialises and manages the valve objects which provides methods for controlling the valves on the Isotope board.
-    
-    Attributes:
-        _config (dict[str, any]): configuration for valves, as specified in config.yaml.
-        _isots (isotope.Isotope_comms_protocol,...): Isotope_comms_protocol instances of the installed Isotope boards.
-        _valves (dict[[int | str], ValveObj]): ValveObj instances with device names as the keys.
     """
     
-    _config: dict[str, any]
-    _isots: dict[Union[int, str], isotope.Isotope]
-    _valves: dict[Union[int, str], ValveObj]
-    
-    def __init__(self, isotope_boards: dict[Union[int, str], isotope.Isotope], config: dict):
+    def __init__(self, isotope_boards: dict[int | str, isotope.Isotope], config: dict):
         """
         Constructor for the Valve class.
         
         Args:
-            isotope_boards (dict[Union[int, str], isotope.Isotope]): Isotope instances of the installed Isotope boards.
+            isotope_boards (dict[int | str, isotope.Isotope]): Isotope instances of the installed Isotope boards.
             config (dict): A dictionary containing the configuration settings for the valves.
         """
-        self._logger = logging.getLogger(__package__)
+        super().__init__(isotope_boards, config['valve'])
+        
         self._logger.debug("Initialising Valve...")
-        self._isots = isotope_boards
-        self._config = config['valve']
         self._configure()
         self._logger.debug("Valve initialised.")
-        
-    def names(self) -> list[Union[int, str]]:
-        """
-        Gets the names of all the valves.
-        
-        Returns:
-            list[[int | str]]: A list of the names of the valves.
-        """
-        return list(self._valves.keys())
-    
-    def items(self) -> list[tuple[Union[int, str], ValveObj]]:
-        """
-        Provides a view of the content in the form of name-value sets.
-        Returns:
-            list[tuple[int | str, ValveObj]]: A list of name-value sets.
-        """
-        return self._valves.items()
-        
-    def __getitem__(self, name: Union[int, str]) -> ValveObj:
-        """
-        Gets the valve object with the specified name.
-
-        Args:
-            name ([int | str]): The name of the valve.
-
-        Returns:
-            ValveObj: The valve object.
-        """
-        self._verify_name(name)
-        return self._valves[name]
-    
-    def _verify_name(self, name: Union[int, str]) -> None:
-            """
-            Verifies if a valve with the given name exists.
-
-            Args:
-                name ([int | str]): The name of the valve to verify.
-
-            Raises:
-                ValueError: If the valve with the given name is not found.
-            """
-            if name not in self._valves:
-                raise ValueError(f"Valve with name {name} not found.")
         
     def _configure(self):
         """
@@ -144,7 +86,7 @@ class Valve:
         """
         self._logger.debug(f"Configuring valves... ${len(self._config['devices'])} registered.")
         defaults = self._config['defaults']
-        self._valves = {}
+        self._devices = {}
         for device in self._config['devices']:
             self._logger.debug(f"Configuring Valve ${device['name']}...")
             
@@ -161,5 +103,5 @@ class Valve:
             valve = ValveObj()
             valve.normally_open = device.get('normally_open', defaults['normally_open'])
             valve.initialise(self._isots[device['board_name']], device['port_id'])
-            self._valves[device['name']] = valve
+            self._devices[device['name']] = valve
             self._logger.debug(f"Valve ${device['name']} configured.")

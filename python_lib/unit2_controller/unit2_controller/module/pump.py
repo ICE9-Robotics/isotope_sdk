@@ -1,8 +1,7 @@
-from typing import Union
-import logging
 import isotope
+from .device import Device, DeviceObj
 
-class PumpObj:
+class PumpObj(DeviceObj):
     """
     The pump object class provides methods for controlling the pumps on the Isotope board.
     
@@ -15,17 +14,15 @@ class PumpObj:
         _initialised (bool): True if the pump is initialised, False otherwise.
     """
     
-    motor: isotope.port.MotorPort
-    rpm: int
-    current: int
-    steps_per_degree: int
-    steps_per_ml: int
-    default_dir: int
-    _initialised: bool = False
-    
     def __init__(self) -> None:
-        self._logger = logging.getLogger(__package__)
-    
+        super().__init__()
+        self.rpm = 0
+        self.current = 0
+        self.steps_per_degree = 0
+        self.steps_per_ml = 0
+        self.default_dir = 0
+        self._initialised = False
+
     def initialise(self, isotope_board: isotope.Isotope, port_id: int) -> None:
         """
         Initializes the pump object with the specified board and port ID.
@@ -93,78 +90,23 @@ class PumpObj:
         """
         return self.motor.is_enabled()
 
-class Pump:
+class Pump(Device[PumpObj]):
     """
     The Pump class initialises and manages the pump object which provides methods for controlling the pumps on the Isotope board.
-    
-    Attributes:
-        _config (dict[str, any]): configurations for pumps, as specified in config.yaml.
-        _isots (isotope.Isotope_comms_protocol,...): Isotope_comms_protocol instances of the installed Isotope boards.
-        _pumps (dict[[int | str], PumpObj]): PumpObj instances with the names as the keys.
     """
     
-    _config: dict[str, any]
-    _isots: dict[Union[int, str], isotope.Isotope]
-    _pumps: dict[Union[int, str], PumpObj]
-    
-    def __init__(self, isotope_boards: dict[Union[int, str], isotope.Isotope], config: dict):
+    def __init__(self, isotope_boards: dict[int | str, isotope.Isotope], config: dict):
         """
         Constructor for the Pump class.
         
         Args:
-            isotope_boards (dict[Union[int, str], isotope.Isotope]): Isotope instances of the installed Isotope boards.
+            isotope_boards (dict[int | str, isotope.Isotope]): Isotope instances of the installed Isotope boards.
             config (dict): A dictionary containing the configuration settings for the pumps.
         """
-        self._logger = logging.getLogger(__package__)
+        super().__init__(isotope_boards, config['pump'])
         self._logger.debug("Initialising Pump...")
-        self._isots = isotope_boards
-        self._config = config['pump']
         self._configure()
         self._logger.debug("Pump initialised.")
-    
-    def names(self) -> list[Union[int, str]]:
-        """
-        Gets the names of all the pumps.
-        
-        Returns:
-            list[[int | str]]: A list of pump names.
-        """
-        return list(self._pumps.keys())
-    
-    def items(self) -> list[tuple[Union[int, str], PumpObj]]:
-        """
-        Provides a view of the content in the form of name-value sets.
-        
-        Returns:
-            list[tuple[int | str, PumpObj]]: A list of name-value sets.
-        """
-        return self._pumps.items()
-    
-    def __getitem__(self, name: Union[int, str]) -> PumpObj:
-        """
-        Gets the pump object with the specified name.
-        
-        Args:
-            name ([int | str]): The name of the pump.
-        
-        Returns:
-            PumpObj: The pump object.
-        """
-        self._verify_name(name)
-        return self._pumps[name]
-    
-    def _verify_name(self, name: Union[int, str]) -> None:
-            """
-            Verifies if a pump with the given name exists.
-
-            Args:
-                name ([int | str]): The name of the pump to verify.
-
-            Raises:
-                ValueError: If the pump with the given name is not found.
-            """
-            if name not in self._pumps:
-                raise ValueError(f"Pump with name {name} not found.")
         
     def _configure(self):
         """
@@ -173,7 +115,7 @@ class Pump:
         self._logger.debug(f"Configuring pumps... ${len(self._config['devices'])} registered.")
         
         defaults = self._config['defaults']
-        self._pumps = {}
+        self._devices = {}
         for device in self._config['devices']:
             self._logger.debug(f"Configuring Pump ${device['name']}...")
             
@@ -193,5 +135,5 @@ class Pump:
             pump.steps_per_ml = device.get('steps_per_ml', defaults['steps_per_ml'])
             pump.default_dir = -1 if device.get('reverse_direction', defaults['reverse_direction']) else 1
             pump.initialise(self._isots[board_name], port_id)
-            self._pumps[device['name']] = pump
+            self._devices[device['name']] = pump
             self._logger.debug(f"Pump ${device['name']} configured.")
