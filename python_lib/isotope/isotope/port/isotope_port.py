@@ -28,11 +28,6 @@ from typing import Generic, TypeVar
 import logging
 
 
-__pdoc__ = {}
-__pdoc__['IsotopePortContainer.__getitem__'] = True
-__pdoc__['IsotopePortContainer.__len__'] = True
-
-
 class PortException(Exception):
     """General exception class for the PortController class.
     """
