@@ -4,6 +4,8 @@ The Isotope software development kit (SDK) is for interfacing with the Isotope B
 
 # Packages
 
+[Latest release](https://github.com/ICE9-Robotics/isotope_sdk/releases)
+
 ### isotope
 isotope is the package for handling communication with the Isotope Breakout board. It provides easy to use APIs for sending commands and retrieving data from the I/O ports on the board. 
 
