@@ -10,6 +10,25 @@ Notes
 Users are encouraged to use the Isotope class to access the ports instead of creating their own instances of these 
 class directly.
 
+Example
+-------
+    import isotope
+    
+    usb_address = 'COM3'
+
+
+    # Start the communication
+    isot = isotope.Isotope(usb_address)
+    isot.connect()
+    
+    # Enumerate through all TEMP ports and get their values
+    for i, temp in enumerate(isot.temps):
+        print(f"TEMP port {i} value: {temp.get_value()}")
+
+    # Close the connection
+    isot.disconnect()
+
+
 See Also
 --------
 isotope.isotope
@@ -61,4 +80,4 @@ class TempInput(IsotopePortContainer[TempInputPort]):
                 that is used to communicate with the Isotope board.
         """
         super().__init__(comms, 3)
-        self._ports = [TempInputPort(comms, i) for i in range(self._max_ports)]
+        self._ports = [TempInputPort(comms, i) for i in range(self._max_port_count)]

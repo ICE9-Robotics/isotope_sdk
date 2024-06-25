@@ -113,19 +113,11 @@ class Isotope:
     | `temps`    | `isotope.port.TempInput`   | Temperature sensor ports, i.e. TEMP X.          |
     
     Attributes:
-        heart_beat_interval (int): Interval for the heartbeat thread.
+        heart_beat_interval (int): Interval in seconds for sending heartbeats, default is 1.
     """
     
-    heart_beat_interval: int = 0.1 # Interval for the heartbeat thread.
-    powers: port.PowerOutput # Instance of the PowerOutput class, for controlling the power output ports.
-    motors: port.Motor # Instance of the Motor class, for controlling the motor ports.
-    adcs: port.ADCInput # Instance of the ADCInput class, for reading the ADC input ports.
-    pwms: port.PWMOutput # Instance of the PWMOutput class, for controlling the PWM output ports.
-    temps: port.TempInput # Instance of the TempInput class, for reading the temperature input ports.
-    
     def __init__(self, usb_address: str, debug=False, response_timeout=5) -> None:
-        """Constructor for the Isotope class.
-
+        """
         Args:
             usb_address (str): USB port address of the Isotope board.
             debug (bool): Set to True to enable debug information. Default is False.
@@ -152,6 +144,7 @@ class Isotope:
             self._logger.error(e, exc_info=True)
             raise e
         
+        self.heart_beat_interval = 1
         self._heartbeat_thread = threading.Thread(target=self._heartbeat)
     
     def connect(self) -> bool:

@@ -10,6 +10,40 @@ Notes
 Users are encouraged to use the Isotope class to access the ports instead of creating their own instances of these 
 class directly.
 
+Example
+-------
+    import isotope
+
+    usb_address = 'COM3'
+    port_id = 0
+    
+    # Start the communication
+    isot = isotope.Isotope(usb_address)
+    isot.connect()
+
+    # Enable all PWM output ports
+    result = isot.pwms.enable()
+
+    if not result or not isot.pwms.is_enabled():
+        raise Exception("Failed to enable PWM output ports.")
+    
+    # Get PWM output port at port_id
+    port = isot.pwms[port_id]
+    
+    # Set PWM value of the PWM port to 512
+    port.set_pwm(512)
+    
+    # Read the PWM value of the PWM port
+    actual_pwm = port.get_pwm()
+    print(f"Actual PWM on the Isotope Board is {actual_pwm}")
+
+    # Disable all PWM output ports
+    isot.pwms.disable()
+
+    # Close the connection
+    isot.disconnect()
+
+
 See Also
 --------
 isotope.isotope
@@ -81,7 +115,7 @@ class PWMOutput(IsotopePortContainer[PWMOutputPort]):
         """
         self._logger = logging.getLogger(__package__)
         super().__init__(comms, 4)
-        self._ports = [PWMOutputPort(comms, i) for i in range(self._max_ports)]
+        self._ports = [PWMOutputPort(comms, i) for i in range(self._max_port_count)]
 
     def enable(self) -> bool:
         """Enable all PWM outputs.

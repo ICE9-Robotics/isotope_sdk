@@ -9,6 +9,47 @@ Notes
 Users are encouraged to use the Isotope class to access the ports instead of creating their own instances of these 
 class directly.
 
+Example
+-------
+
+    import isotope
+
+    resolution = 7.5
+    current = 400
+    rpm = 50
+    
+    usb_address = 'COM3'
+    port_id = 0
+
+    # Start the communication
+    isot = isotope.Isotope(usb_address)
+    isot.connect()
+
+    # Get motor port at port_id
+    motor = isot.motors[port_id]
+    
+    # Configure motor port
+    motor.configure(resolution, current, rpm)
+
+    # Enable the motor port
+    result = motor.enable()
+
+    if not result or not motor.is_enabled():
+        raise Exception("Failed to enable motor port.")
+
+    # Rotate the motor by 100 steps
+    motor.rotate_by_steps(100)
+
+    # Rotate the motor by 90 degrees
+    motor.rotate_by_degrees(90)
+
+    # Disable the motor port
+    motor.disable()
+
+    # Close the connection
+    isot.disconnect()
+
+
 See Also
 --------
 isotope.isotope
@@ -22,13 +63,6 @@ class MotorPort(IsotopePort):
     """The MotorPort class is used to control the MOT ports, i.e. MOT 0, 1, 2 and 3, on the Isotope board.
     """
 
-    _resolution: int
-    _rpm: int
-    _current: int
-    _enabled: bool = False
-    _configure_requested = False
-    _configured: bool = False
-
     def __init__(self, comms: icl.Isotope_comms_protocol, port_id: int) -> None:
         """
         Args:
@@ -40,9 +74,15 @@ class MotorPort(IsotopePort):
             ValueError: Invalid port ID. Valid values are 0, 1, 2 and 3.
         """
         if port_id < 0 or port_id > 3:
-            raise ValueError(
-                "Invalid port ID. Valid values are 0, 1, 2 and 3.")
+            raise ValueError("Invalid port ID. Valid values are 0, 1, 2 and 3.")
         super().__init__(comms, port_id)
+           
+        self._resolution = 0
+        self._rpm = 0
+        self._current = 0
+        self._enabled = False
+        self._configure_requested = False
+        self._configured = False
 
     def configure(self, resolution: int, current: int, rpm: int = 100) -> bool:
         """Setup the motor with the specified parameters.
@@ -248,4 +288,4 @@ class Motor(IsotopePortContainer[MotorPort]):
                 that is used to communicate with the Isotope board.
         """
         super().__init__(comms, 4)
-        self._ports = [MotorPort(comms, i) for i in range(self._max_ports)]
+        self._ports = [MotorPort(comms, i) for i in range(self._max_port_count)]

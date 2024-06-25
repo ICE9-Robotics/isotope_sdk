@@ -1,5 +1,4 @@
 import isotope
-import time
 
 DEBUG_ENABLED = True
 
@@ -10,7 +9,7 @@ port_id = 1
 # For windows machine, this is usually "COMX" where X is the port number;
 # for Ubuntu, this is usually "/dev/ttyACMX", where X is the port number;
 # and for MacOS, this is usually "/dev/cu.usbmodemXXXXX".
-usb_address = '/dev/cu.usbmodem21201'
+usb_address = '/dev/cu.usbmodem2144101'
 
 
 def main():
@@ -18,9 +17,15 @@ def main():
     isot = isotope.Isotope(usb_address, DEBUG_ENABLED, response_timeout=5)
     isot.connect()
     
+    print(f"{len(isot.adcs)} ADC ports available.")
+    
     # Get the ADC port value
-    value = isot.adcs[port_id].get_value()
-    print(f"ADC port value: {value}")
+    for i, adc in enumerate(isot.adcs):
+        print(f"ADC port {i} value: {adc.get_value()}")
+        
+    # Get the value of a specific ADC port
+    value = isot.adcs[1].get_value()
+    print(f"ADC port 1 value: {value}")
 
     # Close the connection
     isot.disconnect()

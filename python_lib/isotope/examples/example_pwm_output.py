@@ -10,7 +10,7 @@ port_id = 1
 # For windows machine, this is usually "COMX" where X is the port number;
 # for Ubuntu, this is usually "/dev/ttyACMX", where X is the port number;
 # and for MacOS, this is usually "/dev/cu.usbmodemXXXXX".
-usb_address = '/dev/cu.usbmodem21201'
+usb_address = '/dev/cu.usbmodem2144101'
 
 
 def validate_result(result: bool):
@@ -31,18 +31,19 @@ def main():
 
     print(f"PWM output ports are {'' if isot.pwms.is_enabled() else 'not'} enabled.")
     
-    # Set and get the PWM output port value
-    for i in range(0, 1024, 128):
-        print(f"Setting Port {port_id} PWM to {i}")
-        result = isot.pwms[port_id].set_pwm(i)
+    print(f"{len(isot.pwms)} PWM output ports available.")
+    
+    # Enumerate through all PWM output ports and set and get PWM values
+    for i, port in enumerate(isot.pwms):
+        print(f"Setting Port {i} PWM to 512")
+        result = port.set_pwm(512)
         validate_result(result)
-        time.sleep(0.1)
 
-        actual_pwm = isot.pwms[port_id].get_pwm()
+        actual_pwm = port.get_pwm()
         print(f"Actual PWM on the Isotope Board is {actual_pwm}")
 
     print("Disable all PWM output ports")
-    result = isot.pwms.disable():
+    result = isot.pwms.disable()
     validate_result(result)
 
     print(f"PWM output ports are {'' if isot.pwms.is_enabled() else 'not'} enabled.")

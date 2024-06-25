@@ -10,6 +10,30 @@ Notes
 Users are encouraged to use the Isotope class to access the ports instead of creating their own instances of these 
 class directly.
 
+Example
+-------
+    import isotope
+    
+    usb_address = 'COM3'
+    port_id = 0
+    
+    # Start the communication
+    isot = isotope.Isotope(usb_address)
+    isot.connect()
+
+    # Get power output port at port_id
+    port = isot.powers[port_id]
+
+    # Enable Port with default PWM
+    port.enable()
+
+    # Disable Port
+    port.disable()
+
+    # Close the connection
+    isot.disconnect()
+
+
 See Also
 --------
 isotope.isotope
@@ -21,9 +45,6 @@ from .isotope_port import IsotopePort, IsotopePortContainer
 
 class PowerOutputPort(IsotopePort):
     """The PowerOutputPort class is used to control the PWM enabled power output ports, i.e. Output 0, 1 and 2, on the Isotope board."""
-
-    _defaut_pwm: int = 1024
-    _current_pwm: int = 0
 
     def __init__(self, comms: icl.Isotope_comms_protocol, port_id: int) -> None:
         """
@@ -38,9 +59,11 @@ class PowerOutputPort(IsotopePort):
 
         if port_id < 0 or port_id > 2:
             raise ValueError("Invalid port ID. Valid values are 0, 1 and 2.")
-
         super().__init__(comms, port_id)
 
+        self._defaut_pwm = 1024
+        self._current_pwm = 0
+        
     @property
     def default_pwm(self) -> int:
         """Get the default PWM value of the power output port as set in the constructor.
@@ -134,4 +157,4 @@ class PowerOutput(IsotopePortContainer[PowerOutputPort]):
                 that is used to communicate with the Isotope board.
         """
         super().__init__(comms, 3)
-        self._ports = [PowerOutputPort(comms, i) for i in range(self._max_ports)]
+        self._ports = [PowerOutputPort(comms, i) for i in range(self._max_port_count)]
