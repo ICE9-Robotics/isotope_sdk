@@ -1,11 +1,11 @@
 """Contains `ValveObj` and `Valve` classes, used to control solenoids connected to the Isotope board.
 
-`ValveObj` class inherits from the `unit2_controller.module.device.DeviceObject` class containing the actual implementation of functions to control the valves. 
+`ValveObj` class inherits from the `unit2_controller.module.device.DeviceObj` class containing the actual implementation of functions to control the valves. 
 `Valve` class inherits from the `unit2_controller.module.device.Device` class that initialises and manages the `ValveObj` instances for all registered valves.
 
 Notes
 -----
-Users are encouraged to use the unit2_controller.Unit2 class to access the valves instead of creating their own instances of these 
+Users are encouraged to use the `unit2_controller.unit2_controller.Unit2` class to access the valves instead of creating their own instances of these 
 class directly.
 
 Example
@@ -43,7 +43,7 @@ Example
 
 See Also
 --------
-unit2_controller.Unit2
+unit2_controller.unit2_controller.Unit2
 unit2_controller.module.device
 """
 import isotope

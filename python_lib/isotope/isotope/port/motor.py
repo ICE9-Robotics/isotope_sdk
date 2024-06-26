@@ -1,4 +1,4 @@
-"""Contains `MotorPort` and `Motor` classes, used to hanlde the communication with the MOT ports on the Isotope board.
+"""Contains `MotorPort` and `Motor` classes, used to handle the communication with the MOT ports on the Isotope board.
 
 `MotorPort` class inherits from the `isotope.port.isotope_port.IsotopePort` class as the actual implementation of the communicaiton protocol 
 while the `Motor` class inherits from the `isotope.port.isotope_port.IsotopePortContainer` class as a list-like container that holds `MotorPort` 

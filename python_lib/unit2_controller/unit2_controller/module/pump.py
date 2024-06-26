@@ -1,11 +1,11 @@
 """Contains `PumpObj` and `Pump` classes, used to control diaphragm pumps connected to the Isotope board.
 
-`PumpObj` class inherits from the `unit2_controller.module.device.DeviceObject` class containing the actual implementation of functions to control the pumps. 
+`PumpObj` class inherits from the `unit2_controller.module.device.DeviceObj` class containing the actual implementation of functions to control the pumps. 
 `Pump` class inherits from the `unit2_controller.module.device.Device` class that initialises and manages the `PumpObj` instances for all registered pumps.
 
 Notes
 -----
-Users are encouraged to use the unit2_controller.Unit2 class to access the pumps instead of creating their own instances of these 
+Users are encouraged to use the `unit2_controller.unit2_controller.Unit2` class to access the pumps instead of creating their own instances of these 
 class directly.
 
 Example

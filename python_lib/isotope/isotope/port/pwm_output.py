@@ -1,4 +1,4 @@
-"""Contains `PWMOutputPort` and `PWMOutput` classes, used to hanlde the communication with 
+"""Contains `PWMOutputPort` and `PWMOutput` classes, used to handle the communication with 
 the PWM ports on the Isotope board.
 
 `PWMOutputPort` class inherits from the `isotope.port.isotope_port.IsotopePort` class as the actual implementation of the communicaiton protocol 

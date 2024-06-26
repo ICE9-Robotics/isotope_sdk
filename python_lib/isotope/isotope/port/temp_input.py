@@ -1,4 +1,4 @@
-"""Contains `TempInputPort` and `TempInput` classes, used to hanlde the communication with 
+"""Contains `TempInputPort` and `TempInput` classes, used to handle the communication with 
 the TEMP ports on the Isotope board.
 
 `TempInputPort` class inherits from the `isotope.port.isotope_port.IsotopePort` class as the actual implementation of the communicaiton protocol 

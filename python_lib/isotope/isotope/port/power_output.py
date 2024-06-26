@@ -1,4 +1,4 @@
-"""Contains `PowerOutputPort` and `PowerOutput` classes, used to hanlde the communication with 
+"""Contains `PowerOutputPort` and `PowerOutput` classes, used to handle the communication with 
 the Output ports on the Isotope board.
 
 `PowerOutputPort` class inherits from the `isotope.port.isotope_port.IsotopePort` class as the actual implementation of the communicaiton protocol 
