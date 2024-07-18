@@ -93,6 +93,8 @@ class MotorPort(IsotopePort):
         self._configured = False
         self._busy = False
         self._current_sequence = 0
+        self._last_is_busy_query_time = 0
+        self._is_busy_query_delay = 0.1
 
     def configure(self, resolution: int, current: int, rpm: int = 100) -> bool:
         """Setup the motor with the specified parameters.
@@ -221,6 +223,7 @@ class MotorPort(IsotopePort):
         if not self.is_enabled():
             raise InvalidOperationException("Motor is not enabled.")
         resp = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_MOTOR_STEP, self._id, steps)
+        self._last_is_busy_query_time = time.perf_counter()
         if self._comms.is_resp_ok(resp) == icl.CmdResponseType.Acknowledged:
             self._busy = True
             self._current_sequence = resp.sequence
@@ -288,26 +291,55 @@ class MotorPort(IsotopePort):
             bool: True if the step resolution was successfully set, False otherwise.
         """
         self._logger.debug(f"Setting resolution to {value} degrees...")
-        resp = self._comms.send_cmd(
-            icl.CMD_TYPE_SET, icl.SEC_MOTOR_STEP_ANGLE, self._id, value)
+        resp = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_MOTOR_STEP_ANGLE, self._id, value)
         if self._comms.is_resp_ok(resp) == icl.CmdResponseType.Succeeded:
             self._resolution = value
             return True
         return False
 
     def is_motion_completed(self) -> bool:
+        """Check if a `CMD_SUCCESS` message has been received which is sent by the Isotope board as soon as the previously requested motion is completed.
+
+        Returns:
+            bool: True if the motor has completed the motion, False otherwise.
+        """
         if not self._busy:
             return True  # No motion is in progress
         resp = self._comms.retrieve_response(self._current_sequence)
         if self._comms.is_resp_ok(resp) == icl.CmdResponseType.Succeeded or self._comms.is_resp_ok(resp) == icl.CmdResponseType.Aborted:
-            self._busy = False
             return True
+        if time.perf_counter() - self._last_is_busy_query_time > self._is_busy_query_delay:
+            return not self.is_busy_from_board()
         return False
 
-    def wait_until_motion_completed(self, refresh_frequency=100):
-        delay = 1/refresh_frequency
-        while not self.is_motion_completed():
+    def wait_until_motion_completed(self, timeout = 0, check_frequency=100):
+        """Wait until a `CMD_SUCCESS` message is received which is sent by the Isotope board as soon as the previously requested motion is completed.
+
+        Args:
+            timeout (int, optional): Set a timeout in seconds. Set to zero or a negative value to disable and wait indefinitely. Defaults to 0.
+            check_frequency (int, optional): Set a frequency in Hz for repeated checking of the motion status. Defaults to 100 Hz.
+        """
+        delay = 1/check_frequency
+        t_start = time.perf_counter()
+        while not self.is_motion_completed() and (timeout <= 0 or time.perf_counter() - t_start < timeout):
             time.sleep(delay)
+            
+    def is_busy_from_board(self) -> bool:
+        """Check if the motor is busy. This method sends a message to the Isotope board to ask for a feedback on the busy status of the motor.
+        This method is different from `MotorPort.is_motion_completed()` which checks if a `CMD_SUCCESS` message is received from the board.
+        A `CMD_SUCCESS` message is sent from the board as soon as the motor completes its motion. Therefore, `MotorPort.is_motion_completed()` is more
+        efficient in that it does not send a message to the board. However, in rare situations, the `CMD_SUCCESS` message may be dropped due to communication errors. 
+        This method, in this case, can be used to proactively ask for an update on the busy status of the motor. 
+        
+        Frequent use of this method is discouraged as it may cause unnecessary communication overhead.
+
+        Returns:
+            bool: True if the motor is busy, False otherwise.
+        """
+        resp = self._comms.send_cmd(icl.CMD_TYPE_GET, icl.SEC_MOTOR_BUSY, self._id)
+        self._last_is_busy_query_time = time.perf_counter()
+        if self._comms.is_resp_ok(resp) == icl.CmdResponseType.Succeeded:
+            return resp.payload == 1
 
     def _configure(self) -> bool:
         """Configure the motor with the specified parameters.

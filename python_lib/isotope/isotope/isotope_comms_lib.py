@@ -65,6 +65,7 @@ Exported constants
     SEC_MOTOR_STEP_ANGLE # used with "GET" to read the motor step angle
     SEC_MOTOR_CURRENT_MILLIAMP # used with "SET" to set the motor current in milliamps
     SEC_MOTOR_ENABLE # used with "SET" to enable or disable the motor
+    SEC_MOTOR_BUSY # used with "GET" to check if the motor is rotating
     
     # Response Definitions:
     RES_CMD_ACK # default response for successful commands
@@ -135,6 +136,7 @@ SEC_MOTOR_RPM_SPEED = "Motor_rpm_speed"
 SEC_MOTOR_CURRENT_MILLIAMP = "Motor_current_milliamps"
 SEC_MOTOR_ENABLE = "Motor_enable"
 SEC_MOTOR_STEP_ANGLE = "Motor_step_angle"
+SEC_MOTOR_BUSY = "Motor_busy"
 
 # Response Definitions
 RES_CMD_ACK = "ACK"

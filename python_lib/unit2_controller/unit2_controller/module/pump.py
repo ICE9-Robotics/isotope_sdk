@@ -92,8 +92,7 @@ class PumpObj(DeviceObj):
         if not self._is_powered():
             self.motor.enable()
         result = self.motor.rotate_by_steps(steps * self.default_dir)
-        self.motor.disable()
-        self._logger.debug(f"Movement {'successful' if result else 'failed'}.")
+        self._logger.debug(f"{'Command was received' if result else 'Failed to deliver command'}.")
         return result
 
     def move_liquid(self, millilitre: float, direction: int) -> bool:
@@ -119,6 +118,19 @@ class PumpObj(DeviceObj):
 
         steps = round(self.steps_per_ml * millilitre * direction)
         return self.move_liquid_by_steps(steps)
+    
+    def is_done(self) -> bool:
+        """Checks if the pump has finished moving liquid.
+
+        Returns:
+            bool: True if the pump has finished moving liquid, False otherwise.
+        """
+        return self.motor.is_motion_completed()
+    
+    def wait_until_done(self) -> None:
+        """Waits until the pump has finished moving liquid.
+        """
+        self.motor.wait_until_motion_completed()
 
     def _is_powered(self) -> bool:
         """Checks if the motor is powered.

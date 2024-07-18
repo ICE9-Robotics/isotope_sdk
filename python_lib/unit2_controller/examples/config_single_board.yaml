@@ -1,0 +1,38 @@
+# check example_config.yaml for more details
+isotope_board:
+  defaults:
+    debug_enabled: false
+    comm_timeout: 5
+  devices:
+    - name: 1
+      port: /dev/cu.usbmodem2144101
+
+pump:
+  defaults:
+    rpm: 100
+    current: 400
+    steps_per_degree: 7.5
+    steps_per_ml: 10
+    reverse_direction: false
+  devices:
+    - name: pump1
+      board_name: 1
+      port_id: 0
+    - name: pump2
+      board_name: 1
+      port_id: 1
+    - name: pump3
+      board_name: 1
+      port_id: 2
+    - name: pump4
+      board_name: 1
+      port_id: 3
+
+valve:
+  defaults:
+    power: 100
+    normally_open: false
+  devices:
+    - name: 1
+      board_name: 1
+      port_id: 0

@@ -4,8 +4,7 @@
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # Before running this script, make sure you confirm the current
 # value is correctly set to the operating current of the motor 
-# that is connected to the specified MOT port. Otherwise, the
-# motor and the PCB may not be burned.
+# Otherwise, the motor and the PCB may be damaged.
 
 
 import isotope
@@ -13,7 +12,7 @@ import time
 import random
 
 
-DEBUG_ENABLED = False
+DEBUG_ENABLED = True
 
 # MOT port ID that the motor is connected to
 port_id = 1

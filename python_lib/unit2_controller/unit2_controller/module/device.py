@@ -59,7 +59,7 @@ class Device(Generic[T]):
         self._config = config
         self._devices: dict[int | str, T] = {}
 
-    def names(self) -> list[int | str]:
+    def keys(self) -> list[int | str]:
         """
         Gets the names of all the devices.
 
