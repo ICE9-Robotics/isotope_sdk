@@ -1,6 +1,6 @@
 import isotope
 
-DEBUG_ENABLED = True
+DEBUG_ENABLED = False
 
 # ADC input port ID to be controlled
 port_id = 1

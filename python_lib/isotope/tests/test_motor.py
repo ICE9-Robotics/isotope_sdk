@@ -1,12 +1,12 @@
 import unittest
 from unittest.mock import MagicMock
-from isotope.isotope_comms_lib import Isotope_comms_protocol
+from isotope.isotope_comms_lib import IsotopeCommsProtocol
 from isotope.port.motor import MotorPort, Motor
 
 class TestMotorPort(unittest.TestCase):
 
     def setUp(self):
-        self.isotope_mock = MagicMock(spec=Isotope_comms_protocol)
+        self.isotope_mock = MagicMock(spec=IsotopeCommsProtocol)
         self.motor_port = MotorPort(self.isotope_mock, 0)
         
     def test_constructor_with_invalid_port_id(self):
@@ -124,7 +124,7 @@ class TestMotorPort(unittest.TestCase):
 class TestMotor(unittest.TestCase):
 
     def setUp(self):
-        self.isotope_mock = MagicMock(spec=Isotope_comms_protocol)
+        self.isotope_mock = MagicMock(spec=IsotopeCommsProtocol)
         self.motor = Motor(self.isotope_mock)
 
     def test_get_motor_port(self):

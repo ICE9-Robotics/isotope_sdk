@@ -46,10 +46,10 @@ from .isotope_port import IsotopePort, IsotopePortContainer
 class PowerOutputPort(IsotopePort):
     """The PowerOutputPort class is used to control the PWM enabled power output ports, i.e. Output 0, 1 and 2, on the Isotope board."""
 
-    def __init__(self, comms: icl.Isotope_comms_protocol, port_id: int) -> None:
+    def __init__(self, comms: icl.IsotopeCommsProtocol, port_id: int) -> None:
         """
         Args:
-            comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class that is used to communicate with the Isotope board.
+            comms (isotope_comms_lib.IsotopeCommsProtocol): The instance of the IsotopeCommsProtocol class that is used to communicate with the Isotope board.
             port_id (int): ID of the power output port on the Isotope board. Valid values are 0, 1 and 2.
             pwm_val (int): Sets the PWM control of the power output port. Valid values are 0 to 1024. Defaults to 1024.
 
@@ -104,13 +104,13 @@ class PowerOutputPort(IsotopePort):
         self._logger.debug(f"Enabling power output port {self._id} with PWM value of {pwm}...")
         if pwm is not None and (pwm < 0 or pwm > 1024):
             raise ValueError("PWM value must be between 0 and 1024.")
-        if pwm == 0:
-            return self.disable()
         if pwm is None:
             pwm = self._defaut_pwm
             self._logger.debug(f"Using default PWM value of {pwm}.")
-        msg = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_POWER_OUTPUT, self._id, pwm)
-        if self._comms.is_resp_ok(msg):
+        if pwm == 0:
+            return self.disable()
+        resp = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_POWER_OUTPUT, self._id, pwm)
+        if self._comms.is_resp_ok(resp) == icl.CmdResponseType.Succeeded:
             self._current_pwm = pwm
             return True
         return False
@@ -122,8 +122,8 @@ class PowerOutputPort(IsotopePort):
             bool: True if the power output port was successfully disabled, False otherwise.
         """
         self._logger.debug(f"Disabling power output port {self._id}...")
-        msg = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_POWER_OUTPUT, self._id, 0)
-        if self._comms.is_resp_ok(msg):
+        resp = self._comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_POWER_OUTPUT, self._id, 0)
+        if self._comms.is_resp_ok(resp) == icl.CmdResponseType.Succeeded:
             self._current_pwm = 0
             return True
         return False
@@ -150,10 +150,10 @@ class PowerOutput(IsotopePortContainer[PowerOutputPort]):
     """The PowerOutput class is a list-like container for PowerOutputPort objects representing all the power output ports on the Isotope board.
     """
 
-    def __init__(self, comms: icl.Isotope_comms_protocol) -> None:
+    def __init__(self, comms: icl.IsotopeCommsProtocol) -> None:
         """
         Args:
-            comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
+            comms (isotope_comms_lib.IsotopeCommsProtocol): The instance of the IsotopeCommsProtocol class 
                 that is used to communicate with the Isotope board.
         """
         super().__init__(comms, 3)

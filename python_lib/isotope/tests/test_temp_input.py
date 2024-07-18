@@ -1,12 +1,12 @@
 import unittest
 from unittest.mock import MagicMock
-from isotope.isotope_comms_lib import Isotope_comms_protocol
+from isotope.isotope_comms_lib import IsotopeCommsProtocol
 from isotope.port.temp_input import TempInputPort, TempInput
 
 class TestTempInputPort(unittest.TestCase):
 
     def setUp(self):
-        self.isotope_mock = MagicMock(spec=Isotope_comms_protocol)
+        self.isotope_mock = MagicMock(spec=IsotopeCommsProtocol)
         self.temp_input_port = TempInputPort(self.isotope_mock, 0)
 
     def test_get_value_success(self):
@@ -29,7 +29,7 @@ class TestTempInputPort(unittest.TestCase):
 class TestTempInput(unittest.TestCase):
 
     def setUp(self):
-        self.isotope_mock = MagicMock(spec=Isotope_comms_protocol)
+        self.isotope_mock = MagicMock(spec=IsotopeCommsProtocol)
         self.temp_input = TempInput(self.isotope_mock)
 
     def test_getitem_valid_index(self):

@@ -47,7 +47,7 @@ from .utils.logging import setup_logger
 from . import port
 from . import isotope_comms_lib as icl
 
-        
+
 def version_from_string(firmware_string: str) -> tuple[int, ...]:
     """Converts version in string to int tuple.
 
@@ -101,9 +101,9 @@ class Isotope:
     """The Isotope class is the higher-level class for communicating with the Isotope Breakout,
     with a single method call connect() to connect to the board and initialise all the I/O ports.
     A heartbeat thread is incorporated to keep the connection alive.
-    
+
     The I/O ports can be accessed using the the class variables including:
-    
+
     | Variable   | Class type                 | Port                                            |
     |------------|----------------------------|-------------------------------------------------|
     | `powers`   | `isotope.port.power_output.PowerOutput` | Power output ports, i.e. Output X.              |
@@ -111,11 +111,11 @@ class Isotope:
     | `adcs`     | `isotope.port.adc_input.ADCInput`    | Analogue-digital-converter ports, i.e. ADC X.   |
     | `pwms`     | `isotope.port.pwm_output.PWMOutput`   | PWM output ports, i.e. PWM X.                   |
     | `temps`    | `isotope.port.temp_input.TempInput`   | Temperature sensor ports, i.e. TEMP X.          |
-    
+
     Attributes:
         heart_beat_interval (int): Interval in seconds for sending heartbeats, default is 1.
     """
-    
+
     def __init__(self, usb_address: str, debug=False, response_timeout=5) -> None:
         """
         Args:
@@ -131,9 +131,9 @@ class Isotope:
         self._logger.info(f"SDK version: {version_to_string(__version_info__)}")
         self._logger.info(f"Minimum firmware: {version_to_string(__minimum_firmware__)}")
         self._logger.info(f"Response timeout: {response_timeout}")
-        
-        self.comms = icl.Isotope_comms_protocol(usb_address, response_timeout)
-        
+
+        self.comms = icl.IsotopeCommsProtocol(usb_address, response_timeout)
+
         try:
             self.powers = port.PowerOutput(self.comms)
             self.motors = port.Motor(self.comms)
@@ -143,13 +143,13 @@ class Isotope:
         except ValueError as e:
             self._logger.error(e, exc_info=True)
             raise e
-        
+
         self.heart_beat_interval = 1
         self._heartbeat_thread = threading.Thread(target=self._heartbeat)
-    
+
     def connect(self) -> bool:
         """Connect to the Isotope board.
-        
+
         Returns:
             bool: True if the connection is successful, False otherwise.
         """
@@ -164,11 +164,11 @@ class Isotope:
             self._heartbeat_thread.start()
             self._logger.debug("Heartbeat thread started.")
         return True
-    
+
     def disconnect(self) -> None:
         """Disconnect from the Isotope board."""
         self.comms.disconnect()
-    
+
     def set_RGB_colour(self, red_i: int, green_i: int, blue_i: int) -> bool:
         """Set RGB colour.
 
@@ -180,16 +180,12 @@ class Isotope:
         Returns:
             bool: True if successful. Otherwise, false.
         """
-        msg = self.comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_RGB_RED, 0,
-                            clamp_i(red_i, 0, 255))
-        ok = self.comms.is_resp_ok(msg)
-        msg = self.comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_RGB_GREEN, 0,
-                            clamp_i(green_i, 0, 255))
-        ok = ok and self.comms.is_resp_ok(msg)
-        msg = self.comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_RGB_BLUE, 0,
-                            clamp_i(blue_i, 0, 255))
-        return ok and self.comms.is_resp_ok(msg)
-        
+        r = clamp_i(red_i, 0, 255)
+        g = clamp_i(green_i, 0, 255)
+        b = clamp_i(blue_i, 0, 255)
+        resp = self.comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_RGB, 0, [r, g, b])
+        return self.comms.is_resp_ok(resp) == icl.CmdResponseType.Succeeded
+
     def _heartbeat(self) -> None:
         """Heartbeat thread to keep the connection alive.
         """
@@ -198,6 +194,7 @@ class Isotope:
                 time.sleep(0.1)
                 continue
             try:
+                self._logger.debug("Sending heartbeat...")
                 self.comms.send_cmd(icl.CMD_TYPE_SET, icl.SEC_HEARTBEAT, 0, 0)
             except SerialException as e:
                 self._logger.error(e, exc_info=True)
@@ -206,16 +203,16 @@ class Isotope:
     def _verify_firmware(self):
         """Verify the firmware version of the Isotope board.
         """
-        payload, msg = self.comms.send_cmd(icl.CMD_TYPE_GET, icl.SEC_WHO_I_AM, 0, 0)
-        if not self.comms.is_resp_ok(msg):
+        resp = self.comms.send_cmd(icl.CMD_TYPE_GET, icl.SEC_WHO_I_AM, 0, 0)
+        if self.comms.is_resp_ok(resp) != icl.CmdResponseType.Succeeded:
             raise IsotopeException("Error! No Isotope found.")
-        if payload == "ISOTOPE_BOARD":
+        if resp.payload == "ISOTOPE_BOARD":
             self.board_firmware = (0, 0, 0)
             if __minimum_firmware__ != (0, 0, 0):
                 raise IsotopeException(f"Requires minimum firmware v{version_to_string(__minimum_firmware__)}, board firmware is v0.")
             return
-        
-        re = payload.split(",")
+
+        re = resp.payload.split(",")
         if not len(re) == 2:
             raise IsotopeException("Error! Wrong firmware format")
 
@@ -228,4 +225,5 @@ class Isotope:
         self.board_firmware = version_from_string(my_firmware)
         if self.board_firmware >= __minimum_firmware__:
             return
-        raise IsotopeException(f"Requires minimum firmware v{version_to_string(__minimum_firmware__)}, board firmware is v{my_firmware}.")
+        raise IsotopeException(f"Requires minimum firmware v{version_to_string(
+            __minimum_firmware__)}, board firmware is v{my_firmware}.")

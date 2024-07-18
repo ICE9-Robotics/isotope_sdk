@@ -1,12 +1,12 @@
 import unittest
 from unittest.mock import MagicMock
-from isotope.isotope_comms_lib import Isotope_comms_protocol
+from isotope.isotope_comms_lib import IsotopeCommsProtocol
 from isotope.port.adc_input import ADCInputPort, ADCInput
 
 class TestADCInputPort(unittest.TestCase):
 
     def setUp(self):
-        self.isotope_mock = MagicMock(spec=Isotope_comms_protocol)
+        self.isotope_mock = MagicMock(spec=IsotopeCommsProtocol)
         self.adc_input_item = ADCInputPort(self.isotope_mock, 0)
         
     def test_constructor_with_valid_port_id(self):
@@ -32,7 +32,7 @@ class TestADCInputPort(unittest.TestCase):
 class TestADCInput(unittest.TestCase):
 
     def setUp(self):
-        self.isotope_mock = MagicMock(spec=Isotope_comms_protocol)
+        self.isotope_mock = MagicMock(spec=IsotopeCommsProtocol)
         self.adc_input = ADCInput(self.isotope_mock)
 
     def test_get_adc_input_port_with_valid_index(self):
