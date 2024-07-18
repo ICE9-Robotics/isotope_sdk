@@ -36,6 +36,8 @@ def main():
                 continue
             if pump.is_done():
                 completed[name] = True
+                # Unless stall torque is required, turn off the pump to avoid overheating, recommended!
+                pump.power_off()
                 print(f"Pump {name} is done.")
     
     time.sleep(1)
@@ -46,6 +48,7 @@ def main():
     else:
         raise Exception(f"Failed to move liquid by steps in Pump {name}")
     unit2.pump["pump1"].wait_until_done()
+    unit2.pump["pump1"].power_off()
     print(f"Pump {name} is done.")
 
     # Test the valve

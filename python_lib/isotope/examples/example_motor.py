@@ -21,7 +21,7 @@ port_id = 1
 # Step resolution: 7.5 degrees
 # Rated current: 500 mA
 resolution = 7.5
-current = 500
+current = 400
 rpm = 100
 
 # USB address of the Isotope board.
@@ -81,7 +81,7 @@ def main():
         validate_result(result)
         motor.wait_until_motion_completed()
 
-        # Disable the motor port
+        # Disable the motor after motion to avoid overheating.
         print(f"=====Disable motor {motor.id}====")
         result = motor.disable()
         validate_result(result)

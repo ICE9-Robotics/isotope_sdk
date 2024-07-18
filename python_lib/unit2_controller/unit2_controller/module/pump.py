@@ -135,6 +135,15 @@ class PumpObj(DeviceObj):
         """Waits until the pump has finished pumping liquid.
         """
         self.motor.wait_until_motion_completed()
+        
+    def power_off(self) -> bool:
+        """Turns off the motor.
+
+        Returns:
+            bool: True if the motor is successfully turned off, False otherwise.
+        """
+        self._logger.debug("Powering off pump...")
+        return self.motor.disable()
 
     def _is_powered(self) -> bool:
         """Checks if the motor is powered.

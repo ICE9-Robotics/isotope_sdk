@@ -68,9 +68,9 @@ Exported constants
     SEC_MOTOR_BUSY # used with "GET" to check if the motor is rotating
     
     # Response Definitions:
-    RES_CMD_ACK # default response for successful commands
-    RES_CMD_SUCCESS # response for successful commands
-    RES_CMD_ABORT # response for aborted commands
+    RES_CMD_ACK # response for commands that are successfully received
+    RES_CMD_SUCCESS # response for commands that are successfully executed
+    RES_CMD_ABORT # response for commands whose execution is aborted
     RES_ERR_GEN # general error response
     RES_ERR_WRONG_JSON_FORMAT # error response for wrong JSON format
     RES_ERR_WRONG_SEC_TYPE # error response for wrong command type
