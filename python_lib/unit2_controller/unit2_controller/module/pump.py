@@ -26,12 +26,16 @@ Example
         pump = unit2.pump[name]
         
         if pump.move_liquid(millilitre=1.0, direction=1):
-            print(f"moved 1 ml liquid in Pump {name} in direction 1")
+            print(f"Pump {name} is now moving liquid by 1 ml in direction 1")
+            pump.wait_until_done()
+            print(f"Pump {name} is done.")
         else:
             raise Exception(f"Failed to move liquid in Pump {name}")
         
         if pump.move_liquid_by_steps(steps=-48):
-            print(f"moved liquid by 48 steps in Pump {name} in direction -1")
+            print(f"Pump {name} is now moving 48 steps in direction -1")
+            pump.wait_until_done()
+            print(f"Pump {name} is done.")
         else:
             raise Exception(f"Failed to move liquid by steps in Pump {name}")
 
@@ -120,7 +124,7 @@ class PumpObj(DeviceObj):
         return self.move_liquid_by_steps(steps)
     
     def is_done(self) -> bool:
-        """Checks if the pump has finished moving liquid.
+        """Checks if the pump has finished pumping liquid.
 
         Returns:
             bool: True if the pump has finished moving liquid, False otherwise.
@@ -128,7 +132,7 @@ class PumpObj(DeviceObj):
         return self.motor.is_motion_completed()
     
     def wait_until_done(self) -> None:
-        """Waits until the pump has finished moving liquid.
+        """Waits until the pump has finished pumping liquid.
         """
         self.motor.wait_until_motion_completed()
 
