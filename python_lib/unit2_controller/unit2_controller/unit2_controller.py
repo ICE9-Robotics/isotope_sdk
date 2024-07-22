@@ -82,11 +82,11 @@ class Unit2:
         self.config = yaml.load(open(config_file, 'r'), Loader=yaml.FullLoader)
         self._logger.info(f"Configuration loaded successfully.")
 
-        self._isotopes: dict[int | str, Isotope] = {}
+        self.isotopes: dict[int | str, Isotope] = {}
         try:
             self.initialise_isotope_board()
-            self.pump = Pump(self._isotopes, self.config)
-            self.valve = Valve(self._isotopes, self.config)
+            self.pump = Pump(self.isotopes, self.config)
+            self.valve = Valve(self.isotopes, self.config)
         except ValueError as e:
             self._logger.error("Failed to initialise Unit2 Controller.", exc_info=True)
             raise e
@@ -101,13 +101,13 @@ class Unit2:
             debug_enabled = isot.get('debug_enabled', defaults['debug_enabled'])
             comm_timeout = isot.get('comm_timeout', defaults['comm_timeout'])
             self._logger.debug(f"Initialising Isotope Breakout ${isot['name']}: \nPort: {isot['port']}, Debug: {debug_enabled}, Timeout: {comm_timeout}.")
-            self._isotopes[isot['name']] = Isotope(isot['port'], debug_enabled, comm_timeout)
+            self.isotopes[isot['name']] = Isotope(isot['port'], debug_enabled, comm_timeout)
             self._logger.debug(f"Isotope Breakout {isot['name']} initialised successfully.")
             
     def connect(self):
         """Connect to the isotope boards.
         """       
-        for name, isot in self._isotopes.items():
+        for name, isot in self.isotopes.items():
             self._logger.debug(f"Connecting to Isotope Breakout {name}...")
             isot.connect()
             self._logger.info(f"Isotope Breakout {name} connected.")
@@ -115,7 +115,7 @@ class Unit2:
     def disconnect(self):
         """Disconnect the isotope boards.
         """
-        for name, isot in self._isotopes.items():
+        for name, isot in self.isotopes.items():
             self._logger.debug(f"Disconnecting Isotope Breakout {name}...")
             isot.disconnect()
             self._logger.info(f"Isotope Breakout {name} disconnected.")

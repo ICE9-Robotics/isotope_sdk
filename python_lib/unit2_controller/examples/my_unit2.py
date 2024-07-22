@@ -21,6 +21,10 @@ def main():
     unit2 = Unit2(config_file)
     unit2.connect()
 
+
+    ###############
+    # Test pumps #
+    ###############
     # Start all pumps
     for name, pump in unit2.pump.items():
         if pump.move_liquid(millilitre=10, direction=1):
@@ -34,7 +38,7 @@ def main():
         for name, pump in unit2.pump.items():
             if completed[name]:
                 continue
-            if pump.is_done():
+            if pump.is_completed():
                 completed[name] = True
                 # Unless stall torque is required, turn off the pump to avoid overheating, recommended!
                 pump.power_off()
@@ -47,11 +51,13 @@ def main():
         print(f"Pump {name} is now moving 48 steps in direction -1")
     else:
         raise Exception(f"Failed to move liquid by steps in Pump {name}")
-    unit2.pump["pump1"].wait_until_done()
+    unit2.pump["pump1"].wait_until_completed()
     unit2.pump["pump1"].power_off()
     print(f"Pump {name} is done.")
 
-    # Test the valve
+    ###############
+    # Test valves #
+    ###############
     for name, valve in unit2.valve.items():
         if valve.open() and valve.is_open():
             print(f"opened Valve {name}")
@@ -68,6 +74,24 @@ def main():
             print(f"toggled Valve {name}")
         else:
             raise Exception(f"Failed to toggle Valve {name}")
+    
+    ##########################################
+    # Access ports on Isotope board directly #
+    ##########################################
+    # Servo motor via PWM
+    unit2.isotopes[1].pwms.enable()
+    motor = unit2.isotopes[1].pwms[0]
+    motor.set_servo_mode()
+    motor.set_pwm(0) # minimum position or motor.set_ms(544)
+    time.sleep(1)
+    motor.set_pwm(90) # middle position
+    time.sleep(1)
+    motor.set_ms(2400) # maximum position or motor.set_pwm(90)
+    time.sleep(1)
+    unit2.isotopes[1].pwms.disable()
+    
+    # Read from ADC
+    print(f"Anolgue reading from ADC 0 is {unit2.isotopes[1].adcs[0].get_value()}")
     
     # Close the connection
     unit2.disconnect()
