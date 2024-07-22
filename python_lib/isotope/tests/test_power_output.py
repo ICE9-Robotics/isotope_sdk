@@ -1,12 +1,12 @@
 import unittest
 from unittest.mock import MagicMock
-from isotope.isotope_comms_lib import Isotope_comms_protocol
+from isotope.isotope_comms_lib import IsotopeCommsProtocol
 from isotope.port.power_output import PowerOutput, PowerOutputPort
 
 class TestPowerOutputPort(unittest.TestCase):
 
     def setUp(self):
-        self.isotope_mock = MagicMock(spec=Isotope_comms_protocol)
+        self.isotope_mock = MagicMock(spec=IsotopeCommsProtocol)
         self.power_output_port = PowerOutputPort(self.isotope_mock, 0)
 
     def test_default_pwm(self):
@@ -63,7 +63,7 @@ class TestPowerOutputPort(unittest.TestCase):
 class TestPowerOutput(unittest.TestCase):
 
     def setUp(self):
-        self.isotope_mock = MagicMock(spec=Isotope_comms_protocol)
+        self.isotope_mock = MagicMock(spec=IsotopeCommsProtocol)
         self.power_output = PowerOutput(self.isotope_mock)
 
     def test_getitem_with_valid_index(self):

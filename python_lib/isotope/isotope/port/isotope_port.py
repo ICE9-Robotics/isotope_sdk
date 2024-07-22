@@ -39,10 +39,10 @@ class IsotopePort:
     The IsotopePort class is the abstract for all output and input ports on the Isotope Board.
     """
 
-    def __init__(self, comms: icl.Isotope_comms_protocol, port_id: int) -> None:
+    def __init__(self, comms: icl.IsotopeCommsProtocol, port_id: int) -> None:
         """
         Args:
-            comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
+            comms (isotope_comms_lib.IsotopeCommsProtocol): The instance of the IsotopeCommsProtocol class 
                 that is used to communicate with the Isotope board.
             port_id (int): ID of the port on the Isotope board.
         """
@@ -67,10 +67,10 @@ class IsotopePortContainer(Generic[T]):
     """The IsotopePortContainer class is an abstract for list-like container for IsotopePort objects representing all the corresponding ports on the Isotope board.
     """
 
-    def __init__(self, comms: icl.Isotope_comms_protocol, max_port_count: int) -> None:
+    def __init__(self, comms: icl.IsotopeCommsProtocol, max_port_count: int) -> None:
         """
         Args:
-            comms (isotope_comms_lib.Isotope_comms_protocol): The instance of the Isotope_comms_protocol class 
+            comms (isotope_comms_lib.IsotopeCommsProtocol): The instance of the IsotopeCommsProtocol class 
                 that is used to communicate with the Isotope board.
             max_port_count (int): The maximum number of ports for the specific port type on the Isotope board.
         """

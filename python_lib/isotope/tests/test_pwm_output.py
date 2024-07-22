@@ -1,12 +1,12 @@
 import unittest
 from unittest.mock import MagicMock
-from isotope.isotope_comms_lib import Isotope_comms_protocol
+from isotope.isotope_comms_lib import IsotopeCommsProtocol
 from isotope.port.pwm_output import PWMOutputPort, PWMOutput
 
 class TestPWMOutputPort(unittest.TestCase):
 
     def setUp(self):
-        self.isotope_mock = MagicMock(spec=Isotope_comms_protocol)
+        self.isotope_mock = MagicMock(spec=IsotopeCommsProtocol)
         self.pwm_output_port = PWMOutputPort(self.isotope_mock, 0)
 
     def test_set_pwm_success(self):
@@ -35,7 +35,7 @@ class TestPWMOutputPort(unittest.TestCase):
 class TestPWMOutput(unittest.TestCase):
 
     def setUp(self):
-        self.isotope_mock = MagicMock(spec=Isotope_comms_protocol)
+        self.isotope_mock = MagicMock(spec=IsotopeCommsProtocol)
         self.pwm_output = PWMOutput(self.isotope_mock)
 
     def test_getitem_with_valid_index(self):

@@ -1,4 +1,4 @@
-"""Contains `PumpObj` and `Pump` classes, used to control diaphragm pumps connected to the Isotope board.
+"""Contains `PumpObj` and `Pump` classes, used to control peristaltic pumps connected to the Isotope board MOT ports.
 
 `PumpObj` class inherits from the `unit2_controller.module.device.DeviceObj` class containing the actual implementation of functions to control the pumps. 
 `Pump` class inherits from the `unit2_controller.module.device.Device` class that initialises and manages the `PumpObj` instances for all registered pumps.
@@ -26,15 +26,20 @@ Example
         pump = unit2.pump[name]
         
         if pump.move_liquid(millilitre=1.0, direction=1):
-            print(f"moved 1 ml liquid in Pump {name} in direction 1")
+            print(f"Pump {name} is now moving liquid by 1 ml in direction 1")
+            pump.wait_until_completed()
+            print(f"Pump {name} is done.")
         else:
             raise Exception(f"Failed to move liquid in Pump {name}")
         
         if pump.move_liquid_by_steps(steps=-48):
-            print(f"moved liquid by 48 steps in Pump {name} in direction -1")
+            print(f"Pump {name} is now moving 48 steps in direction -1")
+            pump.wait_until_completed()
+            print(f"Pump {name} is done.")
         else:
             raise Exception(f"Failed to move liquid by steps in Pump {name}")
 
+        pump.power_off()
         
 
 See Also
@@ -48,7 +53,7 @@ from .device import Device, DeviceObj, DeviceError
 
 
 class PumpObj(DeviceObj):
-    """The PumpObj class provides methods for controlling the pumps on the Isotope board.
+    """The PumpObj class provides methods for controlling peristaltic pumps connected to the Isotope board MOT ports.
     """
 
     def __init__(self) -> None:
@@ -65,7 +70,7 @@ class PumpObj(DeviceObj):
 
         Args:
             isotope_board (isotope.Isotope): The Isotope object.
-            port_id (int): The ID of the port to which the motor is connected.
+            port_id (int): The ID of the port to which the pump is connected.
         """
         self._logger.debug(f"Initialising Pump connected to Isotope Breakout {isotope_board} on port {port_id}...")
 
@@ -74,26 +79,20 @@ class PumpObj(DeviceObj):
         self._initialised = True
 
     def move_liquid_by_steps(self, steps: int) -> bool:
-        """Moves liquid by rotating the motor with the specified number of steps.
+        """Moves liquid by rotating the pump motor with the specified number of steps.
 
         Args:
-            steps (int): The number of steps to rotate the motor. Can be negative to reverse the direction.
+            steps (int): The number of steps to rotate the pump motor. Can be negative to reverse the direction.
 
         Returns:
             bool: True if the execution is successful, False otherwise.
-
-        Raises:
-            DeviceError: If the pump is not initialised. Pump initialisation should be automatically done but it can be done manually by calling
-            the `initialise` method in case of any issues.
         """
         self._logger.debug(f"Moving liquid by {steps} steps...")
-        if not self._initialised:
-            raise DeviceError("Pump not initialised.")
+        assert self._initialised, "Pump not initialised."
         if not self._is_powered():
             self.motor.enable()
         result = self.motor.rotate_by_steps(steps * self.default_dir)
-        self.motor.disable()
-        self._logger.debug(f"Movement {'successful' if result else 'failed'}.")
+        self._logger.debug(f"{'Command was received' if result else 'Failed to deliver command'}.")
         return result
 
     def move_liquid(self, millilitre: float, direction: int) -> bool:
@@ -119,6 +118,39 @@ class PumpObj(DeviceObj):
 
         steps = round(self.steps_per_ml * millilitre * direction)
         return self.move_liquid_by_steps(steps)
+    
+    def is_completed(self) -> bool:
+        """Checks if the pump has finished pumping liquid.
+
+        Returns:
+            bool: True if the pump has finished moving liquid, False otherwise.
+        """
+        return self.motor.is_motion_completed()
+    
+    def wait_until_completed(self) -> None:
+        """Waits until the pump has finished pumping liquid.
+        """
+        self.motor.wait_until_motion_completed()
+        
+    def power_off(self) -> bool:
+        """Turns off the motor.
+
+        Returns:
+            bool: True if the motor is successfully turned off, False otherwise.
+        """
+        self._logger.debug("Powering off pump...")
+        return self.motor.disable()
+    
+    def power_on(self) -> bool:
+        """Turns on the motor.
+        Note: The motor is turned on automatically when it is commanded to move. 
+        You may turn on the motor purposely for holding the torsion.
+
+        Returns:
+            bool: True if the motor is successfully turned on, False otherwise.
+        """
+        self._logger.debug("Powering on pump...")
+        return self.motor.enable()
 
     def _is_powered(self) -> bool:
         """Checks if the motor is powered.

@@ -1,7 +1,7 @@
 import isotope
 import time
 
-DEBUG_ENABLED = True
+DEBUG_ENABLED = False
 
 # USB address of the Isotope board.
 # For windows machine, this is usually "COMX" where X is the port number;
@@ -24,28 +24,28 @@ def main():
 
     print(f"{len(isot.powers)} power output ports available.")
 
-    for i, port in enumerate(isot.powers):
-        print(f"Enable Port {i} with default PWM: {port.default_pwm}.")
+    for port in isot.powers:
+        print(f"=====Testing Power Output Port {port.id}====")
+        print(f"Enable Port {port.id} with default PWM: {port.default_pwm}.")
         result = port.enable()
         validate_result(result)
         
         if not result or not port.is_enabled():
             raise Exception("Failed to enable power output port.")
         
-        
-        print(f"Change Port {i} default PWM to 300")
+        print(f"Change Port {port.id} default PWM to 300")
         result = port.default_pwm = 300
         
-        print(f"Update Port {i} to new default PWM")
+        print(f"Update Port {port.id} to new default PWM")
         result = port.enable()
         validate_result(result)
         
         
-        print(f"Change Port {i} to a custom PWM value of 512")
+        print(f"Change Port {port.id} to a custom PWM value of 512")
         result = port.enable(512)
         validate_result(result)
     
-        print(f"Disable Port {i}")
+        print(f"Disable Port {port.id}")
         result = port.disable()
         validate_result(result)
 
